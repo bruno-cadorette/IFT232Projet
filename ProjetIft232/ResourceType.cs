@@ -11,6 +11,7 @@ namespace ProjetIft232
         Gold,
         Meat,
         Rock,
+        Population,
         End
     }
 }

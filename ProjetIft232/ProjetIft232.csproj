@@ -47,12 +47,10 @@
     <Compile Include="ConsoleUi.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="IPlayer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="City.cs" />
     <Compile Include="ResourceType.cs" />
-    <Compile Include="TurnEventHandler.cs" />
     <Compile Include="UserCallable.cs" />
   </ItemGroup>
   <ItemGroup>

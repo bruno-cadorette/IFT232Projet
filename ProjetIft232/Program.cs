@@ -10,9 +10,9 @@ namespace ProjetIft232
     {
         static void Main(string[] args)
         {
-            Game.CurrentGame = new Game();
+            Game game1 = new Game();
             ConsoleUi UI = new ConsoleUi();
-            UI.Interact();
+            UI.Interact(game1);
         }
     }
 }
