@@ -5,7 +5,8 @@ using System.Text;
 
 namespace ProjetIft232
 {
-    enum ResourceType
+    //TODO: Changer pour une classe
+    public enum Resources
     {
         Wood,
         Gold,

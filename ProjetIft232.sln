@@ -1,7 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetIft232", "ProjetIft232\ProjetIft232.csproj", "{4D3DF023-7A7A-4F62-8470-F236132D5BE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ift232Tests", "Ift232Tests\Ift232Tests.csproj", "{FE06E805-0411-4445-9C01-3DA45342217C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +17,10 @@ Global
 		{4D3DF023-7A7A-4F62-8470-F236132D5BE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D3DF023-7A7A-4F62-8470-F236132D5BE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D3DF023-7A7A-4F62-8470-F236132D5BE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE06E805-0411-4445-9C01-3DA45342217C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE06E805-0411-4445-9C01-3DA45342217C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE06E805-0411-4445-9C01-3DA45342217C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE06E805-0411-4445-9C01-3DA45342217C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

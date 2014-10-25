@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjetIft232
 {
-    class CommandResult
+    public class CommandResult
     {
         public string TextResult { get; set; }
         public CommandResult()
