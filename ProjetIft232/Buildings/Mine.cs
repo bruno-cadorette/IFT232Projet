@@ -14,13 +14,14 @@ namespace ProjetIft232.Buildings
             Name = "Mine";
             Description =
                 "Une infrastructure basée sous la terre exploitant les minéraux afin d'obtenir de l'or.\nOn a toujours besoin d'or...\n";
+            Dictionary<Resources, int> res = new Dictionary<Resources, int>();
+            res.Add(Resources.Gold, 1);
+            Ressource = new Resource(res);
         }
 
-        protected override int[] UpdateBuilding()
+        protected override Resource UpdateBuilding()
         {
-            var ressources = new int[5];
-            ressources[(int) Resources.Gold] = 1;
-            return ressources;
+            return Ressource;
         }
     }
 }

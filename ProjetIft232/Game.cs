@@ -21,7 +21,7 @@ namespace ProjetIft232
 
         private int _playerIndex = 0;
         public int PlayerIndex { get; private set; }
-        public int TourIndex { get; private set; }
+        public static int TourIndex { get; private set; }
 
         public Game()
         {
@@ -31,8 +31,11 @@ namespace ProjetIft232
         [UserCallable("Next")]
         public CommandResult NextTurn()
         {
+            CurrentPlayer.Cities.First().Update();
             PlayerIndex++;
-            if (PlayerIndex > Players.Count)
+            
+           //Sinon c'est attardé
+            if (PlayerIndex + 1 > Players.Count)
             {
                 PlayerIndex-=Players.Count;
                 TourIndex++;

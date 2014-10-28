@@ -16,10 +16,9 @@ namespace ProjetIft232.Buildings
                 "Un bâtiment assez banal...\nEnfin, il y a quelques personnes un peu bizarre qui font des recherches dedans...\n";
         }
 
-        protected override int[] UpdateBuilding()
+        protected override Resource UpdateBuilding()
         {
-            var ressources = new int[5];
-            return ressources;
+            return Ressource;
         }
     }
 }

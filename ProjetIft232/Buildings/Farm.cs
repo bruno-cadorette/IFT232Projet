@@ -14,13 +14,14 @@ namespace ProjetIft232.Buildings
             Name = "Ferme";
             Description =
                 "Une parcelle de terre réservée à l'élevage et la culture afin de récolter de la nourriture.\n";
+            Dictionary<Resources, int> res = new Dictionary<Resources, int>();
+            res.Add(Resources.Meat, 1);
+            Ressource = new Resource(res);
         }
 
-        protected override int[] UpdateBuilding()
+        protected override Resource UpdateBuilding()
         {
-            var ressources = new int[5];
-            ressources[(int) Resources.Meat] = 1;
-            return ressources;
+            return Ressource;
         }
     }
 }

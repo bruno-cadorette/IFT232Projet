@@ -16,10 +16,9 @@ namespace ProjetIft232.Buildings
                 "Un bâtiment permettant l'échange de ressources.\nQui sait, peut-être que si vous aidez le marchand il vous donnera un peu d'or...\n";
         }
 
-        protected override int[] UpdateBuilding()
+        protected override Resource UpdateBuilding()
         {
-            var ressources = new int[5];
-            return ressources;
+            return Ressource;
         }
     }
 }

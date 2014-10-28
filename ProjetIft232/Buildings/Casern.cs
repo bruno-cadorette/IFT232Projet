@@ -16,10 +16,9 @@ namespace ProjetIft232.Buildings
                 "Un camp d'entraînement pour des soldats d'élite !\nEnfin...Jusqu'à ce qu'on trouve meilleur que ces bras cassés...\n";
         }
 
-        protected override int[] UpdateBuilding()
+        protected override Resource UpdateBuilding()
         {
-            var ressources = new int[5];
-            return ressources;
+            return Ressource;
         }
     }
 }

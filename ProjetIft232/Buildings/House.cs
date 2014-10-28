@@ -14,13 +14,14 @@ namespace ProjetIft232.Buildings
             Name = "Maison";
             Description =
                 "Un bâtiment principalement composé de bois permettant à votre population actuelle de créer une famille et donc d'augmenter votre population.\n";
+            Dictionary<Resources, int> res = new Dictionary<Resources, int>();
+            res.Add(Resources.Population, 1);
+            Ressource = new Resource(res);
         }
 
-        protected override int[] UpdateBuilding()
+        protected override Resource UpdateBuilding()
         {
-            var ressources = new int[5];
-            ressources[(int) Resources.Population] = 1;
-            return ressources;
+            return Ressource;
         }
     }
 }

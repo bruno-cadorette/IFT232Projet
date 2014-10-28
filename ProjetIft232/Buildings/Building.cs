@@ -11,23 +11,26 @@ namespace ProjetIft232.Buildings
         public string Description { get; protected set; }
         public bool InConstruction { get; protected set; }
 
+        public Resource Ressource { get; protected set; }
         public int TurnsLeft { get; private set; }
         //Retourne le nombre de ressources par batiment. Permet qu'un batiment actif (tel le marché) puisse générer de l'or 
         //(SVP changer le int[] pour une meilleure structure (voir github))
-        protected abstract int[] UpdateBuilding();
+        protected abstract Resource UpdateBuilding();
+
 
         protected Building(int turnsLeft)
         {
+            Ressource = new Resource();
             InConstruction = true;
             TurnsLeft = turnsLeft;
         }
 
-        public int[] Update()
+        public Resource Update()
         {
             if (InConstruction)
             {
                 Build();
-                return new int[5];
+                return new Resource();
             }
             else
             {

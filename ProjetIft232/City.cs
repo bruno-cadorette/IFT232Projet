@@ -10,19 +10,23 @@ namespace ProjetIft232
     public class City
     {
         private List<Building> _Buildings;
-        public int[] Ressources = new int[(int)Resources.End];
+
+        public Resource Ressources { get; private set; }
         public string Name { get; private set; }
 
         public City(string name)
         {
             Name = name;
+            Dictionary<Resources, int> rsc = new Dictionary<Resources, int>();
+            rsc.Add(Resources.Population, 15);
+            Ressources = new Resource(rsc);
             _Buildings = new List<Building>();
         }
 
         [UserCallable("test")]
         public CommandResult GetWorld()
         {
-            return new CommandResult("Hello World");
+            return new CommandResult("Hello World"+Ressources.ToString());
         }
 
         public override string ToString()
@@ -67,23 +71,21 @@ namespace ProjetIft232
 
         public void Update()
         {
-            //Pour les ressources on ajoute a la variable tout ce qui est récupéré par chaque Update, 
-            //cela nous permettra de savoir nos gains en ressource en debut de tour
-            //Voici un exemple.
-            int populationMultiplier = _Buildings.Sum(building => building.Update()[(int) Resources.Population]);
+            //rsc n'est pas une reelle ressource, c'est une ressource 'theorique'
+            //rsc est en fait un multiplicateur, il nous dira de combien multiplier
+            //notre constante de base de récupération des ressources
 
-            UpdatePopulation(populationMultiplier);
+            //Càd que sans rien, une ville gagne 5 de chaque ressource sauf de population
+            //Avec une maison, elle gagnera 10 de Meat et 5 du reste, etc<
+            Resource rsc = new Resource();
+            foreach (Building building in _Buildings)
+            {
+                rsc = rsc + building.Update();
+            }
+            Ressources.Update(rsc);
         }
 
-        private void UpdatePopulation(int mul)
-        {
-            Ressources[(int)Resources.Population] += mul * Sigmoid(Ressources[(int) Resources.Population]);
-        }
 
-        private static int Sigmoid(int t)
-        {
-            return Convert.ToInt32(1/(1 + Math.Exp(-t)));
-        }
 
     }
 }

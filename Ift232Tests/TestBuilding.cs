@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.AccessControl;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -25,17 +26,13 @@ namespace Ift232Tests
         [TestMethod]
         public void UpdateHouse()
         {
-            var house = new House();
-            var answer = new int[5];
-            answer[(int)Resources.Population] = 1;
-            house.Update();
-            house.Update();
-            house.Update();
-            var a = house.Update();
-            for (int i = 0; i < a.Length; i++)
-            {
-                Assert.AreEqual(a[i],answer[i]);
-            }
+            Building house=new House();
+            Dictionary<Resources, int> rsc = new Dictionary<Resources, int>();
+            rsc.Add(Resources.Population, 1);
+            Assert.AreEqual(house.Update(),new Resource());
+            Assert.AreEqual(house.Update(), new Resource());
+            Assert.AreEqual(house.Update(), new Resource());
+            Assert.AreEqual(house.Update(), new Resource(rsc));
 
         }
     }
