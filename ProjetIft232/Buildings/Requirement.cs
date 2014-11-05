@@ -17,6 +17,12 @@ namespace ProjetIft232.Buildings
             Resources = resources;
         }
 
+        public static Requirement Zero()
+        {
+            return new Requirement(new BuildingType[0], Resource.Zero());
+        }
+
+
         public bool IsValid(Resource actualResource, IEnumerable<Building> actualBuildings)
         {
             return actualResource >= Resources && _Buildings.All(type =>

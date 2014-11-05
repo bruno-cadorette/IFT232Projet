@@ -17,7 +17,7 @@ namespace ProjetIft232.Buildings
             Dictionary<Resources, int> res = new Dictionary<Resources, int>();
             res.Add(Resources.Population, 1);
             Resource = new Resource(res);
-            Requirement = new Requirement(new BuildingType[0],Resource.Zero());
+            Requirement = Requirement.Zero();
         }
     }
 }
