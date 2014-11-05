@@ -16,12 +16,8 @@ namespace ProjetIft232.Buildings
                 "Un bâtiment principalement composé de bois permettant à votre population actuelle de créer une famille et donc d'augmenter votre population.\n";
             Dictionary<Resources, int> res = new Dictionary<Resources, int>();
             res.Add(Resources.Population, 1);
-            Ressource = new Resource(res);
-        }
-
-        protected override Resource UpdateBuilding()
-        {
-            return Ressource;
+            Resource = new Resource(res);
+            Requirement = new Requirement(new BuildingType[0],Resource.Zero());
         }
     }
 }

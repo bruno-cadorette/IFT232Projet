@@ -15,10 +15,5 @@ namespace ProjetIft232.Buildings
             Description =
                 "Un bâtiment assez banal...\nEnfin, il y a quelques personnes un peu bizarre qui font des recherches dedans...\n";
         }
-
-        protected override Resource UpdateBuilding()
-        {
-            return Ressource;
-        }
     }
 }

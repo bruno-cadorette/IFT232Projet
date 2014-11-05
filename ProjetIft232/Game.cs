@@ -21,6 +21,8 @@ namespace ProjetIft232
 
         private int _playerIndex = 0;
         public int PlayerIndex { get; private set; }
+
+        //Variable global, à changer 
         public static int TourIndex { get; private set; }
 
         public Game()
@@ -28,8 +30,7 @@ namespace ProjetIft232
             Players = new List<Player>();
         }
 
-        [UserCallable("Next")]
-        public CommandResult NextTurn()
+        public void NextTurn()
         {
             CurrentPlayer.Cities.First().Update();
             PlayerIndex++;
@@ -40,7 +41,6 @@ namespace ProjetIft232
                 PlayerIndex-=Players.Count;
                 TourIndex++;
             }
-            return new CommandResult("Changement de tour.");
         }
     }
 }

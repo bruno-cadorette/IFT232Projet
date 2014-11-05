@@ -15,10 +15,5 @@ namespace ProjetIft232.Buildings
             Description =
                 "Un bâtiment permettant d'accepter et de soigner les malades.\nQui sait, peut-être qu'un jour il permettra d'endiguer l'Ebola...";
         }
-
-        protected override Resource UpdateBuilding()
-        {
-            return Ressource;
-        }
     }
 }

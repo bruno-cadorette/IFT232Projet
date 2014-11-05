@@ -16,12 +16,7 @@ namespace ProjetIft232.Buildings
                 "Un joyeux camp de bûcheron. \nVive le Canada !\n";
             Dictionary<Resources, int> res = new Dictionary<Resources, int>();
             res.Add(Resources.Wood, 1);
-            Ressource = new Resource(res);
-        }
-
-        protected override Resource UpdateBuilding()
-        {
-            return Ressource;
+            Resource = new Resource(res);
         }
     }
 }

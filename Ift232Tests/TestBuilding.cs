@@ -33,7 +33,52 @@ namespace Ift232Tests
             Assert.AreEqual(house.Update(), new Resource());
             Assert.AreEqual(house.Update(), new Resource());
             Assert.AreEqual(house.Update(), new Resource(rsc));
+        }
 
+        [TestMethod]
+        public void CreateBuilding()
+        {
+            City city = new City("Toulouse!");
+            Assert.AreEqual(BuildingType.Farm,BuildingFactory.CreateBuilding(BuildingType.Farm, city).Type);
+        }
+
+        [TestMethod]
+        public void CantBeBuildDueResource()
+        {
+            var casern = new Casern();
+            var resource = new Resource(1000,50000,0,10000,100000);
+            var buildings = new Building[]{new House(), new Farm()};
+            Assert.IsFalse(casern.CanBeBuild(resource, buildings));
+        }
+
+        [TestMethod]
+        public void CantBeBuildDueBuildings()
+        {
+            var casern = new Casern();
+            var resource = new Resource(1000, 50000, 1000000, 10000, 100000);
+            var buildings = new Building[] { new House(), new Farm() };
+            Assert.IsFalse(casern.CanBeBuild(resource, buildings));
+        }
+
+        [TestMethod]
+        public void CanBeBuild()
+        {
+            House house = new House();
+            house.Update();
+            house.Update();
+            house.Update();
+            house.Update();
+
+            Farm farm = new Farm();
+            farm.Update();
+            farm.Update();
+            farm.Update();
+            farm.Update();
+
+            var casern = new Casern();
+            var resource = new Resource(1000, 50000, 1000000, 10000, 100000);
+            var buildings = new Building[] { house, farm };
+            Assert.IsTrue(casern.CanBeBuild(resource, buildings));
         }
     }
 }

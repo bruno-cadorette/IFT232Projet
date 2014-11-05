@@ -16,12 +16,7 @@ namespace ProjetIft232.Buildings
                 "Un chantier placé sur une source de granit infinie...\nQuoi de mieux pour un revenu de roche à chaque tour ?\n";
             Dictionary<Resources,int> res = new Dictionary<Resources, int>();
             res.Add(Resources.Rock, 1);
-            Ressource = new Resource(res);
-        }
-
-        protected override Resource UpdateBuilding()
-        {
-            return Ressource;
+            Resource = new Resource(res);
         }
     }
 }
