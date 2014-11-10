@@ -1,0 +1,71 @@
+<Batiments>
+  <Batiment Name="Maison" id = "0" turn="3" Description="Un bâtiment principalement composé de bois permettant à votre population actuelle de créer une famille et donc d'augmenter votre population.\n">
+    <Attributes>
+      <Population>1</Population>
+    </Attributes>
+    <IsSpecial>false</IsSpecial>
+  </Batiment>
+
+  <Batiment Name="Ferme" id = "1" turn="3" Description="Une parcelle de terre réservée à l'élevage et la culture afin de récolter de la nourriture.\n">
+    <Attributes>
+      <Meat>1</Meat>
+    </Attributes>
+    <IsSpecial>false</IsSpecial>
+  </Batiment>
+
+  <Batiment Name="Mine" id = "2" turn="3" Description="Une infrastructure basée sous la terre exploitant les minéraux afin d'obtenir de l'or.\nOn a toujours besoin d'or...\n">
+    <Attributes>
+      <Gold>1</Gold>
+    </Attributes>
+    <IsSpecial>false</IsSpecial>
+  </Batiment>
+
+  <Batiment Name="Scierie" id = "3" turn="3" Description="Un joyeux camp de bûcheron. \nVive le Canada !\n">
+    <Attributes>
+      <Wood>1</Wood>
+    </Attributes>
+    <IsSpecial>false</IsSpecial>
+  </Batiment>
+
+  <Batiment Name="Carrière" id = "4" turn="3" Description="Un chantier placé sur une source de granit infinie...\nQuoi de mieux pour un revenu de roche à chaque tour ?\n">
+    <Attributes>
+      <Rock>1</Rock>
+    </Attributes>
+    <IsSpecial>false</IsSpecial>
+  </Batiment>
+
+
+
+  <Batiment Name="Caserne" id = "5" turn="5" Description="Un camp d'entraînement pour des soldats d'élite !\nEnfin...Jusqu'à ce qu'on trouve meilleur que ces bras cassés...\n">
+  <Requirements>
+    <Builds>
+      <Bati>0</Bati>
+      <Bati>1</Bati>
+    </Builds>
+    <Res>
+      <Gold>20</Gold>
+      <Wood>15</Wood>
+      <Meat>25</Meat>
+      <Rock>15</Rock>
+      <Population>10</Population>
+    </Res>
+  </Requirements>
+    <IsSpecial>false</IsSpecial>
+  </Batiment>
+
+  <Batiment Name="École" id = "6" turn="3" Description= "Un bâtiment assez banal...\nEnfin, il y a quelques personnes un peu bizarre qui font des recherches dedans...\n">
+
+    <IsSpecial>false</IsSpecial>
+  </Batiment>
+
+  <Batiment Name="Marché" id = "7" turn="3" Description="Un bâtiment permettant l'échange de ressources.\nQui sait, peut-être que si vous aidez le marchand il vous donnera un peu d'or...\n">
+    <IsSpecial>true</IsSpecial>
+  </Batiment>
+
+  <Batiment Name="Hopital" id = "8" turn="3" Description="Un bâtiment permettant d'accepter et de soigner les malades.\nQui sait, peut-être qu'un jour il permettra d'endiguer l'Ebola...\n">
+    <IsSpecial>false</IsSpecial>
+  </Batiment>
+
+
+
+</Batiments>

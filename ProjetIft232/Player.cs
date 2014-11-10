@@ -15,8 +15,6 @@ namespace ProjetIft232
            
         }
 
-
-        [UserCallable("ville")]
         public City GetCity()
         {
             return Cities.First();

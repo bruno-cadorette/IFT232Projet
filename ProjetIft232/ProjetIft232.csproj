@@ -42,15 +42,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Buildings\Building.cs" />
+    <Compile Include="Buildings\BuildingFactory.cs" />
+    <Compile Include="Buildings\BuildingLoader.cs" />
+    <Compile Include="Buildings\BuildingType.cs" />
     <Compile Include="Buildings\Hospital.cs" />
+    <Compile Include="Buildings\Requirement.cs" />
     <Compile Include="Buildings\School.cs" />
     <Compile Include="Buildings\Market.cs" />
-    <Compile Include="Buildings\Casern.cs" />
-    <Compile Include="Buildings\Farm.cs" />
-    <Compile Include="Buildings\Mine.cs" />
-    <Compile Include="Buildings\SawMill.cs" />
-    <Compile Include="Buildings\Carry.cs" />
-    <Compile Include="Buildings\House.cs" />
     <Compile Include="CommandResult.cs" />
     <Compile Include="ConsoleUi.cs" />
     <Compile Include="Player.cs" />
@@ -59,10 +57,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="City.cs" />
     <Compile Include="Resources.cs" />
-    <Compile Include="UserCallable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="batiments.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

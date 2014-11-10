@@ -30,14 +30,18 @@ namespace ProjetIft232
         public int Rock { get; private set; }
 
         public int Population { get; private set; }
-        public Resource ()
+        public Resource () : this(0,0,0,0,0)
         {
-            Wood = 0;
-            Gold = 0;
-            Meat = 0;
-            Rock = 0;
-            Population = 0;
         }
+        public Resource(int wood, int gold, int meat, int rock, int population)
+        {
+            Wood = wood;
+            Gold = gold;
+            Meat = meat;
+            Rock = rock;
+            Population = population;
+        }
+
 
         public Resource(Resource a)
         {
@@ -75,6 +79,11 @@ namespace ProjetIft232
                         break;
                 }
             }
+        }
+
+        public static Resource Zero()
+        {
+            return new Resource();
         }
 
         public static Resource operator+(Resource debut, Resource b)
