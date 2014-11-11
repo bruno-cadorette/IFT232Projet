@@ -14,7 +14,8 @@ namespace Ift232Tests
         [TestMethod]
         public void Build()
         {
-            var house = new House();
+            City city = new City("Toulouse!");
+            Building house = BuildingFactory.CreateBuilding(BuildingType.House, city);
             Assert.IsTrue(house.InConstruction);
             Assert.IsTrue(house.TurnsLeft==3);
             house.Update();
@@ -26,7 +27,8 @@ namespace Ift232Tests
         [TestMethod]
         public void UpdateHouse()
         {
-            Building house=new House();
+            City city = new City("Toulouse!");
+            Building house = BuildingFactory.CreateBuilding(BuildingType.House, city);
             Dictionary<Resources, int> rsc = new Dictionary<Resources, int>();
             rsc.Add(Resources.Population, 1);
             Assert.AreEqual(house.Update(),new Resource());
@@ -45,37 +47,38 @@ namespace Ift232Tests
         [TestMethod]
         public void CantBeBuildDueResource()
         {
-            var casern = new Casern();
+            var casern = new Building(BuildingLoader.getInstance()._buildings[BuildingType.Casern]);
             var resource = new Resource(1000,50000,0,10000,100000);
-            var buildings = new Building[]{new House(), new Farm()};
+            var buildings = new Building[] { new Building(BuildingLoader.getInstance()._buildings[BuildingType.House]), new Building(BuildingLoader.getInstance()._buildings[BuildingType.Farm]) };
             Assert.IsFalse(casern.CanBeBuild(resource, buildings));
         }
 
         [TestMethod]
         public void CantBeBuildDueBuildings()
         {
-            var casern = new Casern();
+            var casern = new Building(BuildingLoader.getInstance()._buildings[BuildingType.Casern]);
             var resource = new Resource(1000, 50000, 1000000, 10000, 100000);
-            var buildings = new Building[] { new House(), new Farm() };
+            var buildings = new Building[] { new Building( BuildingLoader.getInstance()._buildings[BuildingType.House]), new Building(BuildingLoader.getInstance()._buildings[BuildingType.Farm]) };
             Assert.IsFalse(casern.CanBeBuild(resource, buildings));
         }
 
         [TestMethod]
         public void CanBeBuild()
         {
-            House house = new House();
+            City city = new City("Toulouse!");
+            Building house = BuildingFactory.CreateBuilding(BuildingType.House, city);
             house.Update();
             house.Update();
             house.Update();
             house.Update();
 
-            Farm farm = new Farm();
+            Building farm = BuildingFactory.CreateBuilding(BuildingType.Farm, city);
             farm.Update();
             farm.Update();
             farm.Update();
             farm.Update();
 
-            var casern = new Casern();
+            var casern = new Building(BuildingLoader.getInstance()._buildings[BuildingType.Casern]);
             var resource = new Resource(1000, 50000, 1000000, 10000, 100000);
             var buildings = new Building[] { house, farm };
             Assert.IsTrue(casern.CanBeBuild(resource, buildings));

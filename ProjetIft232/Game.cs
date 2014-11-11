@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ProjetIft232.Buildings;
 
 namespace ProjetIft232
 {
@@ -27,6 +28,7 @@ namespace ProjetIft232
 
         public Game()
         {
+            BuildingLoader.getInstance();
             Players = new List<Player>();
         }
 

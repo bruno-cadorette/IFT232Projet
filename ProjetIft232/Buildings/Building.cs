@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ProjetIft232.Buildings
 {
-    public abstract class Building
+    public  class Building
     {
         public string Name { get; protected set; }
         public string Description { get; protected set; }
@@ -16,11 +16,36 @@ namespace ProjetIft232.Buildings
 
         public Requirement Requirement { get; protected set; }
 
+
         public int TurnsLeft { get; private set; }
         //Retourne le nombre de ressources par batiment. Permet qu'un batiment actif (tel le marché) puisse générer de l'or 
         protected virtual Resource UpdateBuilding()
         {
             return Resource;
+        }
+
+
+        public Building(BuildingType type, string name, string description, int turnsLeft, Resource resource, Requirement requirement)
+        {
+            Type = type;
+            Name = name;
+            Description = description;
+            Resource = resource;
+            InConstruction = false;
+            TurnsLeft = turnsLeft;
+            Requirement = requirement;
+        }
+
+
+        public Building(Building build)
+        {
+            Type = build.Type;
+            Name = build.Name;
+            Description = build.Description;
+            Resource = build.Resource;
+            InConstruction = true;
+            TurnsLeft = build.TurnsLeft;
+            Requirement = build.Requirement;
         }
 
 

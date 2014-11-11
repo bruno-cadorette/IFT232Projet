@@ -32,6 +32,7 @@ namespace ProjetIft232
 
         public bool AddBuilding(BuildingType type)
         {
+            var buildXML = new Building(BuildingLoader.getInstance()._buildings[type]);
             var building = BuildingFactory.CreateBuilding(type, this);
             if (building != null)
             {
