@@ -57,9 +57,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="City.cs" />
     <Compile Include="Resources.cs" />
-    <Compile Include="UserCallable.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
