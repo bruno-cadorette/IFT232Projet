@@ -49,6 +49,16 @@ namespace ProjetIft232.Buildings
         }
 
 
+        protected Building(BuildingType type, string name, string description, int turnsLeft, Resource resource, Requirement requirement)
+        {
+            Type = type;
+            Name = name;
+            Description = description;
+            Resource = resource;
+            InConstruction = true;
+            TurnsLeft = turnsLeft;
+            Requirement = requirement;
+        }
         protected Building(int turnsLeft)
         {
             Resource = new Resource();
