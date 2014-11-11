@@ -1,6 +1,13 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
-
-/ProjetIft232/bin/Debug
-/ProjetIft232/obj/Debug
+﻿[Oo]bj
+[Bb]in
+*.user
+*.suo
+*.[Cc]ache
+*.bak
+*.ncb
+*.log 
+*.DS_Store
+[Tt]humbs.db 
+_ReSharper.*
+*.resharper
+Ankh.NoLoad
