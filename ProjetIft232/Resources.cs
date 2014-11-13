@@ -7,7 +7,7 @@ using System.Text;
 namespace ProjetIft232
 {
     //TODO: Changer pour une classe
-    public enum Resources
+    public enum ResourcesType
     {
         Wood,
         Gold,
@@ -17,150 +17,246 @@ namespace ProjetIft232
         End
     }
 
-    public class Resource
+    public sealed class Resource
+    {
+        public static Dictionary<ResourcesType, string> Name = new Dictionary<ResourcesType, string>()
+        {
+            {ResourcesType.Wood, "Wood"},
+            {ResourcesType.Gold, "Gold"},
+            {ResourcesType.Meat, "Meat"},
+            {ResourcesType.Rock, "Rock"},
+            {ResourcesType.Population, "Population"},
+        };
+
+        // Plus la valeur est basse et plus la ressource est precieuse
+        public static Dictionary<ResourcesType, int> Rarity = new Dictionary<ResourcesType, int>()
+        {
+            {ResourcesType.Wood, 12},
+            {ResourcesType.Gold, 1},
+            {ResourcesType.Meat, 7},
+            {ResourcesType.Rock, 10},
+            {ResourcesType.Population, 0},
+        };
+    }
+
+    public class Resources
     {
         private const int MAX_POP = 500000;
-        private const int RESOURCE_PER_TURN = 5;
-        public int Wood { get; private set; }
 
-        public int Gold { get; private set; }
+        private Dictionary<ResourcesType, int> resources;
 
-        public int Meat { get; private set; }
-
-        public int Rock { get; private set; }
-
-        public int Population { get; private set; }
-        public Resource () : this(0,0,0,0,0)
+        public Resources ()
         {
+            resources = new Dictionary<ResourcesType,int>();
         }
-        public Resource(int wood, int gold, int meat, int rock, int population)
+        public Resources(int wood, int gold, int meat, int rock, int population) : this()
         {
-            Wood = wood;
-            Gold = gold;
-            Meat = meat;
-            Rock = rock;
-            Population = population;
+            resources.Add(ResourcesType.Wood, wood);
+            resources.Add(ResourcesType.Gold, gold);
+            resources.Add(ResourcesType.Meat, meat);
+            resources.Add(ResourcesType.Rock, rock);
+            resources.Add(ResourcesType.Population, population);
+           
         }
 
 
-        public Resource(Resource a)
+        public Resources(Resources a) : this()
         {
-            Wood = a.Wood;
-            Gold = a.Gold;
-            Meat = a.Meat;
-            Rock = a.Rock;
-            Population = a.Population;
-        }
-
-        public Resource(Dictionary<Resources, int> resources)
-            :this()
-        {
-            foreach (var resource in resources)
+            foreach (KeyValuePair<ResourcesType, int> kvp in a.resources)
             {
-                if (resource.Value < 0)
-                    break;
-
-                switch (resource.Key)
-                {
-                    case Resources.Wood:
-                        Wood = resource.Value;
-                        break;
-                    case Resources.Rock:
-                        Rock = resource.Value;
-                        break;
-                    case Resources.Population:
-                        Population = resource.Value;
-                        break;
-                    case Resources.Meat:
-                        Meat = resource.Value;
-                        break;
-                    case Resources.Gold:
-                        Gold = resource.Value;
-                        break;
-                }
+                this.resources.Add(kvp.Key, kvp.Value);
             }
         }
 
-        public static Resource Zero()
+        public Resources(Dictionary<ResourcesType, int> resources)
+            :this()
         {
-            return new Resource();
+            this.resources = resources;
         }
 
-        public static Resource operator+(Resource debut, Resource b)
+        public bool isEmpty()
         {
-            Resource a = new Resource(debut);
-            a.Wood += b.Wood;
-            a.Rock += b.Rock;
-            a.Population += b.Population;
-            a.Meat += b.Meat;
-            a.Gold += b.Gold;
+            return(resources.Count() == 0);
+        }
 
+        public int get(string resource) {
+            ResourcesType r = Resource.Name.FirstOrDefault(x => x.Value == resource).Key;
+            int value;
+            resources.TryGetValue(r, out value);
+            return value;
+        }
+
+        public static Resources Zero()
+        {
+            return new Resources();
+        }
+
+        public static Resources operator+(Resources debut, Resources b)
+        {
+            int old;
+            Resources a = new Resources(debut);
+            foreach (KeyValuePair<ResourcesType, int> kvp in b.resources)
+            {
+                if (a.resources.TryGetValue(kvp.Key, out old))
+                {
+                    a.resources[kvp.Key] = old + kvp.Value;
+                }
+                else a.resources.Add(kvp.Key, kvp.Value);
+            }
             return a;
         }
 
 
 
-        public static Resource operator -(Resource debut, Resource b)
+        public static Resources operator -(Resources debut, Resources b)
         {
-            Resource a = new Resource(debut);
-            a.Wood -= b.Wood;
-            a.Rock -= b.Rock;
-            a.Population -= b.Population;
-            a.Meat -= b.Meat;
-            a.Gold -= b.Gold;
-
+            int old;
+            Resources a = new Resources(debut);
+            foreach (KeyValuePair<ResourcesType, int> kvp in b.resources)
+            {
+                if (a.resources.TryGetValue(kvp.Key, out old))
+                {
+                    a.resources[kvp.Key] = old - kvp.Value;
+                }
+                else a.resources.Add(kvp.Key, -kvp.Value);
+            }
             return a;
         }
 
-        public static bool operator <(Resource a, Resource b)
+        public static bool operator <(Resources a, Resources b)
         {
-            return a.Gold < b.Gold && a.Meat < b.Meat && a.Population < b.Population && a.Rock < b.Rock &&
-                   a.Wood < b.Wood;
+            int old;
+            if (b.isEmpty())
+                return false;
+            foreach (KeyValuePair<ResourcesType, int> kvp in b.resources)
+            {
+                if (a.resources.TryGetValue(kvp.Key, out old))
+                {
+                    if (old >= kvp.Value)
+                        return false;
+                }
+                else return true;
+            }
+            return true;
         }
 
-        public static bool operator <=(Resource a, Resource b)
+        public static bool operator <=(Resources a, Resources b)
         {
-            return a.Gold <= b.Gold && a.Meat <= b.Meat && a.Population <= b.Population && a.Rock <= b.Rock &&
-                   a.Wood <= b.Wood;
+            int old;
+            if (b.isEmpty() && !a.isEmpty())
+                return false;
+            foreach (KeyValuePair<ResourcesType, int> kvp in b.resources)
+            {
+                if (a.resources.TryGetValue(kvp.Key, out old))
+                {
+                    if (old > kvp.Value)
+                        return false;
+                }
+                else return true;
+            }
+            return true;
         }
 
-        public static bool operator >(Resource a, Resource b)
+        public static bool operator >(Resources a, Resources b)
         {
-            return a.Gold > b.Gold && a.Meat > b.Meat && a.Population > b.Population && a.Rock > b.Rock &&
-                   a.Wood > b.Wood;
+            int old;
+            if (a.isEmpty())
+                return false;
+            foreach (KeyValuePair<ResourcesType, int> kvp in b.resources)
+            {
+                if (a.resources.TryGetValue(kvp.Key, out old))
+                {
+                    if (old <= kvp.Value)
+                        return false;
+                }
+                else
+                {
+                    if (kvp.Value != 0) 
+                        return false;
+                }
+            }
+            return true;
         }
 
-        public static bool operator >=(Resource a, Resource b)
+        public static bool operator >=(Resources a, Resources b)
         {
-            return a.Gold >= b.Gold && a.Meat >= b.Meat && a.Population >= b.Population && a.Rock >= b.Rock &&
-                   a.Wood >= b.Wood;
+            int old;
+            if (a.isEmpty() && !b.isEmpty())
+                return false;
+            foreach (KeyValuePair<ResourcesType, int> kvp in b.resources)
+            {
+                if (a.resources.TryGetValue(kvp.Key, out old))
+                {
+                    if (old < kvp.Value)
+                        return false;
+                }
+                else
+                {
+                    if (kvp.Value != 0)
+                        return false;
+                }
+            }
+            return true;
         }
 
-        public static bool operator ==(Resource a, Resource b)
+        public static bool operator ==(Resources a, Resources b)
         {
-            return a.Gold == b.Gold && a.Meat == b.Meat && a.Population == b.Population && a.Rock == b.Rock &&
-                   a.Wood == b.Wood;
+            int old;
+            foreach (KeyValuePair<ResourcesType, int> kvp in b.resources)
+            {
+                if (a.resources.TryGetValue(kvp.Key, out old))
+                {
+                    if (old != kvp.Value)
+                        return false;
+                }
+                else
+                {
+                    if (kvp.Value != 0)
+                        return false;
+                }
+            }
+            foreach (KeyValuePair<ResourcesType, int> kvp in a.resources)
+            {
+                if (b.resources.TryGetValue(kvp.Key, out old))
+                {
+                    if (old != kvp.Value)
+                        return false;
+                }
+                else
+                {
+                    if (kvp.Value != 0)
+                        return false;
+                }
+            }
+            return true;
         }
 
-        public static bool operator !=(Resource a, Resource b)
+        public static bool operator !=(Resources a, Resources b)
         {
-            return a.Gold != b.Gold || a.Meat != b.Meat || a.Population != b.Population || a.Rock != b.Rock ||
-                   a.Wood != b.Wood;
+            return !(a == b);
         }
 
         public override string ToString()
         {
-            return string.Format("Bois : {0} \t Or : {1} \t Viande : {2} \t Pierre : {3} \t Population : {4} \n", Wood, Gold,
-                Meat, Rock, Population);
+            string format = "";
+            foreach (KeyValuePair<ResourcesType, int> kvp in this.resources)
+            {
+                format = format + Resource.Name[kvp.Key] + " : " + kvp.Value.ToString() + "\n";
+            }
+            return format;
         }
 
-        public void Update(Resource a)
+        public void Update(Resources a)
         {
-            this.Meat += (a.Meat+1)*RESOURCE_PER_TURN;
-            this.Gold += (a.Gold + 1) * RESOURCE_PER_TURN;
-            this.Wood += (a.Wood + 1) * RESOURCE_PER_TURN;
-            this.Rock += (a.Rock + 1) * RESOURCE_PER_TURN;
-            this.Population += Convert.ToInt32(a.Population+1+Game.TourIndex*0.1);
+            int old;
+            foreach (KeyValuePair<ResourcesType, int> kvp in a.resources)
+            {
+                if (this.resources.TryGetValue(kvp.Key, out old))
+                {
+                    this.resources[kvp.Key] = old + kvp.Value;
+                }
+                else this.resources.Add(kvp.Key, kvp.Value);
+            }
         }
 
 
@@ -168,9 +264,9 @@ namespace ProjetIft232
         {
             if (obj == null)
                 return false;
-            if (!(obj is Resource))
+            if (!(obj is Resources))
                 return false;
-            Resource temp = obj as Resource;
+            Resources temp = obj as Resources;
             return this == temp;
         }
     }

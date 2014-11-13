@@ -12,20 +12,20 @@ namespace ProjetIft232.Buildings
         public bool InConstruction { get; protected set; }
         public BuildingType Type { get; protected set; }
 
-        public Resource Resource { get; protected set; }
+        public Resources Resource { get; protected set; }
 
         public Requirement Requirement { get; protected set; }
 
 
         public int TurnsLeft { get; private set; }
         //Retourne le nombre de ressources par batiment. Permet qu'un batiment actif (tel le marché) puisse générer de l'or 
-        protected virtual Resource UpdateBuilding()
+        protected virtual Resources UpdateBuilding()
         {
             return Resource;
         }
 
 
-        public Building(BuildingType type, string name, string description, int turnsLeft, Resource resource, Requirement requirement)
+        public Building(BuildingType type, string name, string description, int turnsLeft, Resources resource, Requirement requirement)
         {
             Type = type;
             Name = name;
@@ -50,23 +50,23 @@ namespace ProjetIft232.Buildings
 
         protected Building(int turnsLeft)
         {
-            Resource = new Resource();
+            Resource = new Resources();
             InConstruction = true;
             TurnsLeft = turnsLeft;
         }
 
-        public bool CanBeBuild(Resource actualResource, IEnumerable<Building> actualBuildings)
+        public bool CanBeBuild(Resources actualResource, IEnumerable<Building> actualBuildings)
         {
             return Requirement.IsValid(actualResource, actualBuildings);
         }
 
 
-        public Resource Update()
+        public Resources Update()
         {
             if (InConstruction)
             {
                 Build();
-                return Resource.Zero();
+                return Resources.Zero();
             }
             else
             {

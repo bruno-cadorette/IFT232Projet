@@ -32,8 +32,8 @@ namespace ProjetIft232.Buildings
                 string desc = GetAttribute(child, "Description");
                 int turn = int.Parse(GetAttribute(child, "turn"));
                 BuildingType id = (BuildingType)int.Parse(GetAttribute(child, "id"));
-                Resource att = GetRessource(child,"Attributes");
-                Resource costRes = GetRessource(child, "Res");
+                Resources att = GetRessource(child,"Attributes");
+                Resources costRes = GetRessource(child, "Res");
                 IEnumerable<BuildingType> buildingCost = GetBuilding(child);
                 bool isSpecial = IsSpecial(child);
                 Building build = new Building(id, name, desc, turn, att, new Requirement(buildingCost, costRes));
@@ -74,7 +74,7 @@ namespace ProjetIft232.Buildings
             return res;
         }
 
-        private Resource GetRessource(XElement child,string attName)
+        private Resources GetRessource(XElement child,string attName)
         {
             int gold=0, meat=0, pop=0, wood =0, rock = 0;
             var firstOrDefault = child.Descendants().FirstOrDefault(n => n.Name == attName);
@@ -104,7 +104,7 @@ namespace ProjetIft232.Buildings
                     }
                 }
             }
-            return new Resource(wood,gold,meat,rock,pop);
+            return new Resources(wood,gold,meat,rock,pop);
         }
 
         private string GetAttribute(XElement child, string att)
