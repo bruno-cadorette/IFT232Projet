@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using ProjetIft232.Army;
 using ProjetIft232.Buildings;
 using System.Text;
 
@@ -33,8 +34,9 @@ namespace ProjetIft232
                 Console.WriteLine("Tour #" + Game.TourIndex +@" 
 1) Résumé de l'état de la ville
 2) Création de bâtiments
-3) Prochain tour
-4) Quitter
+3) Création d'armée
+4) Prochain tour
+5) Quitter
 ");
                 option = int.Parse(Console.ReadLine());             
                 switch (option)
@@ -48,12 +50,33 @@ namespace ProjetIft232
                         break;
 
                     case 3:
-                        _Game.NextTurn();
+                        ArmyMenu();
+                        break;
+
+                    case 4:
+                        Console.WriteLine(_Game.NextTurn());
                         Console.WriteLine("Nous avons progressé d'un tour, on ne va pas rester à l'âge de pierre");
                         break;
                     default:
                         break;
                 }
+            }
+        }
+
+        private void ArmyMenu()
+        {
+            var armyUnit = Enum.GetNames(typeof(ArmyUnitType));
+
+            for (int i = 0; i < armyUnit.Length; i++)
+            {
+                Console.WriteLine("{0} : {1}", i + 1, armyUnit[i]);
+            }
+            int option = int.Parse(Console.ReadLine());
+
+
+            if (_Game.CurrentPlayer.GetCity().AddArmy((ArmyUnitType)(option - 1)))
+            {
+                Console.WriteLine(" L'unité " + armyUnit[option - 1] + "a bien été créée");
             }
         }
 

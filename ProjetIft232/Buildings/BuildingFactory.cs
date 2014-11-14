@@ -14,6 +14,7 @@ namespace ProjetIft232.Buildings
             if (building != null && building.CanBeBuild(city.Ressources, city.Buildings))
             {
                 city.RemoveResources(building.Requirement.Resources);
+                city.Buildings.Add(building);
                 return building;
             }
             return null;

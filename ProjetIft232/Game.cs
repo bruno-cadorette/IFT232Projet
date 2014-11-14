@@ -21,6 +21,7 @@ namespace ProjetIft232
         }
 
         private int _playerIndex = 0;
+        private int Hostility { get;  set; }
         public int PlayerIndex { get; private set; }
 
         //Variable global, à changer 
@@ -30,12 +31,23 @@ namespace ProjetIft232
         {
             BuildingLoader.getInstance();
             Players = new List<Player>();
+            Hostility = 3;
         }
 
-        public void NextTurn()
+        public string NextTurn()
         {
+            string resumerDuTour = "";
             CurrentPlayer.Cities.First().Update();
             PlayerIndex++;
+
+            Random hostylityAument = new Random();
+            Hostility +=hostylityAument.Next(-1, 1+TourIndex/10);
+            if (Hostility > hostylityAument.Next(0, 100))
+            {
+               resumerDuTour += CurrentPlayer.Cities.First().Attack(BarbarianArmyGenerator.CreateArmy(TourIndex));
+
+            }
+
             
            //Sinon c'est attardé
             if (PlayerIndex + 1 > Players.Count)
@@ -43,6 +55,7 @@ namespace ProjetIft232
                 PlayerIndex-=Players.Count;
                 TourIndex++;
             }
+            return resumerDuTour;
         }
     }
 }

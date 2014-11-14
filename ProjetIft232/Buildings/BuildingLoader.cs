@@ -18,8 +18,13 @@ namespace ProjetIft232.Buildings
         private BuildingLoader()
         {
             _buildings = new Dictionary<BuildingType, Building>();
-            doc = XDocument.Load("batiments.xml");
+            doc = XDocument.Load("Buildings.xml");
             LoadBuilding();
+        }
+
+        public Building GetBuilding(BuildingType type)
+        {
+            return _buildings[type];
         }
 
         private void LoadBuilding()

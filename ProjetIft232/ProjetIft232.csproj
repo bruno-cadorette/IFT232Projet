@@ -41,6 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Army\ArmyFactory.cs" />
+    <Compile Include="Army\ArmyUnit.cs" />
+    <Compile Include="Army\ArmyUnitType.cs" />
+    <Compile Include="Army\Warrior.cs" />
+    <Compile Include="BarbarianArmyGenerator.cs" />
     <Compile Include="Buildings\Building.cs" />
     <Compile Include="Buildings\BuildingFactory.cs" />
     <Compile Include="Buildings\BuildingLoader.cs" />
@@ -62,7 +67,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="batiments.xml">
+    <Content Include="Army.xml" />
+    <Content Include="Buildings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--NOT USEFULL YET DONT TOUCH IT PLZ-->
+<Army>
+  <ArmyMen Name="Guerrier" id = "0" turn="5" Description="Un barbare sans éducation, unité de base \n">
+  <Requirements>
+    <Builds>
+      <Bati>5</Bati>
+    </Builds>
+    <Res>
+      <Gold>20</Gold>
+      <Meat>10</Meat>
+      <Population>1</Population>
+    </Res>
+  </Requirements>
+  </ArmyMen>
+</Army> 
