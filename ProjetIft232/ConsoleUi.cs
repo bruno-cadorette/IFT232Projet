@@ -7,36 +7,41 @@ using System.Linq;
 using ProjetIft232.Army;
 using ProjetIft232.Buildings;
 using System.Text;
+using System.Xml.Serialization;
+using System.Xml;
+using System.IO;
 
 namespace ProjetIft232
 {
     class ConsoleUi
     {
         private Game _Game;
+        private Player player = new Player();
         public void Interact(Game game)
         {
-            _Game = game;
+            _Game = game;     
             // Game initial setup
             Console.WriteLine("Bienvenue!!!!");
             Console.WriteLine("Bonjour, quel est le nom de votre ville?");
-            string cityName = Console.ReadLine();
-            var player = new Player();
+            string cityName = Console.ReadLine();          
             player.Cities.Add(new City(cityName));
             _Game.Players.Add(player);
+            player.WriteXML();
             PrincipalMenu();
+        }      
 
-        }
         private void PrincipalMenu()
         {
             int option = 0;
-            while (option != 4)
+            while (option != 6)
             {
                 Console.WriteLine("Tour #" + Game.TourIndex +@" 
 1) Résumé de l'état de la ville
 2) Création de bâtiments
 3) Création d'armée
 4) Prochain tour
-5) Quitter
+5) Save
+6) Quitter
 ");
                 option = int.Parse(Console.ReadLine());             
                 switch (option)
@@ -56,6 +61,9 @@ namespace ProjetIft232
                     case 4:
                         Console.WriteLine(_Game.NextTurn());
                         Console.WriteLine("Nous avons progressé d'un tour, on ne va pas rester à l'âge de pierre");
+                        break;
+                    case 5:
+                        player.WriteXML();
                         break;
                     default:
                         break;

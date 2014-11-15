@@ -9,12 +9,18 @@ namespace ProjetIft232.Buildings
     public class Requirement
     {
         private IEnumerable<BuildingType> _Buildings;
-        public Resources Resources { get; private set; }
+        public Resources Resources { get; set; }
 
         public Requirement(IEnumerable<BuildingType> buildings, Resources resources)
         {
             _Buildings = buildings;
             Resources = resources;
+        }
+
+        public Requirement()
+        {
+            _Buildings = new BuildingType[0];
+            Resources = Resources.Zero();
         }
 
         public static Requirement Zero()

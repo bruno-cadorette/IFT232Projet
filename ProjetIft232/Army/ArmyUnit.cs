@@ -21,19 +21,32 @@ namespace ProjetIft232.Army
 
         }
 
-        public string Name { get; protected set; }
-        public string Description { get; protected set; }
-        public bool InFormation { get; protected set; }
+        protected ArmyUnit()
+        {
+            Name = "Chevre";
+            Description = "toto";
+            Attack = 5;
+            Defense = 5;
+            Type = ArmyUnitType.Warrior;
+            TurnsLeft = 0;
+            InFormation = true;
 
-        public int Defense { get; protected set; }
+        }
 
-        public ArmyUnitType Type { get; protected set; }
 
-        public int TurnsLeft { get; protected set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public bool InFormation { get; set; }
 
-        public int Attack { get; protected set; }
-        public Requirement Requirement { get; protected set; }
-        public Resources Transport { get; protected set; }
+        public int Defense { get; set; }
+
+        public ArmyUnitType Type { get; set; }
+
+        public int TurnsLeft { get; set; }
+
+        public int Attack { get; set; }
+        public Requirement Requirement { get; set; }
+        public Resources Transport { get; set; }
 
 
         public void Update()

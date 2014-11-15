@@ -7,17 +7,17 @@ namespace ProjetIft232.Buildings
 {
     public  class Building
     {
-        public string Name { get; protected set; }
-        public string Description { get; protected set; }
-        public bool InConstruction { get; protected set; }
-        public BuildingType Type { get; protected set; }
+        public string Name { get; set; }
+        public string Description { get;  set; }
+        public bool InConstruction { get;  set; }
+        public BuildingType Type { get;  set; }
 
-        public Resources Resource { get; protected set; }
+        public Resources Resource { get;  set; }
 
-        public Requirement Requirement { get; protected set; }
+        public Requirement Requirement { get; set; }
 
 
-        public int TurnsLeft { get; private set; }
+        public int TurnsLeft { get; set; }
         //Retourne le nombre de ressources par batiment. Permet qu'un batiment actif (tel le marché) puisse générer de l'or 
         protected virtual Resources UpdateBuilding()
         {
@@ -46,6 +46,17 @@ namespace ProjetIft232.Buildings
             InConstruction = true;
             TurnsLeft = build.TurnsLeft;
             Requirement = build.Requirement;
+        }
+
+        public Building()
+        {
+            Type = BuildingType.Mine;
+            Name = "toto";
+            Description = "PUTQIN";
+            Resource = new Resources(0,0,0,0,0);
+            InConstruction = true;
+            TurnsLeft = 3;
+            Requirement = Requirement.Zero();
         }
 
         protected Building(int turnsLeft)

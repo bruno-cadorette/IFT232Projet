@@ -49,7 +49,6 @@ namespace ProjetIft232
             var building = BuildingFactory.CreateBuilding(type, this);
             if (building != null)
             {
-                Buildings.Add(building);
                 return true;
             }
             else
