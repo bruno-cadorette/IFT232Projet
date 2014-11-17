@@ -60,7 +60,7 @@ namespace ProjetIft232
             settings.OmitXmlDeclaration = true;
 
             System.IO.StreamWriter file = new System.IO.StreamWriter(
-                @"C:\Testing.xml");
+                @".\Testing.xml");
 
             var writer4 = XmlWriter.Create(file, settings);
             var writer5 = XmlWriter.Create(file, settings);
