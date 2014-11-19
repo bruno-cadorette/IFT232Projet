@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ProjetIft232.Technologies;
 
 namespace ProjetIft232.Buildings
 {
@@ -15,7 +16,7 @@ namespace ProjetIft232.Buildings
         public Resources Resource { get;  set; }
 
         public Requirement Requirement { get; set; }
-
+        private List<int> _CurrentTechnologies;
 
         public int TurnsLeft { get; set; }
         //Retourne le nombre de ressources par batiment. Permet qu'un batiment actif (tel le marché) puisse générer de l'or 
@@ -34,6 +35,7 @@ namespace ProjetIft232.Buildings
             InConstruction = false;
             TurnsLeft = turnsLeft;
             Requirement = requirement;
+            _CurrentTechnologies = new List<int>();
         }
 
 
@@ -46,6 +48,7 @@ namespace ProjetIft232.Buildings
             InConstruction = true;
             TurnsLeft = build.TurnsLeft;
             Requirement = build.Requirement;
+            _CurrentTechnologies = new List<int>();
         }
 
         public Building()
@@ -83,6 +86,17 @@ namespace ProjetIft232.Buildings
             {
                 return UpdateBuilding();
             }
+        }
+
+        public void Upgrade(Technology technology)
+        {
+            _CurrentTechnologies.Add(technology.ID);
+            Resource += technology.Enhancements.Resources;
+        }
+
+        public bool CanBeUpgraded(Resources actualResource, Technology technology)
+        {
+            return !InConstruction && technology.ApplicationCost <= actualResource && _CurrentTechnologies.All(x => x != technology.ID);
         }
 
         private void Build()

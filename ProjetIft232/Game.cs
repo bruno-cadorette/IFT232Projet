@@ -32,7 +32,7 @@ namespace ProjetIft232
 
         public Game()
         {
-            BuildingLoader.getInstance();
+            BuildingLoader.GetInstance();
             Players = new List<Player>();
             Hostility = 3;
             Alea = 0;

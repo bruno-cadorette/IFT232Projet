@@ -53,7 +53,7 @@
     <Compile Include="Buildings\BuildingLoader.cs" />
     <Compile Include="Buildings\BuildingType.cs" />
     <Compile Include="Buildings\Hospital.cs" />
-    <Compile Include="Buildings\Requirement.cs" />
+    <Compile Include="Requirement.cs" />
     <Compile Include="Buildings\School.cs" />
     <Compile Include="Buildings\Market.cs" />
     <Compile Include="CommandResult.cs" />
@@ -65,6 +65,9 @@
     <Compile Include="City.cs" />
     <Compile Include="Resources.cs" />
     <Compile Include="Save.cs" />
+    <Compile Include="Technologies\Enhancement.cs" />
+    <Compile Include="Technologies\Technology.cs" />
+    <Compile Include="Technologies\TechnologyFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -73,6 +76,7 @@
     <Content Include="Army.xml" />
     <Content Include="Buildings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

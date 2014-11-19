@@ -56,10 +56,10 @@ namespace ProjetIft232
                         player.Cities.ForEach(n => Console.WriteLine( string.Format("{0} \n", n.Name)));
                         break;
                     case 1:
-                        ShowCurrentBuildings(_Game.CurrentPlayer.GetCity().Buildings);
-                        if (_Game.CurrentPlayer.GetCity().Army.Count > 0)
-                            ShowArmy(_Game.CurrentPlayer.GetCity().Army);
-                        Console.WriteLine(_Game.CurrentPlayer.GetCity().Ressources);
+                        ShowCurrentBuildings(_Game.CurrentPlayer.CurrentCity.Buildings);
+                        if (_Game.CurrentPlayer.CurrentCity.Army.Count > 0)
+                            ShowArmy(_Game.CurrentPlayer.CurrentCity.Army);
+                        Console.WriteLine(_Game.CurrentPlayer.CurrentCity.Ressources);
                         break;
                     case 2:
                         BuildingMenu();
@@ -180,7 +180,7 @@ namespace ProjetIft232
             int option = int.Parse(Console.ReadLine());
 
 
-            if (_Game.CurrentPlayer.GetCity().AddArmy((ArmyUnitType)(option - 1)))
+            if (_Game.CurrentPlayer.CurrentCity.AddArmy((ArmyUnitType)(option - 1)))
             {
                 Console.WriteLine(" L'unité " + armyUnit[option - 1] + " a bien été créée");
             }
@@ -197,7 +197,7 @@ namespace ProjetIft232
             int option = int.Parse(Console.ReadLine());
 
 
-            if (_Game.CurrentPlayer.GetCity().AddBuilding((BuildingType)(option - 1)))
+            if (_Game.CurrentPlayer.CurrentCity.AddBuilding((BuildingType)(option - 1)))
             {
                 Console.WriteLine(" Le bâtiment " + buildings[option - 1] + " a bien été créé");
             }

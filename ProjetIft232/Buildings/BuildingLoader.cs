@@ -122,7 +122,7 @@ namespace ProjetIft232.Buildings
             return "";
         }
 
-        public static BuildingLoader getInstance()
+        public static BuildingLoader GetInstance()
         {
             if (instance == null)
             {

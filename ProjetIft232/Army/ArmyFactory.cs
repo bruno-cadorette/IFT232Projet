@@ -15,7 +15,6 @@ namespace ProjetIft232.Army
             {
                 case ArmyUnitType.Warrior:
                     return new Warrior();
-                    break;
             }
             return null;
         }

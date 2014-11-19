@@ -56,6 +56,7 @@
     <Compile Include="ArmyTest.cs" />
     <Compile Include="CityTest.cs" />
     <Compile Include="MarketTest.cs" />
+    <Compile Include="TestTechnology.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProjetIft232\ProjetIft232.csproj">

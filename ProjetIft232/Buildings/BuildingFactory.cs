@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProjetIft232.Technologies;
 
 namespace ProjetIft232.Buildings
 {
@@ -19,10 +20,18 @@ namespace ProjetIft232.Buildings
             }
             return null;
         }
+        public static void UpgrateBuilding(ref Building building, Technology technology, ref City city)
+        {
+           if(building.CanBeUpgraded(city.Ressources,technology))
+           {
+               building.Upgrade(technology);
+               city.RemoveResources(technology.ApplicationCost);
+           }
+        }
 
         private static Building GetBuilding(BuildingType type)
         {
-            return new Building(BuildingLoader.getInstance()._buildings[type]);
+            return new Building(BuildingLoader.GetInstance()._buildings[type]);
 
         }
     }

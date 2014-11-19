@@ -5,14 +5,16 @@ using System.Linq;
 using System.Text;
 using ProjetIft232.Army;
 using ProjetIft232.Buildings;
+using ProjetIft232.Technologies;
 
 namespace ProjetIft232
 {
     public class City
     {
 
-        public static Resources CostToCreate = new Resources(500,500,500,500,500);
-        private Resources BaseProduction() {
+        public static Resources CostToCreate = new Resources(500, 500, 500, 500, 500);
+        private Resources BaseProduction()
+        {
             return new Resources(new Dictionary<ResourcesType, int>() {
             {ResourcesType.Wood, 5},
             {ResourcesType.Gold, 5},
@@ -21,9 +23,11 @@ namespace ProjetIft232
             {ResourcesType.Population, Convert.ToInt32(1 + _tourDepuisCreation * 0.1)}
         });
         }
-        public List<Building> Buildings {get;private set;}
+        public List<Building> Buildings { get; private set; }
 
         public List<ArmyUnit> Army { get; private set; }
+
+        public List<Technology> ResearchedTechnologies { get; private set; }
 
         public Resources Ressources { get; private set; }
         public string Name { get; private set; }
@@ -33,14 +37,14 @@ namespace ProjetIft232
         public City(string name)
         {
             Name = name;
-            Ressources = new Resources(10000,10000,10000,10000,10000);
+            Ressources = new Resources(10000, 10000, 10000, 10000, 10000);
             Buildings = new List<Building>();
             Army = new List<ArmyUnit>();
             _tourDepuisCreation = 0;
         }
         public override string ToString()
         {
-            return "Ville de "+Name;
+            return "Ville de " + Name;
         }
 
         public void RemoveResources(Resources resource)
@@ -54,35 +58,27 @@ namespace ProjetIft232
         }
 
 
-        public Boolean TransferResources(City city, Resources resource)
+        public bool TransferResources(City city, Resources resource)
         {
             if (this.Ressources >= resource)
-            { 
-            this.RemoveResources(resource);
-            city.AddResources(resource);
-            return true;
+            {
+                this.RemoveResources(resource);
+                city.AddResources(resource);
+                return true;
             }
             return false;
         }
 
         public bool AddBuilding(BuildingType type)
         {
-            var buildXML = new Building(BuildingLoader.getInstance()._buildings[type]);
             City city = this;
-            var building = BuildingFactory.CreateBuilding(type,ref city);
-            if (building != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var building = BuildingFactory.CreateBuilding(type, ref city);
+            return building != null;
         }
 
         public void RemoveBuilding(int nb)
         {
-            int nbrCasern=0;
+            int nbrCasern = 0;
             if (Buildings.Count > nb)
             {
                 if (Buildings[nb].Type == BuildingType.Casern)
@@ -144,9 +140,9 @@ namespace ProjetIft232
             }
         }
 
-        public  string Attack(List<ArmyUnit> BarbarianArmy)
+        public string Attack(List<ArmyUnit> BarbarianArmy)
         {
-            string Resume = string.Format("La ville est attaqué par des barbares, ils sont {0} \n ",BarbarianArmy.Count) ;
+            string Resume = string.Format("La ville est attaqué par des barbares, ils sont {0} \n ", BarbarianArmy.Count);
             Random rand = new Random();
             int ourdefence = Army.Where(n => n.InFormation == false).Sum(n => n.Defense);
             int theirattack = BarbarianArmy.Sum(n => n.Attack);
@@ -159,18 +155,18 @@ namespace ProjetIft232
                 int lost = (diff / 2);
                 lost = lost > Army.Count ? Army.Count : lost;
                 Army.RemoveRange(0, lost);
-                BarbarianArmy.RemoveRange(0, lost/2);
+                BarbarianArmy.RemoveRange(0, lost / 2);
                 BarbarianArmy.ForEach(n => RemoveResources(n.Transport));
-                Resume += string.Format("Nous avons perdu, dans la bataille nous avons perdu  {0} soldats et eux {1}", lost, lost/2);
+                Resume += string.Format("Nous avons perdu, dans la bataille nous avons perdu  {0} soldats et eux {1}", lost, lost / 2);
             }
             else
             {
                 int diff = theirattack - ourdefence;
                 int lost = (diff / 2);
                 lost = lost > Army.Count ? BarbarianArmy.Count : lost;
-                Army.RemoveRange(0, lost/2);
+                Army.RemoveRange(0, lost / 2);
                 BarbarianArmy.RemoveRange(0, lost);
-                Resume += string.Format("Nous avons gagné! Dans la bataille nous avons perdu  {0} soldats et eux {1}", lost/2, lost);
+                Resume += string.Format("Nous avons gagné! Dans la bataille nous avons perdu  {0} soldats et eux {1}", lost / 2, lost);
             }
             return Resume;
 

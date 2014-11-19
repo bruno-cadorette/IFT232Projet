@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using System.Xml;
+using ProjetIft232.Technologies;
 
 namespace ProjetIft232
 {
@@ -30,14 +31,6 @@ namespace ProjetIft232
         {
             Cities.Add(new City(name));
         }
-
-
-        //Deprecated
-        public City GetCity()
-        {
-            return CurrentCity;
-        }
-
 
         public override string ToString()
         {
