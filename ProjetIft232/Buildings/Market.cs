@@ -29,7 +29,7 @@ namespace ProjetIft232.Buildings
             
         }
 
-        public bool Exchange( City city, ResourcesType resourceWanted, int amountGold)
+        public bool Achat( City city, ResourcesType resourceWanted, int amountGold)
         {
             if (amountGold >= 1) { 
            
@@ -60,6 +60,29 @@ namespace ProjetIft232.Buildings
         }
 
 
+        public int Conversion (int nb, ResourcesType type)
+        {
+            int reste;
+            int ratio=0;
+            switch (type){
+                case ResourcesType.Wood:
+                    ratio = RatioBois;
+                    break;
+                case ResourcesType.Rock:
+                    ratio = RatioPierre;
+                    break;
+                case ResourcesType.Meat:
+                    ratio = RatioViande;
+                    break;
+                default:
+                    return 0;
+            }
+            reste = nb % ratio;
+            if (reste == 0)
+                return nb;
+            return ratio * (nb / ratio) + ratio;
+
+        }
 
         // Création d'un historique pour changer les prix en fonction de l'offre et la demande
         // Avoir un tableau de correspondances de prix entre les ressources et l'argent
