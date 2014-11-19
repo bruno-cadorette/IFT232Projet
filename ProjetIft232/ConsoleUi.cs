@@ -34,19 +34,20 @@ namespace ProjetIft232
         private void PrincipalMenu()
         {
             int option = 0;
-            while (option != 9)
+            while (option != 10)
             {
-                Console.WriteLine("Tour #" + Game.TourIndex +@" 
+                Console.WriteLine("Tour #" + Game.TourIndex + "     Vous etes dans : " +player.CurrentCity +@" 
 0) Liste des villes de votre empire
 1) Résumé de l'état de la ville
 2) Création de bâtiments
 3) Création d'armée
-4) Créé Ville
+4) Créer Ville
 5) Prochaine Ville
-6) Prochain tour
-7) Transfert de ressources
-8) Save
-9) Quitter
+6) Envoi de ressources a une autre ville
+7) Acheter des ressources : marché
+8) Prochain tour
+9) Save
+10) Quitter
 ");
                  option = int.Parse(Console.ReadLine());             
                 switch (option)
@@ -74,14 +75,17 @@ namespace ProjetIft232
                     case 5:
                         ChangeCityFocus();
                         break;
-                    case 6:
+                   case 6:
+                        TransferResources();
+                        break;
+                    case 7 : // loading
+                        AchatRessources();
+                        break;
+                   case 8:
                         Console.WriteLine(_Game.NextTurn());
                         Console.WriteLine("Nous avons progressé d'un tour, on ne va pas rester à l'âge de pierre");
                         break;
-                    case 7:
-                        TransferResources();
-                        break;
-                    case 8:
+                    case 9:
                         player.WriteXML();
                         break;
                     default:
@@ -147,6 +151,94 @@ namespace ProjetIft232
 
 
 
+        }
+
+
+        private void PrintAchat(int accepte, ResourcesType type, int qtte,Market m)
+        {
+            switch (accepte)
+            {
+                case 1:
+                    m.Achat(_Game.CurrentPlayer.CurrentCity, type, qtte);
+                    break;
+                case 2:
+                    Console.WriteLine("Vous n'avez pas accepté la commande.");
+                    break;
+                default:
+                    Console.WriteLine("Vous avez écrit n'importe quoi !! ");
+                    return;
+            }
+        }
+
+
+        private void AchatRessources()
+        {
+
+            if (_Game.getMarket() != null)
+            {
+                Market m =(Market)_Game.getMarket();
+
+                Console.WriteLine(" Quel type de ressources voulez-vous acheter ");
+                Console.WriteLine(@" 
+1) Bois
+2) Viande
+3) Pierre
+");
+                bool result = false;
+                int option = int.Parse(Console.ReadLine());
+                int bois2, roche2, viande2;
+                int accepte;
+                switch (option)
+                {
+                    case 1:
+                        Console.Write(" Combien de bois ? ");
+                        int bois = Convert.ToInt32(Console.ReadLine());
+
+                        bois2 = m.Conversion(bois,ResourcesType.Wood);
+                        Console.Write(" Nous vous proposons " + bois2 + " unitées de bois contre " + bois2 / 15 + " unitées d'or : acceptez vous ?" + @"
+1 : oui
+2 : non");
+                        PrintAchat(Convert.ToInt32(Console.ReadLine()),ResourcesType.Wood,bois2/15,m);
+                        break;
+                        
+                    case 2:
+                        Console.Write(" Combien de viande ? ");
+                        int viande = Convert.ToInt32(Console.ReadLine());
+
+                        viande2 = m.Conversion(viande, ResourcesType.Meat);
+                        Console.Write(" Nous vous proposons " + viande2 + " unitées de viande contre " + viande2 / 8 + " unitées d'or : acceptez vous ?" + @"
+1 : oui
+2 : non");
+                        accepte = Convert.ToInt32(Console.ReadLine());
+                        PrintAchat(Convert.ToInt32(Console.ReadLine()), ResourcesType.Meat, viande / 8, m);
+                        break;
+                    case 3:
+                        Console.Write(" Combien de roche ? ");
+                        int roche = Convert.ToInt32(Console.ReadLine());
+
+                        roche2 = m.Conversion(roche, ResourcesType.Rock);
+                        Console.Write(" Nous vous proposons " + roche2 + " unitées de roche contre " + roche2 / 12 + " unitées d'or : acceptez vous ?" + @"
+1 : oui
+2 : non");
+                        accepte = Convert.ToInt32(Console.ReadLine());
+                        PrintAchat(Convert.ToInt32(Console.ReadLine()), ResourcesType.Rock, roche2 / 12, m);
+                        break;
+                    default:
+                        Console.WriteLine(" Message non interpreté");
+                        break;
+
+                }
+                if (result)
+                {
+                    Console.WriteLine("L'échange a bien eu lieu");
+                }
+                else
+                {
+                    Console.WriteLine("L'échange n'a pas eu lieu");
+                }
+
+            }
+            Console.WriteLine("Il n'y pas présentement pas de marché dans votre ville ou alors il est encore en construction");
         }
 
         private void ChangeCityFocus()

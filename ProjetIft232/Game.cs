@@ -107,7 +107,18 @@ namespace ProjetIft232
             {
                 return false;
             }
+        }
+
+            // Méthode getMarket pour récupérer une instance de Market (construit) si elle existe
+
+            public Building getMarket()
+            {
+                Building m = CurrentPlayer.CurrentCity.Buildings.FirstOrDefault(n => (n.Name == "Market") && (n.InConstruction == false)) ;
+
+                return m  ;
+                
+            }
             
         }
     }
-}
+
