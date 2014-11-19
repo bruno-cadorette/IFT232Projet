@@ -16,6 +16,7 @@ namespace ProjetIft232.Buildings
         Casern,
         School,
         Market,
-        Hospital
+        Hospital,
+        Null,
     }
 }

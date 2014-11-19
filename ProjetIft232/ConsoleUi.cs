@@ -48,7 +48,7 @@ namespace ProjetIft232
 8) Save
 9) Quitter
 ");
-                option = int.Parse(Console.ReadLine());             
+                 option = int.Parse(Console.ReadLine());             
                 switch (option)
                 {
                     case 0:
@@ -190,7 +190,7 @@ namespace ProjetIft232
         {
             var buildings = Enum.GetNames(typeof(BuildingType));
 
-            for (int i = 0; i < buildings.Length; i++)
+            for (int i = 0; i < buildings.Length-1; i++)
             {
                 Console.WriteLine("{0} : {1}", i + 1, buildings[i]);
             }

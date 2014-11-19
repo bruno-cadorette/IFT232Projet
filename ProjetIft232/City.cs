@@ -100,9 +100,21 @@ namespace ProjetIft232
                             }
                         }
                     }
-                    Buildings.Remove(Buildings[nb]);
                 }
+                Buildings.Remove(Buildings[nb]);
             }
+        }
+
+        public bool IsBuilt(BuildingType bt)
+        {
+            if (bt == BuildingType.Null)
+                return false;
+           foreach (Building building in Buildings)
+            {
+                if (building.Type == bt)
+                    return true;
+            }
+           return false;
         }
 
         public void Update()
