@@ -8,7 +8,7 @@ namespace ProjetIft232.Buildings
 {
     public class BuildingFactory
     {
-        public static Building CreateBuilding(BuildingType type, City city)
+        public static Building CreateBuilding(BuildingType type,ref City city)
         {
             Building building = GetBuilding(type);
             if (building != null && building.CanBeBuild(city.Ressources, city.Buildings))

@@ -10,13 +10,15 @@ namespace ProjetIft232
 {
     public class City
     {
-        private static Resources BaseProduction() {
+
+        public static Resources CostToCreate = new Resources(500,500,500,500,500);
+        private Resources BaseProduction() {
             return new Resources(new Dictionary<ResourcesType, int>() {
             {ResourcesType.Wood, 5},
             {ResourcesType.Gold, 5},
             {ResourcesType.Meat, 5},
             {ResourcesType.Rock, 5},
-            {ResourcesType.Population, Convert.ToInt32(1 + Game.TourIndex * 0.1)}
+            {ResourcesType.Population, Convert.ToInt32(1 + _tourDepuisCreation * 0.1)}
         });
         }
         public List<Building> Buildings {get;private set;}
@@ -26,12 +28,15 @@ namespace ProjetIft232
         public Resources Ressources { get; private set; }
         public string Name { get; private set; }
 
+        private int _tourDepuisCreation;
+
         public City(string name)
         {
             Name = name;
             Ressources = new Resources(10000,10000,10000,10000,10000);
             Buildings = new List<Building>();
             Army = new List<ArmyUnit>();
+            _tourDepuisCreation = 0;
         }
         public override string ToString()
         {
@@ -43,10 +48,28 @@ namespace ProjetIft232
             Ressources -= resource;
         }
 
+        public void AddResources(Resources resource)
+        {
+            Ressources += resource;
+        }
+
+
+        public Boolean TransferResources(City city, Resources resource)
+        {
+            if (this.Ressources >= resource)
+            { 
+            this.RemoveResources(resource);
+            city.AddResources(resource);
+            return true;
+            }
+            return false;
+        }
+
         public bool AddBuilding(BuildingType type)
         {
             var buildXML = new Building(BuildingLoader.getInstance()._buildings[type]);
-            var building = BuildingFactory.CreateBuilding(type, this);
+            City city = this;
+            var building = BuildingFactory.CreateBuilding(type,ref city);
             if (building != null)
             {
                 return true;
@@ -59,12 +82,16 @@ namespace ProjetIft232
 
         public void Update()
         {
+            _tourDepuisCreation++;
             //rsc n'est pas une reelle ressource, c'est une ressource 'theorique'
             //rsc est en fait un multiplicateur, il nous dira de combien multiplier
             //notre constante de base de récupération des ressources
 
             //Càd que sans rien, une ville gagne 5 de chaque ressource sauf de population
             //Avec une maison, elle gagnera 6 de Meat et 5 du reste, etc<
+            Army.ForEach(n => n.Update());
+
+
             Resources rsc = new Resources();
             foreach (Building building in Buildings)
             {

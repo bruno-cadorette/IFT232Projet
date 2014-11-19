@@ -15,7 +15,7 @@ namespace Ift232Tests
         public void Build()
         {
             City city = new City("Toulouse!");
-            Building house = BuildingFactory.CreateBuilding(BuildingType.House, city);
+            Building house = BuildingFactory.CreateBuilding(BuildingType.House,ref city);
             Assert.IsTrue(house.InConstruction);
             Assert.IsTrue(house.TurnsLeft==3);
             house.Update();
@@ -28,7 +28,7 @@ namespace Ift232Tests
         public void UpdateHouse()
         {
             City city = new City("Toulouse!");
-            Building house = BuildingFactory.CreateBuilding(BuildingType.House, city);
+            Building house = BuildingFactory.CreateBuilding(BuildingType.House,ref city);
             Dictionary<ResourcesType, int> rsc = new Dictionary<ResourcesType, int>();
             rsc.Add(ResourcesType.Population, 1);
             Assert.AreEqual(house.Update(),new Resources());
@@ -41,7 +41,7 @@ namespace Ift232Tests
         public void CreateBuilding()
         {
             City city = new City("Toulouse!");
-            Assert.AreEqual(BuildingType.Farm,BuildingFactory.CreateBuilding(BuildingType.Farm, city).Type);
+            Assert.AreEqual(BuildingType.Farm,BuildingFactory.CreateBuilding(BuildingType.Farm,ref city).Type);
         }
 
         [TestMethod]
@@ -66,13 +66,13 @@ namespace Ift232Tests
         public void CanBeBuild()
         {
             City city = new City("Toulouse!");
-            Building house = BuildingFactory.CreateBuilding(BuildingType.House, city);
+            Building house = BuildingFactory.CreateBuilding(BuildingType.House,ref city);
             house.Update();
             house.Update();
             house.Update();
             house.Update();
 
-            Building farm = BuildingFactory.CreateBuilding(BuildingType.Farm, city);
+            Building farm = BuildingFactory.CreateBuilding(BuildingType.Farm,ref city);
             farm.Update();
             farm.Update();
             farm.Update();

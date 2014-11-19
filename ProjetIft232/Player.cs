@@ -7,18 +7,35 @@ using System.Xml;
 
 namespace ProjetIft232
 {
-    class Player
+    public class Player
     {
         public List<City> Cities { get; set; }
 
         public Player()
         {
-            Cities = new List<City>();         
+            Cities = new List<City>();
+            _indexCity = 0;
         }
 
+        public City CurrentCity { get; private set; }
+        private int _indexCity;
+
+        public void NextCity()
+        {
+            _indexCity = (_indexCity + 1)%Cities.Count;
+            CurrentCity = Cities[_indexCity];
+        }
+
+        public void CreateCity(string name)
+        {
+            Cities.Add(new City(name));
+        }
+
+
+        //Deprecated
         public City GetCity()
         {
-            return Cities.First();
+            return CurrentCity;
         }
 
 

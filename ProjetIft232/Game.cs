@@ -37,18 +37,20 @@ namespace ProjetIft232
         public string NextTurn()
         {
             string resumerDuTour = "";
-            CurrentPlayer.Cities.First().Update();
-            PlayerIndex++;
-
+            CurrentPlayer.Cities.ForEach(n => n.Update());
             Random hostylityAument = new Random();
-            Hostility +=hostylityAument.Next(-1, 1+TourIndex/10);
-            if (Hostility > hostylityAument.Next(0, 100))
+            Hostility += hostylityAument.Next(-1, 1 + TourIndex/10);
+            foreach (City city in CurrentPlayer.Cities)
             {
-               resumerDuTour += CurrentPlayer.Cities.First().Attack(BarbarianArmyGenerator.CreateArmy(TourIndex));
 
+                if (Hostility > hostylityAument.Next(0, 100))
+                {
+                    resumerDuTour += city.Attack(BarbarianArmyGenerator.CreateArmy(TourIndex));
+
+                }
             }
 
-            
+            PlayerIndex++;
            //Sinon c'est attardé
             if (PlayerIndex + 1 > Players.Count)
             {
@@ -56,6 +58,45 @@ namespace ProjetIft232
                 TourIndex++;
             }
             return resumerDuTour;
+        }
+
+        public  bool CreateCity(string name)
+        {
+            if (CurrentPlayer.CurrentCity.Ressources > City.CostToCreate)
+            {
+                CurrentPlayer.CurrentCity.RemoveResources(City.CostToCreate);
+                CurrentPlayer.CreateCity(name);
+                return true;
+            }
+            else
+            {
+                if (CurrentPlayer.Cities.Any(n => n.Ressources > City.CostToCreate))
+                {
+                    CurrentPlayer.Cities.First(n => n.Ressources > City.CostToCreate).RemoveResources(City.CostToCreate);
+                    CurrentPlayer.CreateCity(name);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void ChangeCityFocus()
+        {
+            CurrentPlayer.NextCity();
+        }
+
+        public bool Transfer(string nomville, int bois, int or, int viande, int rock, int pop)
+        {
+            City city = CurrentPlayer.Cities.FirstOrDefault(n => n.Name == nomville);
+            if (city != null)
+            {
+                return CurrentPlayer.CurrentCity.TransferResources(city, new Resources(bois,or,viande,rock,pop));
+            }
+            else
+            {
+                return false;
+            }
+            
         }
     }
 }
