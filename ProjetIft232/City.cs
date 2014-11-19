@@ -57,6 +57,35 @@ namespace ProjetIft232
             }
         }
 
+        public void RemoveBuilding(int nb)
+        {
+            int nbrCasern=0;
+            if (Buildings.Count > nb)
+            {
+                if (Buildings[nb].Type == BuildingType.Casern)
+                {
+                    for (int i = 0; i < Buildings.Count; i++)
+                    {
+                        if (Buildings[nb].Type == BuildingType.Casern)
+                        {
+                            nbrCasern++;
+                        }
+                    }
+                    if (nbrCasern > 1)
+                    {
+                        for (int i = Army.Count - 1; i >= 0; i--)
+                        {
+                            if (Army[i].InFormation == true)
+                            {
+                                Army.Remove(Army[i]);
+                            }
+                        }
+                    }
+                    Buildings.Remove(Buildings[nb]);
+                }
+            }
+        }
+
         public void Update()
         {
             //rsc n'est pas une reelle ressource, c'est une ressource 'theorique'

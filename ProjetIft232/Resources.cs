@@ -119,6 +119,8 @@ namespace ProjetIft232
                     a.resources[kvp.Key] = old - kvp.Value;
                 }
                 else a.resources.Add(kvp.Key, -kvp.Value);
+                if (a.resources[kvp.Key] < 0)
+                    a.resources[kvp.Key] = 0;
             }
             return a;
         }

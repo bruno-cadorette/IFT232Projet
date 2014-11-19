@@ -48,6 +48,8 @@ namespace ProjetIft232
                 {
                     case 1:
                         ShowCurrentBuildings(_Game.CurrentPlayer.GetCity().Buildings);
+                        if (_Game.CurrentPlayer.GetCity().Army.Count > 0)
+                            ShowArmy(_Game.CurrentPlayer.GetCity().Army);
                         Console.WriteLine(_Game.CurrentPlayer.GetCity().Ressources);
                         break;
                     case 2:
@@ -84,7 +86,7 @@ namespace ProjetIft232
 
             if (_Game.CurrentPlayer.GetCity().AddArmy((ArmyUnitType)(option - 1)))
             {
-                Console.WriteLine(" L'unité " + armyUnit[option - 1] + "a bien été créée");
+                Console.WriteLine(" L'unité " + armyUnit[option - 1] + " a bien été créée");
             }
         }
 
@@ -101,7 +103,7 @@ namespace ProjetIft232
 
             if (_Game.CurrentPlayer.GetCity().AddBuilding((BuildingType)(option - 1)))
             {
-                Console.WriteLine(" Le bâtiment" + buildings[option - 1] + "a bien été créé");
+                Console.WriteLine(" Le bâtiment " + buildings[option - 1] + " a bien été créé");
             }
         }
 
@@ -111,6 +113,25 @@ namespace ProjetIft232
             {
                 Console.WriteLine(building.Name);
             }
+        }
+
+        private void ShowArmy(IEnumerable<ArmyUnit> army)
+        {
+            int[] units= new int[1];
+            int Form = 0;
+            foreach(var soldier in army)
+            {
+                if (!soldier.InFormation) {
+                    if (soldier.Type == ArmyUnitType.Warrior)
+                    {
+                        units[0]++;
+                    }}
+            else {
+                Form++;
+                }
+            }
+            Console.WriteLine("Guerriers : "+units[0]);
+            Console.WriteLine("Troupe en formation : " + Form);
         }
 
     }
