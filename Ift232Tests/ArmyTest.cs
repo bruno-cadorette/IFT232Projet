@@ -22,19 +22,19 @@ namespace Ift232Tests
         private void SetUp()
         {
             city = new City("Toulouse");
-            Building house = BuildingFactory.CreateBuilding(BuildingType.House, city);
+            Building house = BuildingFactory.CreateBuilding(BuildingType.House,ref city);
             house.Update();
             house.Update();
             house.Update();
             house.Update();
 
-            Building farm = BuildingFactory.CreateBuilding(BuildingType.Farm, city);
+            Building farm = BuildingFactory.CreateBuilding(BuildingType.Farm,ref city);
             farm.Update();
             farm.Update();
             farm.Update();
             farm.Update();
 
-            caserne = BuildingFactory.CreateBuilding(BuildingType.Casern, city);
+            caserne = BuildingFactory.CreateBuilding(BuildingType.Casern,ref city);
             caserne.Update();
             caserne.Update();
             caserne.Update();

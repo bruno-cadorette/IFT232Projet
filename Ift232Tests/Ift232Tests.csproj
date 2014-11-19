@@ -54,6 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestResource.cs" />
     <Compile Include="ArmyTest.cs" />
+    <Compile Include="CityTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProjetIft232\ProjetIft232.csproj">
