@@ -107,9 +107,28 @@ namespace Ift232Tests
             Assert.IsTrue(boisconverti == 75);
             Assert.IsTrue(viandeconverti == 80);
             Assert.IsTrue(viandeconverti == 36);
-            
-        
+          
         }
 
+        public void TestTradeMarket()
+        {
+            int boispropose = 100;
+            int viandepropose = 40;
+            int boisconverti;
+            int viandeconvertie;
+            int rockconvertie;
+
+            viandeconvertie = market.Trade(boispropose, ResourcesType.Wood, ResourcesType.Meat);
+
+            Assert.Equals(viandeconvertie, 66);
+
+            boisconverti = market.Trade(viandepropose, ResourcesType.Meat,ResourcesType.Wood );
+            Assert.Equals(boisconverti, 60);
+            rockconvertie = market.Trade(boispropose, ResourcesType.Wood, ResourcesType.Rock);
+            Assert.Equals(rockconvertie, 125);
+
+
+
+        }
     }
 }

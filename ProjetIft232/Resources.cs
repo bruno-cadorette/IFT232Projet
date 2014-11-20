@@ -86,6 +86,13 @@ namespace ProjetIft232
             return value;
         }
 
+        
+        public int this[ResourcesType i]
+{
+    get { return resources[i]; }
+    set { resources[i] = (int)value; }
+}
+
         public static Resources Zero()
         {
             return new Resources();

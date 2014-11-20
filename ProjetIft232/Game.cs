@@ -6,7 +6,7 @@ using ProjetIft232.Buildings;
 
 namespace ProjetIft232
 {
-    class Game
+    public class Game
     {
         
         //static public Game CurrentGame;
@@ -113,7 +113,7 @@ namespace ProjetIft232
 
             public Building getMarket()
             {
-                Building m = CurrentPlayer.CurrentCity.Buildings.FirstOrDefault(n => (n.Name == "Market") && (n.InConstruction == false)) ;
+                Building m = CurrentPlayer.CurrentCity.Buildings.FirstOrDefault(n => (n.Name == "Marché") && (n.InConstruction == false)) ;
 
                 return m  ;
                 

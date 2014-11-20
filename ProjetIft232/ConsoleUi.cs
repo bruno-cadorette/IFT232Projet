@@ -34,7 +34,7 @@ namespace ProjetIft232
         private void PrincipalMenu()
         {
             int option = 0;
-            while (option != 10)
+            while (option != 11)
             {
                 Console.WriteLine("Tour #" + Game.TourIndex + "     Vous etes dans : " +player.CurrentCity +@" 
 0) Liste des villes de votre empire
@@ -45,9 +45,10 @@ namespace ProjetIft232
 5) Prochaine Ville
 6) Envoi de ressources a une autre ville
 7) Acheter des ressources : marché
-8) Prochain tour
-9) Save
-10) Quitter
+8) Echanger des ressources
+9) Prochain tour
+10) Save
+11) Quitter
 ");
                  option = int.Parse(Console.ReadLine());             
                 switch (option)
@@ -78,14 +79,18 @@ namespace ProjetIft232
                    case 6:
                         TransferResources();
                         break;
-                    case 7 : // loading
+                    case 7 : 
                         AchatRessources();
                         break;
-                   case 8:
+                    case 8 : 
+                        // pas encore créé
+                        ResourcesExchange();
+                        break;
+                   case 9:
                         Console.WriteLine(_Game.NextTurn());
                         Console.WriteLine("Nous avons progressé d'un tour, on ne va pas rester à l'âge de pierre");
                         break;
-                    case 9:
+                    case 10:
                         player.WriteXML();
                         break;
                     default:
@@ -237,6 +242,55 @@ namespace ProjetIft232
                     Console.WriteLine("L'échange n'a pas eu lieu");
                 }
 
+            }
+            Console.WriteLine("Il n'y pas présentement pas de marché dans votre ville ou alors il est encore en construction");
+        }
+
+        private void ResourcesExchange() 
+        {
+            if (_Game.getMarket() != null)
+            {
+                Market m = (Market)_Game.getMarket();
+
+                Console.WriteLine(" Quel type de ressources donner à échanger ");
+                Console.WriteLine(@" 
+1) Bois
+2) Viande
+3) Pierre
+");
+                ResourcesType input = (ResourcesType)Enum.Parse(typeof(ResourcesType), Console.ReadLine());
+
+                Console.WriteLine("Contre quoi?");
+                Console.WriteLine(@" 
+1) Bois
+2) Viande
+3) Pierre
+");
+
+                ResourcesType output = (ResourcesType)Enum.Parse(typeof(ResourcesType), Console.ReadLine());
+
+                Console.WriteLine("Combien de {0} voulez vous echanger contre du {1}", input.ToString(), output.ToString());
+                int qte =  (int)Math.Min(_Game.CurrentPlayer.CurrentCity.Ressources[input],int.Parse(Console.ReadLine()));
+
+
+
+                bool result = false;
+                int option = int.Parse(Console.ReadLine());
+                int bois2, roche2, viande2;
+                int accepte;
+                switch (option)
+                {
+                    case 1:
+                        Console.WriteLine("Combien d'unités de bois souhaitez vous échanger ?");
+                        Console.WriteLine("Combien d'unités de viande souhaitez vous échanger ?");
+                        Console.WriteLine("Combien d'unités de  souhaitez vous échanger ?");
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                }
+               
             }
             Console.WriteLine("Il n'y pas présentement pas de marché dans votre ville ou alors il est encore en construction");
         }

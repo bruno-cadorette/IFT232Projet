@@ -81,7 +81,31 @@ namespace ProjetIft232.Buildings
             if (reste == 0)
                 return nb;
             return ratio * (nb / ratio) + ratio;
+        }
 
+
+        /// <summary>
+        /// The resources values
+        /// Note: This could have been a float array, but this is cleaner (and performance doesnt really matter)
+        /// </summary>
+        static private readonly Dictionary<ResourcesType, float> ResourcesValues = new Dictionary<ResourcesType, float>()
+        {
+            { ResourcesType.Gold, 1},
+            { ResourcesType.Meat, 8},
+            { ResourcesType.Rock, 15},
+            { ResourcesType.Wood, 12},
+        };
+
+        /// <summary>
+        /// Trades the specified input.
+        /// </summary>
+        /// <param name="qty">The quantity to trade.</param>
+        /// <param name="input">The input type.</param>
+        /// <param name="output">The output type.</param>
+        /// <returns></returns>
+        public int Trade(int qty, ResourcesType input, ResourcesType output)
+        {
+            return (int)Math.Floor(qty / ResourcesValues[input] * ResourcesValues[output]);
         }
 
         // Création d'un historique pour changer les prix en fonction de l'offre et la demande
