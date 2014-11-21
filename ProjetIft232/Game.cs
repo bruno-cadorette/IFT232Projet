@@ -9,7 +9,7 @@ namespace ProjetIft232
     public class Game
     {
         
-        //static public Game CurrentGame;
+        //static public Game CurrentGame
         public List<Player> Players { get; set; }
 
         public Player CurrentPlayer 
