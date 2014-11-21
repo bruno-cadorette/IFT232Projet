@@ -46,6 +46,7 @@
     <Compile Include="Army\ArmyUnitType.cs" />
     <Compile Include="Army\Warrior.cs" />
     <Compile Include="Buildings\Casern.cs" />
+    <Compile Include="PlayerAI.cs" />
     <Compile Include="RandomEvent.cs" />
     <Compile Include="BarbarianArmyGenerator.cs" />
     <Compile Include="Buildings\Building.cs" />

@@ -38,37 +38,50 @@ namespace ProjetIft232
             Alea = 0;
         }
 
-        public string NextTurn()
+        public void NextTurn()
         {
-            string resumerDuTour = "";
+            do
+            {
+                 Console.WriteLine(NextTurnInternal());
+                if (CurrentPlayer is PlayerAI)
+                {
+                    Console.WriteLine("\nTour du joueur AI: {0}", CurrentPlayer.playerName);
+                    ((PlayerAI)CurrentPlayer).Play();
+                }
+            }
+            while (CurrentPlayer is PlayerAI);
+        }
+
+        private string NextTurnInternal()
+        {
+            string turnText = "";
             CurrentPlayer.Cities.ForEach(n => n.Update());
             Random hostylityAument = new Random();
-            Hostility += hostylityAument.Next(-1, 1 + TourIndex/10);
+            Hostility += hostylityAument.Next(-1, 1 + TourIndex / 10);
             foreach (City city in CurrentPlayer.Cities)
             {
 
                 if (Hostility > hostylityAument.Next(0, 100))
                 {
-                    resumerDuTour += city.Attack(BarbarianArmyGenerator.CreateArmy(TourIndex));
+                    turnText += city.Attack(BarbarianArmyGenerator.CreateArmy(TourIndex));
 
                 }
                 //On reutilise la variable hostilityAument pour generer les evenements aleatoires
                 Alea = hostylityAument.Next(0, 100);
                 if (Alea > 90)
                 {
-                    resumerDuTour += evt.Next(CurrentPlayer.Cities.First());
+                    turnText += evt.Next(CurrentPlayer.Cities.First());
 
                 }
             }
 
             PlayerIndex++;
-           //Sinon c'est attardé
-            if (PlayerIndex + 1 > Players.Count)
+            if (PlayerIndex >= Players.Count)
             {
-                PlayerIndex-=Players.Count;
+                PlayerIndex -= Players.Count;
                 TourIndex++;
             }
-            return resumerDuTour;
+            return turnText;
         }
 
         public  bool CreateCity(string name)
@@ -113,7 +126,7 @@ namespace ProjetIft232
 
             public Building getMarket()
             {
-                Building m = CurrentPlayer.CurrentCity.Buildings.FirstOrDefault(n => (n.Name == "Marché") && (n.InConstruction == false)) ;
+                Building m = CurrentPlayer.CurrentCity.Buildings.FirstOrDefault(n => (n is Market) && (n.InConstruction == false)) ;
 
                 return m  ;
                 

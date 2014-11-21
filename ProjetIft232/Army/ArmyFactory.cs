@@ -21,7 +21,7 @@ namespace ProjetIft232.Army
 
         public static ArmyUnit Building(ArmyUnit unit, City city)
         {
-            if (unit != null && unit.CanBeBuild(city.Ressources, city.Buildings))
+            if (unit != null && unit.CanBeBuild(city.Ressources, city.Buildings.ToList()))
             {
                 city.RemoveResources(unit.Requirement.Resources);
                 return unit;

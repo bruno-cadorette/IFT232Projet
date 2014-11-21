@@ -6,6 +6,7 @@ using System.Text;
 using ProjetIft232.Army;
 using ProjetIft232.Buildings;
 using ProjetIft232.Technologies;
+using System.Collections.ObjectModel;
 
 namespace ProjetIft232
 {
@@ -23,7 +24,7 @@ namespace ProjetIft232
             {ResourcesType.Population, Convert.ToInt32(1 + _tourDepuisCreation * 0.1)}
         });
         }
-        public List<Building> Buildings { get; private set; }
+        public ObservableCollection<Building> Buildings { get; private set; }
 
         public List<ArmyUnit> Army { get; private set; }
 
@@ -38,9 +39,17 @@ namespace ProjetIft232
         {
             Name = name;
             Ressources = new Resources(10000, 10000, 10000, 10000, 10000);
-            Buildings = new List<Building>();
+            Buildings = new ObservableCollection<Building>();
+            Buildings.CollectionChanged += Buildings_CollectionChanged;
+
             Army = new List<ArmyUnit>();
             _tourDepuisCreation = 0;
+        }
+
+        void Buildings_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if(Buildings.Any(t=>t==null))
+                throw new InvalidOperationException();
         }
         public override string ToString()
         {

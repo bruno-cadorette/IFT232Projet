@@ -11,6 +11,7 @@ namespace ProjetIft232
     public class Player
     {
         public List<City> Cities { get; set; }
+        public string playerName { get; set; }
 
         public Player()
         {
@@ -18,13 +19,17 @@ namespace ProjetIft232
             _indexCity = 0;
         }
 
-        public City CurrentCity { get; private set; }
+        public City CurrentCity { 
+            get {
+                return Cities[_indexCity];
+            }
+        }
+
         private int _indexCity;
 
         public void NextCity()
         {
             _indexCity = (_indexCity + 1)%Cities.Count;
-            CurrentCity = Cities[_indexCity];
         }
 
         public void CreateCity(string name)
@@ -34,7 +39,7 @@ namespace ProjetIft232
 
         public override string ToString()
         {
-            return "Joueur 1";
+            return playerName;
         }
 
         public void WriteXML()
@@ -50,7 +55,7 @@ namespace ProjetIft232
             resourcesTable[3] = Cities.First().Ressources.get("Rock");
             resourcesTable[4] = Cities.First().Ressources.get("Population");
 
-            List<Buildings.Building> bulle = Cities.First().Buildings;
+            List<Buildings.Building> bulle = Cities.First().Buildings.ToList();
             
             //Il prend un Army Warrior au lieu de prendre un ArmyUnit
             //List<Army.ArmyUnit> chevre = Cities.First().Army;

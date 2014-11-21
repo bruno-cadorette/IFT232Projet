@@ -16,19 +16,52 @@ namespace ProjetIft232
     class ConsoleUi
     {
         private Game _Game;
-        private Player player = new Player();
         public void Interact(Game game)
         {
             _Game = game;     
             // Game initial setup
             Console.WriteLine("Bienvenue!!!!");
-            Console.WriteLine("Bonjour, quel est le nom de votre ville?");
-            string cityName = Console.ReadLine();          
-            player.Cities.Add(new City(cityName));
-            player.NextCity();
-            _Game.Players.Add(player);
-            player.WriteXML();
-            PrincipalMenu();
+            Console.WriteLine("Veuillez entrer le nombre de joueur pour la partie.");
+            int numberOfPlayer = int.Parse(Console.ReadLine());
+
+            for (int i = 1; i <= numberOfPlayer; i++)
+            {
+                Console.WriteLine("Quel est le nom du joueur {0}", i);
+                string temp_playerName = Console.ReadLine();
+
+                if (temp_playerName == "AI")
+                {
+                    Player player = new PlayerAI();
+                    Console.WriteLine("Vous allez jouer contre {0} (Ville {1})", player.playerName, player.Cities.First().Name);
+                    player.NextCity();
+                    _Game.Players.Add(player);
+                }
+                else
+                {
+                    Player player = new Player();
+                    player.playerName = temp_playerName;
+                    Console.WriteLine("Bonjour, quel est le nom de votre ville?");
+                    string cityName = Console.ReadLine();
+                    player.Cities.Add(new City(cityName));
+                    player.NextCity();
+                    _Game.Players.Add(player);
+                }
+            }
+            //player.WriteXML();
+
+            Player[] regular = _Game.Players.Where(t => t.GetType() == typeof(Player)).ToArray();
+            Player[] ais = _Game.Players.Where(t => t.GetType() == typeof(PlayerAI)).ToArray();
+            _Game.Players.Clear();
+            _Game.Players.AddRange(regular);
+            _Game.Players.AddRange(ais);
+            if (regular.Length > 0)
+            {
+                PrincipalMenu();
+            }
+            else
+            {
+                _Game.NextTurn();
+            }
         }      
 
         private void PrincipalMenu()
@@ -36,7 +69,7 @@ namespace ProjetIft232
             int option = 0;
             while (option != 11)
             {
-                Console.WriteLine("Tour #" + Game.TourIndex + "     Vous etes dans : " +player.CurrentCity +@" 
+                Console.WriteLine(@"Tour #{0}     Vous etes dans : {1} du joueur {2}
 0) Liste des villes de votre empire
 1) Résumé de l'état de la ville
 2) Création de bâtiments
@@ -49,13 +82,13 @@ namespace ProjetIft232
 9) Prochain tour
 10) Save
 11) Quitter
-");
+", Game.TourIndex, _Game.CurrentPlayer.CurrentCity, _Game.CurrentPlayer.playerName);
                  option = int.Parse(Console.ReadLine());             
                 switch (option)
                 {
                     case 0:
                         Console.WriteLine("Vos villes : ");
-                        player.Cities.ForEach(n => Console.WriteLine( string.Format("{0} \n", n.Name)));
+                        _Game.CurrentPlayer.Cities.ForEach(n => Console.WriteLine( string.Format("{0} \n", n.Name)));
                         break;
                     case 1:
                         ShowCurrentBuildings(_Game.CurrentPlayer.CurrentCity.Buildings);
@@ -87,11 +120,11 @@ namespace ProjetIft232
                         ResourcesExchange();
                         break;
                    case 9:
-                        Console.WriteLine(_Game.NextTurn());
+                        _Game.NextTurn();
                         Console.WriteLine("Nous avons progressé d'un tour, on ne va pas rester à l'âge de pierre");
                         break;
                     case 10:
-                        player.WriteXML();
+                        _Game.CurrentPlayer.WriteXML();
                         break;
                     default:
                         break;
@@ -298,7 +331,7 @@ namespace ProjetIft232
         private void ChangeCityFocus()
         {
             _Game.ChangeCityFocus();
-            Console.WriteLine(string.Format("Vous êtes maintenant dans la cité : {0}",player.CurrentCity.Name));
+            Console.WriteLine(string.Format("Vous êtes maintenant dans la cité : {0}", _Game.CurrentPlayer.CurrentCity.Name));
         }
 
         private void CreateCity()
