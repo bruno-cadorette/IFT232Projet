@@ -94,9 +94,19 @@ namespace ProjetIft232.Buildings
             Resource += technology.Enhancements.Resources;
         }
 
+        public bool AlreadyApplied(int technology)
+        {
+           return _CurrentTechnologies.Any(n => n == technology);
+        }
+
         public bool CanBeUpgraded(Resources actualResource, Technology technology)
         {
             return !InConstruction && technology.ApplicationCost <= actualResource && _CurrentTechnologies.All(x => x != technology.ID);
+        }
+
+        public void ReduceTurnLeft(int minus)
+        {
+            TurnsLeft = ((TurnsLeft - minus) < 0)  ? 0 : TurnsLeft - minus;
         }
 
         private void Build()

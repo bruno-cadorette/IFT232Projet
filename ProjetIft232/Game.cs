@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ProjetIft232.Buildings;
+using ProjetIft232.Technologies;
 
 namespace ProjetIft232
 {
@@ -56,6 +57,7 @@ namespace ProjetIft232
         {
             string turnText = "";
             CurrentPlayer.Cities.ForEach(n => n.Update());
+            CurrentPlayer.ResearchedTech.ToList().ForEach(n => n.Update());
             Random hostylityAument = new Random();
             Hostility += hostylityAument.Next(-1, 1 + TourIndex / 10);
             foreach (City city in CurrentPlayer.Cities)
@@ -82,6 +84,17 @@ namespace ProjetIft232
                 TourIndex++;
             }
             return turnText;
+        }
+
+        public bool ApplyTech(string name)
+        {
+            Technology tech = CurrentPlayer.ResearchedTech.FirstOrDefault(n => n.Name == name);
+            if (tech == null) return false;
+            Building build = CurrentPlayer.CurrentCity.FindBuildingForReschearded(tech);
+            if (build == null) return false;
+            City city = CurrentPlayer.CurrentCity;
+            return BuildingFactory.UpgrateBuilding(ref build,tech,ref city);
+            
         }
 
         public  bool CreateCity(string name)
@@ -131,7 +144,18 @@ namespace ProjetIft232
                 return m  ;
                 
             }
-            
+
+        public bool ReshearchedTech(Technology choix)
+        {
+            Technology tech = TechnologyFactory.ReshearcheTech(CurrentPlayer.CurrentCity,
+                choix.Name);
+            if (tech == null)
+            {
+                return false;
+            }
+            CurrentPlayer.ResearchedTech.Add(tech);
+            return true;
         }
+    }
     }
 

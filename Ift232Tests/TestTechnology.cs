@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProjetIft232;
 using ProjetIft232.Buildings;
@@ -9,10 +10,18 @@ namespace Ift232Tests
     [TestClass]
     public class TestTechnology
     {
+        private City city;
+        private Technology tech;
+
+        [TestInitialize]
+        public void SetUp()
+        {
+            city = new City("Toulouse!");
+            tech = new Technology(2,"Maconnerie",null,Requirement.Zero(),2,new List<BuildingType>(){BuildingType.Farm},new Resources(0,10,100,10,10),new Enhancement(new Resources(20,20,20,20,20),53));
+        }
         [TestMethod]
         public void UpgradeBuilding()
         {
-            City city = new City("Toulouse!");
             Technology technology = TechnologyFactory.CreateTechnology();
             Building house = BuildingFactory.CreateBuilding(BuildingType.House, ref city);
             for (int i = 0; i < 10; i++)
@@ -23,6 +32,46 @@ namespace Ift232Tests
             BuildingFactory.UpgrateBuilding(ref house,technology, ref city);
             Resources expected = new Resources(100,100,100,100,101);
             Assert.AreEqual(expected,house.Resource);
+        }
+
+        [TestMethod]
+        public void UpgradedNewBuilding()
+        {
+            city.ResearchedTechnologies.Add(tech);
+            for (int i = 0; i < 10; i++)
+            {
+                city.ResearchedTechnologies.ForEach(n => n.Update());
+            }
+            Building farm = BuildingFactory.CreateBuilding(BuildingType.Farm, ref city);
+            for (int i = 0; i < 10; i++)
+            {
+                farm.Update();
+            }
+            Assert.IsTrue(farm.Resource[ResourcesType.Rock]>0);
+        }
+
+        [TestMethod]
+        public void NotUpgradedBuilding()
+        {
+            city.ResearchedTechnologies.Add(tech);
+            Building farm = BuildingFactory.CreateBuilding(BuildingType.Farm, ref city);
+            for (int i = 0; i < 10; i++)
+            {
+                city.ResearchedTechnologies.ForEach(n => n.Update());
+            }
+            Assert.IsFalse(farm.Resource[ResourcesType.Rock] > 0);
+        }
+
+        [TestMethod]
+        public void TurnUpdate()
+        {
+            city.ResearchedTechnologies.Add(tech);
+            for (int i = 0; i < 10; i++)
+            {
+                city.ResearchedTechnologies.ForEach(n => n.Update());
+            }
+            Building farm = BuildingFactory.CreateBuilding(BuildingType.Farm, ref city);
+            Assert.IsTrue(farm.TurnsLeft == 0);
         }
     }
 }

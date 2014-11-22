@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using ProjetIft232.Army;
@@ -11,8 +12,7 @@ using System.Collections.ObjectModel;
 namespace ProjetIft232
 {
     public class City
-    {
-
+    { 
         public static Resources CostToCreate = new Resources(500, 500, 500, 500, 500);
         private Resources BaseProduction()
         {
@@ -37,6 +37,7 @@ namespace ProjetIft232
 
         public City(string name)
         {
+            ResearchedTechnologies = new List<Technology>();
             Name = name;
             Ressources = new Resources(10000, 10000, 10000, 10000, 10000);
             Buildings = new ObservableCollection<Building>();
@@ -46,6 +47,7 @@ namespace ProjetIft232
             _tourDepuisCreation = 0;
         }
 
+        //WTF please explain
         void Buildings_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if(Buildings.Any(t=>t==null))
@@ -161,6 +163,11 @@ namespace ProjetIft232
             }
         }
 
+        public Building FindBuildingForReschearded(Technology tech)
+        {
+            return Buildings.ToList().FirstOrDefault(n => !n.AlreadyApplied(tech.ID) && tech.AffectedBuilding.Contains(n.Type));
+        }
+
         public string Attack(List<ArmyUnit> BarbarianArmy)
         {
             string Resume = string.Format("La ville est attaqué par des barbares, ils sont {0} \n ", BarbarianArmy.Count);
@@ -191,6 +198,17 @@ namespace ProjetIft232
             }
             return Resume;
 
+        }
+
+        public void TechChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (sender is ObservableCollection<Technology>)
+            {
+                foreach (var tech in e.NewItems)
+                {
+                    ResearchedTechnologies.Add((Technology) tech);
+                }
+            }
         }
     }
 }

@@ -12,6 +12,12 @@ namespace ProjetIft232.Buildings
         public static Building CreateBuilding(BuildingType type,ref City city)
         {
             Building building = GetBuilding(type);
+            var techs = city.ResearchedTechnologies.Where(n => n.AffectedBuilding.Any(m => m == building.Type) && n.InConstruction == false);
+            foreach (var technology in techs)
+            {
+                building.Upgrade(technology); //lol qui veut refactorer peut.
+                building.ReduceTurnLeft(technology.Enhancements.ConstructionTime);
+            }
             if (building != null && building.CanBeBuild(city.Ressources, city.Buildings))
             {
                 city.RemoveResources(building.Requirement.Resources);
@@ -20,13 +26,16 @@ namespace ProjetIft232.Buildings
             }
             return null;
         }
-        public static void UpgrateBuilding(ref Building building, Technology technology, ref City city)
+
+        public static bool UpgrateBuilding(ref Building building, Technology technology, ref City city)
         {
            if(building.CanBeUpgraded(city.Ressources,technology))
            {
                building.Upgrade(technology);
                city.RemoveResources(technology.ApplicationCost);
+               return true;
            }
+            return false;
         }
 
         private static Building GetBuilding(BuildingType type)

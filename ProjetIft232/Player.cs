@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
@@ -10,11 +13,13 @@ namespace ProjetIft232
 {
     public class Player
     {
+        public ObservableCollection<Technology> ResearchedTech { get; private set; } 
         public List<City> Cities { get; set; }
         public string playerName { get; set; }
 
         public Player()
         {
+            ResearchedTech = new ObservableCollection<Technology>();
             Cities = new List<City>();
             _indexCity = 0;
         }
@@ -34,12 +39,21 @@ namespace ProjetIft232
 
         public void CreateCity(string name)
         {
-            Cities.Add(new City(name));
+            City city = new City(name);
+            city.ResearchedTechnologies.AddRange(ResearchedTech.ToList());
+            ResearchedTech.CollectionChanged += city.TechChanged;
+            Cities.Add(city);
         }
 
         public override string ToString()
         {
             return playerName;
+        }
+
+        public Dictionary<string, Technology> GetTechnologies()
+        {
+            return TechnologyFactory.Technologies.Where(n => ResearchedTech.All(m => n.Key != m.Name && m.InConstruction == false)).ToDictionary(n => n.Key, w => w.Value);
+
         }
 
         public void WriteXML()

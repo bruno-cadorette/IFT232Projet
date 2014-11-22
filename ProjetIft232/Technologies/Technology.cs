@@ -29,6 +29,20 @@ namespace ProjetIft232.Technologies
             Enhancements = new Enhancement(new Resources(100, 100, 100, 100, 100), 0);
         }
 
+        public Technology(Technology pattern)
+        {
+            Name = pattern.Name;
+            Requirement = pattern.Requirement;
+            AffectedBuilding = pattern.AffectedBuilding;
+            ApplicationCost = pattern.ApplicationCost;
+            Enhancements = pattern.Enhancements;
+            TurnsLeft = pattern.TurnsLeft;
+            InConstruction = true;
+            ID = pattern.ID;
+            Enhancements = pattern.Enhancements;
+            Description = pattern.Description;
+        }
+
         public Technology(int id, 
             string name, 
             string description, 
@@ -50,8 +64,14 @@ namespace ProjetIft232.Technologies
         }
 
 
+        public void Update()
+        {
+            if (InConstruction)
+            {
+                TurnsLeft--;
+                InConstruction = TurnsLeft > 0;
+            }
 
-        
-
+        }
     }
 }

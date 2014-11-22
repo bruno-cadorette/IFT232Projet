@@ -10,6 +10,7 @@ using System.Text;
 using System.Xml.Serialization;
 using System.Xml;
 using System.IO;
+using ProjetIft232.Technologies;
 
 namespace ProjetIft232
 {
@@ -67,21 +68,23 @@ namespace ProjetIft232
         private void PrincipalMenu()
         {
             int option = 0;
-            while (option != 11)
+            while (option != 12)
             {
                 Console.WriteLine(@"Tour #{0}     Vous etes dans : {1} du joueur {2}
 0) Liste des villes de votre empire
 1) Résumé de l'état de la ville
-2) Création de bâtiments
-3) Création d'armée
-4) Créer Ville
-5) Prochaine Ville
-6) Envoi de ressources a une autre ville
-7) Acheter des ressources : marché
-8) Echanger des ressources
-9) Prochain tour
-10) Save
-11) Quitter
+2) Rechercher une Technologie
+3) Création de bâtiments
+4) Création d'armée
+5) Créer Ville
+6) Prochaine Ville
+7) Envoi de ressources a une autre ville
+8) Acheter des ressources : marché
+9) Echanger des ressources
+10) Appliquer une technologie
+11) Prochain tour
+12) Save
+13) Quitter
 ", Game.TourIndex, _Game.CurrentPlayer.CurrentCity, _Game.CurrentPlayer.playerName);
                  option = int.Parse(Console.ReadLine());             
                 switch (option)
@@ -96,40 +99,96 @@ namespace ProjetIft232
                             ShowArmy(_Game.CurrentPlayer.CurrentCity.Army);
                         Console.WriteLine(_Game.CurrentPlayer.CurrentCity.Ressources);
                         break;
+
                     case 2:
+                        TechMenu();
+                        break;
+                    case 3:
                         BuildingMenu();
                         break;
 
-                    case 3:
+                    case 4:
                         ArmyMenu();
                         break;
-                    case 4:
+                    case 5:
                         CreateCity();
                         break;
-                    case 5:
+                    case 6:
                         ChangeCityFocus();
                         break;
-                   case 6:
+                   case 7:
                         TransferResources();
                         break;
-                    case 7 : 
+                    case 8 : 
                         AchatRessources();
                         break;
-                    case 8 : 
+                    case 9:
                         // pas encore créé
                         ResourcesExchange();
                         break;
-                   case 9:
+                    case 10:
+                        ApplyTechMenu();
+                        break;
+                   case 11:
                         _Game.NextTurn();
                         Console.WriteLine("Nous avons progressé d'un tour, on ne va pas rester à l'âge de pierre");
                         break;
-                    case 10:
+                    case 12:
                         _Game.CurrentPlayer.WriteXML();
                         break;
                     default:
                         break;
                 }
             }
+        }
+
+        private void ApplyTechMenu()
+        {
+            Console.WriteLine("Liste des technologies");
+            var Techs = _Game.CurrentPlayer.ResearchedTech;
+            int compteur = 0;
+            Technology[] alltech = new Technology[Techs.Count];
+            foreach (var technology in Techs)
+            {
+                Console.WriteLine(string.Format("{0}) {1}", compteur, technology.Name));
+                alltech[compteur] = technology;
+                compteur++;
+            }
+            Console.WriteLine("Choisissez une technologie à appliquer");
+            int choix = int.Parse(Console.ReadLine());
+            if (_Game.ApplyTech(alltech[choix].Name))
+            {
+                Console.WriteLine("La technologie a été appliquée au premier bâtiment.");
+            }
+            else
+            {
+                Console.WriteLine("La technologie n'est pas appliquable.");
+            }
+        }
+
+        private void TechMenu()
+        {
+            Console.WriteLine("Liste des Technologies disponibles");
+            var Techs = _Game.CurrentPlayer.GetTechnologies();
+            int compteur = 0;
+            Technology[] alltech = new Technology[Techs.Count];
+            foreach (var technology in Techs)
+            {
+                Console.WriteLine(string.Format("{0}) {1}",compteur,technology.Key));
+                alltech[compteur] = technology.Value;
+                compteur++;
+            }
+            Console.WriteLine("Choisissez une technologie à rechercher");
+            int choix = int.Parse(Console.ReadLine());
+            if (_Game.ReshearchedTech(alltech[choix]))
+            {
+                Console.WriteLine("La technologie est en cours de recherche");
+            }
+            else
+            {
+                Console.WriteLine("Il vous manque des préalables pour rechercher cette technologie");
+            }
+
         }
 
         private void TransferResources()
