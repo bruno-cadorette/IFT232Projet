@@ -17,7 +17,7 @@ namespace Ift232Tests
         public void Init()
         {
             city1 = new City("Toulouse");
-            market = new Market(Resources.Zero());
+            market = (Market)BuildingLoader.GetInstance().GetBuilding((int)BuildingType.Market);
             market.Update();
             market.Update();
             market.Update();

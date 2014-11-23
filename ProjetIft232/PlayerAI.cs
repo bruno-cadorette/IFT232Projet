@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using System.Xml;
 using ProjetIft232.Technologies;
 using ProjetIft232.Buildings;
+using ProjetIft232.Army;
 
 namespace ProjetIft232
 {
@@ -24,6 +25,8 @@ namespace ProjetIft232
         public void Play()
         {
             int actions = rd.Next(10);
+            var buildingValues = BuildingLoader.GetInstance().Buildings().Select(x => x.ID).ToArray();
+            var armyValues = ArmyLoader.GetInstance().Soldiers().Select(x => x.ID).ToArray();
             for (int i = 0; i < actions; i++)
             {
                 int actionTaken = rd.Next(10);
@@ -32,18 +35,16 @@ namespace ProjetIft232
                 {
                     case 0: // Random army creation
                         {
-                            Array values = Enum.GetValues(typeof(Army.ArmyUnitType));
-                            Army.ArmyUnitType randomArmy = (Army.ArmyUnitType)values.GetValue(rd.Next(values.Length));
-                            cityTaken.AddArmy(randomArmy);
+                            cityTaken.AddArmy(armyValues[rd.Next(armyValues.Length)]);
                         }
                         break;
                     case 2:
                     case 1: // Random building making
                         {
-                            Array values = Enum.GetValues(typeof(BuildingType));
-                            BuildingType randomBuilding = (BuildingType)values.GetValue(rd.Next(values.Length - 1/*Pour la valeur BuildingType.Null #WHYYYY */));
+
+    
                             
-                            cityTaken.AddBuilding(randomBuilding);
+                            cityTaken.AddBuilding(buildingValues[rd.Next(buildingValues.Length)]);
                         }
                         break;
                     case 3: // destruction aleatoire (why? no idea.)

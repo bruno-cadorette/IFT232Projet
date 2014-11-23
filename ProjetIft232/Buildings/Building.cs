@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ProjetIft232.Technologies;
+using System.Runtime.Serialization;
 
 namespace ProjetIft232.Buildings
 {
-    public  class Building
+    [DataContract]
+    [KnownType(typeof(Market))]
+    public class Building : BuildableEntity
     {
-        public string Name { get; set; }
-        public string Description { get;  set; }
-        public bool InConstruction { get;  set; }
-        public BuildingType Type { get;  set; }
-
+        
+        [DataMember]
         public Resources Resource { get;  set; }
 
-        public Requirement Requirement { get; set; }
+        [DataMember]
         private List<int> _CurrentTechnologies;
 
-        public int TurnsLeft { get; set; }
+        
         //Retourne le nombre de ressources par batiment. Permet qu'un batiment actif (tel le marché) puisse générer de l'or 
         protected virtual Resources UpdateBuilding()
         {
@@ -26,53 +26,26 @@ namespace ProjetIft232.Buildings
         }
 
 
-        public Building(BuildingType type, string name, string description, int turnsLeft, Resources resource, Requirement requirement)
+        public Building()
         {
-            Type = type;
-            Name = name;
-            Description = description;
+
+        }
+        public Building(int id, string name, string description, int turnsLeft, Resources resource, Requirement requirement)
+            : base(id, name, description, turnsLeft, requirement)
+        {
             Resource = resource;
-            InConstruction = false;
-            TurnsLeft = turnsLeft;
-            Requirement = requirement;
             _CurrentTechnologies = new List<int>();
         }
 
 
         public Building(Building build)
+            : base(build)
         {
-            Type = build.Type;
-            Name = build.Name;
-            Description = build.Description;
             Resource = build.Resource;
-            InConstruction = true;
-            TurnsLeft = build.TurnsLeft;
-            Requirement = build.Requirement;
             _CurrentTechnologies = new List<int>();
         }
 
-        public Building()
-        {
-            Type = BuildingType.Mine;
-            Name = "toto";
-            Description = "PUTQIN";
-            Resource = new Resources(0,0,0,0,0);
-            InConstruction = true;
-            TurnsLeft = 3;
-            Requirement = Requirement.Zero();
-        }
 
-        protected Building(int turnsLeft)
-        {
-            Resource = new Resources();
-            InConstruction = true;
-            TurnsLeft = turnsLeft;
-        }
-
-        public bool CanBeBuild(Resources actualResource, IEnumerable<Building> actualBuildings)
-        {
-            return Requirement.IsValid(actualResource, actualBuildings);
-        }
 
 
         public Resources Update()
@@ -104,16 +77,9 @@ namespace ProjetIft232.Buildings
             return !InConstruction && technology.ApplicationCost <= actualResource && _CurrentTechnologies.All(x => x != technology.ID);
         }
 
-        public void ReduceTurnLeft(int minus)
-        {
-            TurnsLeft = ((TurnsLeft - minus) < 0)  ? 0 : TurnsLeft - minus;
-        }
+        
 
-        private void Build()
-        {
-            TurnsLeft--;
-            InConstruction = TurnsLeft > 0;
-        }
+        
 
     }
 }

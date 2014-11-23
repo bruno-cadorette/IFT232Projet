@@ -14,7 +14,7 @@ namespace ProjetIft232.Technologies
         static TechnologyFactory()
         {
             Technologies = new Dictionary<string, Technology>();
-            Technologies.Add("FermeCool", new Technology(0,"FermeCool", "",Requirement.Zero(),2,new List<BuildingType>(){BuildingType.House},Resources.Zero(),new Enhancement(new Resources(100,0120,212,22,31),2 )));
+            //Technologies.Add("FermeCool", new Technology(0,"FermeCool", "",Requirement.Zero(),2,new List<BuildingType>(){0},Resources.Zero(),new Enhancement(new Resources(100,0120,212,22,31),2 )));
         }
         public static Technology CreateTechnology()
         {

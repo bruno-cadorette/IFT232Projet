@@ -59,7 +59,7 @@ namespace ProjetIft232
         public void WriteXML()
         {
 
-            //Buildings.Building overview = new Buildings.Building(Buildings.BuildingType.Mine, "toto", "Blablabla", 3, new Resources(0,0,0,0,0), Buildings.Requirement.Zero());
+            //Buildings.Building overview = new Buildings.Building(Buildings.2, "toto", "Blablabla", 3, new Resources(0,0,0,0,0), Buildings.Requirement.Zero());
 
             int[] resourcesTable = new int[5];
 

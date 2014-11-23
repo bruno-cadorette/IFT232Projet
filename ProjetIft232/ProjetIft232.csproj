@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,22 +44,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Army\ArmyFactory.cs" />
+    <Compile Include="Army\ArmyLoader.cs" />
     <Compile Include="Army\ArmyUnit.cs" />
-    <Compile Include="Army\ArmyUnitType.cs" />
-    <Compile Include="Army\Warrior.cs" />
+    <Compile Include="BuildableEntity.cs" />
+    <Compile Include="Buildings\BuildingLoader.cs" />
     <Compile Include="Buildings\Casern.cs" />
     <Compile Include="PlayerAI.cs" />
     <Compile Include="RandomEvent.cs" />
     <Compile Include="BarbarianArmyGenerator.cs" />
     <Compile Include="Buildings\Building.cs" />
     <Compile Include="Buildings\BuildingFactory.cs" />
-    <Compile Include="Buildings\BuildingLoader.cs" />
-    <Compile Include="Buildings\BuildingType.cs" />
-    <Compile Include="Buildings\Hospital.cs" />
+    <Compile Include="Loader.cs" />
     <Compile Include="Requirement.cs" />
-    <Compile Include="Buildings\School.cs" />
     <Compile Include="Buildings\Market.cs" />
-    <Compile Include="CommandResult.cs" />
     <Compile Include="ConsoleUi.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Game.cs" />

@@ -22,46 +22,36 @@ namespace Ift232Tests
         private void SetUp()
         {
             city = new City("Toulouse");
-            Building house = BuildingFactory.CreateBuilding(BuildingType.House,ref city);
-            house.Update();
-            house.Update();
-            house.Update();
-            house.Update();
+            Building house = BuildingFactory.CreateBuilding((int)BuildingType.House, ref city);
+            house.FinishConstruction();
 
-            Building farm = BuildingFactory.CreateBuilding(BuildingType.Farm,ref city);
-            farm.Update();
-            farm.Update();
-            farm.Update();
-            farm.Update();
+            Building farm = BuildingFactory.CreateBuilding((int)BuildingType.Farm, ref city);
+            farm.FinishConstruction();
 
-            caserne = BuildingFactory.CreateBuilding(BuildingType.Casern,ref city);
-            caserne.Update();
-            caserne.Update();
-            caserne.Update();
-            caserne.Update();
-            caserne.Update();
+            caserne = BuildingFactory.CreateBuilding((int)BuildingType.Casern, ref city);
+            caserne.FinishConstruction();
         }
 
         [TestMethod]
         public void CreateUnit()
         {
             SetUp();
-            ArmyUnit unit = ArmyFactory.CreateArmyUnit(ArmyUnitType.Warrior, city);
-            Assert.IsTrue(unit.Attack == 1);
-            Assert.IsTrue(unit.InFormation);
+            ArmyUnit unit = ArmyFactory.CreateArmyUnit(0, ref city);
+            Assert.IsTrue(unit.Attack == 2);
+            Assert.IsTrue(unit.InConstruction);
             unit.Update();
             unit.Update();
             unit.Update();
-            Assert.IsTrue(!unit.InFormation);
-            Assert.IsTrue(unit.Type == ArmyUnitType.Warrior);
+            Assert.IsTrue(!unit.InConstruction);
+            Assert.IsTrue(unit.ID == 0);
 
         }
         [TestMethod]
         public void RequirementTestFail()
         {
             SetUp();
-            ArmyUnit unit = ArmyFactory.CreateArmyUnit(ArmyUnitType.Warrior, city);
-            var resource = new Resources(1000,50000,0,10000,100000);
+            ArmyUnit unit = ArmyFactory.CreateArmyUnit(0, ref city);
+            var resource = new Resources(1000, 50000, 0, 10000, 100000);
             var buildings = new Building[] { caserne, };
             Assert.IsFalse(unit.CanBeBuild(resource, buildings.ToList()));
         }
@@ -70,10 +60,10 @@ namespace Ift232Tests
         public void RequirementTest()
         {
             SetUp();
-            ArmyUnit unit = ArmyFactory.CreateArmyUnit(ArmyUnitType.Warrior, city);
-            var resource = new Resources(1000,50000,6,10000,100000);
+            ArmyUnit unit = ArmyFactory.CreateArmyUnit(0, ref city);
+            var resource = new Resources(1000, 50000, 60000, 10000, 100000);
             var buildings = new Building[] { caserne, };
-            Assert.IsTrue(unit.CanBeBuild(resource, buildings.ToList()));
+            Assert.IsTrue(unit.CanBeBuild(resource, buildings));
         }
 
         [TestMethod]
@@ -81,39 +71,34 @@ namespace Ift232Tests
         {
             SetUp();
 
-            city.AddArmy(ArmyUnitType.Warrior);
-            city.AddArmy(ArmyUnitType.Warrior);
+            city.AddArmy(0);
+            city.AddArmy(0);
             city.Army.ForEach(unit => unit.Update());
             city.Army.ForEach(unit => unit.Update());
             city.Army.ForEach(unit => unit.Update());
             Resources old = new Resources(city.Ressources);
             city.Attack(BarbarianArmyGenerator.CreateArmy(1));
-            Assert.IsTrue(old==city.Ressources);
+            Assert.IsTrue(old == city.Ressources);
             Assert.IsTrue(city.Army.Count == 2);
         }
 
-          [TestMethod]
+        [TestMethod]
         public void AttackLostTest()
         {
             SetUp();
-            city.AddArmy(ArmyUnitType.Warrior);
+            city.AddArmy(0);
             city.Army.ForEach(unit => unit.Update());
             city.Army.ForEach(unit => unit.Update());
             city.Army.ForEach(unit => unit.Update());
             Resources old = new Resources(city.Ressources);
             List<ArmyUnit> opponent = new List<ArmyUnit>();
-              opponent.Add(new Warrior());
-              opponent.Add(new Warrior());
-              opponent.Add(new Warrior());
-              opponent.Add(new Warrior());
-              opponent.Add(new Warrior());
-              opponent.Add(new Warrior());
-              opponent.Add(new Warrior());
-              opponent.Add(new Warrior());
-              opponent.Add(new Warrior());
-              opponent.Add(new Warrior());
+
+            for (int i = 0; i < 10; i++)
+            {
+                opponent.Add(ArmyFactory.CreateArmyUnit(0,ref city));
+            }
             city.Attack(opponent);
-            Assert.IsTrue(old>city.Ressources);
+            Assert.IsTrue(old > city.Ressources);
             Assert.IsFalse(city.Army.Count == 1);
         }
 

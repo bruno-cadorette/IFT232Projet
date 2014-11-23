@@ -9,13 +9,13 @@ namespace ProjetIft232.Buildings
 {
     public class BuildingFactory
     {
-        public static Building CreateBuilding(BuildingType type,ref City city)
+        public static Building CreateBuilding(int type,ref City city)
         {
             Building building = GetBuilding(type);
-            var techs = city.ResearchedTechnologies.Where(n => n.AffectedBuilding.Any(m => m == building.Type) && n.InConstruction == false);
+            var techs = city.ResearchedTechnologies.Where(n => n.AffectedBuilding.Any(m => m == building.ID) && n.InConstruction == false);
             foreach (var technology in techs)
             {
-                building.Upgrade(technology); //lol qui veut refactorer peut.
+                building.Upgrade(technology); 
                 building.ReduceTurnLeft(technology.Enhancements.ConstructionTime);
             }
             if (building != null && building.CanBeBuild(city.Ressources, city.Buildings))
@@ -38,9 +38,9 @@ namespace ProjetIft232.Buildings
             return false;
         }
 
-        private static Building GetBuilding(BuildingType type)
+        private static Building GetBuilding(int type)
         {
-            return new Building(BuildingLoader.GetInstance()._buildings[type]);
+            return BuildingLoader.GetInstance().GetBuilding(type);
 
         }
     }

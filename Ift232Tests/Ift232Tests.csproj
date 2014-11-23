@@ -51,6 +51,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="BuildingType.cs" />
     <Compile Include="TestBuilding.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestResource.cs" />
@@ -58,8 +59,9 @@
     <Compile Include="CityTest.cs" />
     <Compile Include="MarketTest.cs" />
     <Compile Include="TestTechnology.cs" />
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="GameTest.cs" />
     <Compile Include="AITest.cs" />
+    <Compile Include="LoaderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProjetIft232\ProjetIft232.csproj">

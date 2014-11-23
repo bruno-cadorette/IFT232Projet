@@ -1,71 +1,108 @@
-<Batiments>
-  <Batiment Name="Maison" id = "0" turn="3" Description="Un bâtiment principalement composé de bois permettant à votre population actuelle de créer une famille et donc d'augmenter votre population.\n">
-    <Attributes>
-      <Population>1</Population>
-    </Attributes>
-    <IsSpecial>false</IsSpecial>
-  </Batiment>
+<Entities>
+  <Batiments>
+    <Batiment Name="Maison" id = "0" turns="3" Description="Un bâtiment principalement composé de bois permettant à votre population actuelle de créer une famille et donc d'augmenter votre population.\n">
+      <Resources>
+        <Population>1</Population>
+      </Resources>
+    </Batiment>
 
-  <Batiment Name="Ferme" id = "1" turn="3" Description="Une parcelle de terre réservée à l'élevage et la culture afin de récolter de la nourriture.\n">
-    <Attributes>
-      <Meat>1</Meat>
-    </Attributes>
-    <IsSpecial>false</IsSpecial>
-  </Batiment>
+    <Batiment Name="Ferme" id = "1" turns="3" Description="Une parcelle de terre réservée à l'élevage et la culture afin de récolter de la nourriture.\n">
+      <Resources>
+        <Meat>1</Meat>
+      </Resources>
+    </Batiment>
 
-  <Batiment Name="Mine" id = "2" turn="3" Description="Une infrastructure basée sous la terre exploitant les minéraux afin d'obtenir de l'or.\nOn a toujours besoin d'or...\n">
-    <Attributes>
-      <Gold>1</Gold>
-    </Attributes>
-    <IsSpecial>false</IsSpecial>
-  </Batiment>
+    <Batiment Name="Mine" id = "2" turns="3" Description="Une infrastructure basée sous la terre exploitant les minéraux afin d'obtenir de l'or.\nOn a toujours besoin d'or...\n">
+      <Resources>
+        <Gold>1</Gold>
+      </Resources>
+    </Batiment>
 
-  <Batiment Name="Scierie" id = "3" turn="3" Description="Un joyeux camp de bûcheron. \nVive le Canada !\n">
-    <Attributes>
-      <Wood>1</Wood>
-    </Attributes>
-    <IsSpecial>false</IsSpecial>
-  </Batiment>
+    <Batiment Name="Scierie" id = "3" turns="3" Description="Un joyeux camp de bûcheron. \nVive le Canada !\n">
+      <Resources>
+        <Wood>1</Wood>
+      </Resources>
+    </Batiment>
 
-  <Batiment Name="Carrière" id = "4" turn="3" Description="Un chantier placé sur une source de granit infinie...\nQuoi de mieux pour un revenu de roche à chaque tour ?\n">
-    <Attributes>
-      <Rock>1</Rock>
-    </Attributes>
-    <IsSpecial>false</IsSpecial>
-  </Batiment>
+    <Batiment Name="Carrière" id = "4" turns="3" Description="Un chantier placé sur une source de granit infinie...\nQuoi de mieux pour un revenu de roche à chaque tour ?\n">
+      <Resources>
+        <Rock>1</Rock>
+      </Resources>
+    </Batiment>
 
 
 
-  <Batiment Name="Caserne" id = "5" turn="5" Description="Un camp d'entraînement pour des soldats d'élite !\nEnfin...Jusqu'à ce qu'on trouve meilleur que ces bras cassés...\n">
-  <Requirements>
-    <Builds>
-      <Bati>0</Bati>
-      <Bati>1</Bati>
-    </Builds>
-    <Res>
-      <Gold>20</Gold>
-      <Wood>15</Wood>
-      <Meat>25</Meat>
-      <Rock>15</Rock>
-      <Population>10</Population>
-    </Res>
-  </Requirements>
-    <IsSpecial>false</IsSpecial>
-  </Batiment>
+    <Batiment Name="Caserne" id = "5" turns="5" Description="Un camp d'entraînement pour des soldats d'élite !\nEnfin...Jusqu'à ce qu'on trouve meilleur que ces bras cassés...\n">
+      <Requirements>
+        <Buildings>
+          <Building>0</Building>
+          <Building>1</Building>
+        </Buildings>
+        <Resources>
+          <Gold>20</Gold>
+          <Wood>15</Wood>
+          <Meat>25</Meat>
+          <Rock>15</Rock>
+          <Population>10</Population>
+        </Resources>
+      </Requirements>
+    </Batiment>
 
-  <Batiment Name="École" id = "6" turn="3" Description= "Un bâtiment assez banal...\nEnfin, il y a quelques personnes un peu bizarre qui font des recherches dedans...\n">
+    <Batiment Name="École" id = "6" turns="3" Description= "Un bâtiment assez banal...\nEnfin, il y a quelques personnes un peu bizarre qui font des recherches dedans...\n">
+    </Batiment>
 
-    <IsSpecial>false</IsSpecial>
-  </Batiment>
+    <Batiment Name="Marché" id = "7" turns="3" Description="Un bâtiment permettant l'échange de ressources.\nQui sait, peut-être que si vous aidez le marchand il vous donnera un peu d'or...\n">
+      <Special type="Market" />
+    </Batiment>
 
-  <Batiment Name="Marché" id = "7" turn="3" Description="Un bâtiment permettant l'échange de ressources.\nQui sait, peut-être que si vous aidez le marchand il vous donnera un peu d'or...\n">
-    <IsSpecial>true</IsSpecial>
-  </Batiment>
+    <Batiment Name="Hopital" id = "8" turns="3" Description="Un bâtiment permettant d'accepter et de soigner les malades.\nQui sait, peut-être qu'un jour il permettra d'endiguer l'Ebola...\n">
+      <Requirements>
+        <Technologies>
+          <Technology>0</Technology>
+        </Technologies>
+      </Requirements>
+    </Batiment>
+  </Batiments>
 
-  <Batiment Name="Hopital" id = "8" turn="3" Description="Un bâtiment permettant d'accepter et de soigner les malades.\nQui sait, peut-être qu'un jour il permettra d'endiguer l'Ebola...\n">
-    <IsSpecial>false</IsSpecial>
-  </Batiment>
+  <Soldiers>
+    <Soldier Name="Guerrier" id = "0" turns="3" Description="Un guerrier sans education\n" Attack="2" Defense="2">
+      <Resources>
+        <Rock>1</Rock>
+        <Gold>1</Gold>
+      </Resources>
+      <Requirements>
+        <Buildings>
+          <Building>5</Building>
+        </Buildings>
+        <Resources>
+          <Gold>20</Gold>
+          <Wood>15</Wood>
+          <Meat>25</Meat>
+          <Rock>15</Rock>
+          <Population>10</Population>
+        </Resources>
+      </Requirements>
+    </Soldier>
 
+    <Soldier Name="Cavalier" id = "1" turns="3" Description="Un homme a cheval\n" Attack="8" Defense="3">
+      <Resources>
+        <Rock>16</Rock>
+        <Gold>19</Gold>
+        <Population>20</Population>
+      </Resources>
+      <Requirements>
+        <Buildings>
+          <Building>5</Building>
+        </Buildings>
+        <Resources>
+          <Gold>80</Gold>
+          <Wood>15</Wood>
+          <Meat>75</Meat>
+          <Rock>100</Rock>
+          <Population>20</Population>
+        </Resources>
+      </Requirements>
+    </Soldier>
+  </Soldiers>
 
-
-</Batiments>
+</Entities>

@@ -8,11 +8,9 @@ namespace ProjetIft232.Buildings
 {
     public class Casern : Building
     {
-        public Casern()
-            : base(3)
+        public Casern(Building building)
+            : base(building)
         {
-            Name = "Casern";
-            Description ="Un bâtiment permettant l'entrainement de soldats";
         }
     }
 }

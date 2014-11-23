@@ -17,13 +17,13 @@ namespace Ift232Tests
         public void SetUp()
         {
             city = new City("Toulouse!");
-            tech = new Technology(2,"Maconnerie",null,Requirement.Zero(),2,new List<BuildingType>(){BuildingType.Farm},new Resources(0,10,100,10,10),new Enhancement(new Resources(20,20,20,20,20),53));
+            tech = new Technology(2,"Maconnerie",null,Requirement.Zero(),2,new List<int>(){(int)BuildingType.Farm},new Resources(0,10,100,10,10),new Enhancement(new Resources(20,20,20,20,20),53));
         }
         [TestMethod]
         public void UpgradeBuilding()
         {
             Technology technology = TechnologyFactory.CreateTechnology();
-            Building house = BuildingFactory.CreateBuilding(BuildingType.House, ref city);
+            Building house = BuildingFactory.CreateBuilding((int)BuildingType.House, ref city);
             for (int i = 0; i < 10; i++)
 			{
                 house.Update();
@@ -42,7 +42,7 @@ namespace Ift232Tests
             {
                 city.ResearchedTechnologies.ForEach(n => n.Update());
             }
-            Building farm = BuildingFactory.CreateBuilding(BuildingType.Farm, ref city);
+            Building farm = BuildingFactory.CreateBuilding((int)BuildingType.Farm, ref city);
             for (int i = 0; i < 10; i++)
             {
                 farm.Update();
@@ -54,7 +54,7 @@ namespace Ift232Tests
         public void NotUpgradedBuilding()
         {
             city.ResearchedTechnologies.Add(tech);
-            Building farm = BuildingFactory.CreateBuilding(BuildingType.Farm, ref city);
+            Building farm = BuildingFactory.CreateBuilding((int)BuildingType.Farm, ref city);
             for (int i = 0; i < 10; i++)
             {
                 city.ResearchedTechnologies.ForEach(n => n.Update());
@@ -70,7 +70,7 @@ namespace Ift232Tests
             {
                 city.ResearchedTechnologies.ForEach(n => n.Update());
             }
-            Building farm = BuildingFactory.CreateBuilding(BuildingType.Farm, ref city);
+            Building farm = BuildingFactory.CreateBuilding((int)BuildingType.Farm, ref city);
             Assert.IsTrue(farm.TurnsLeft == 0);
         }
     }

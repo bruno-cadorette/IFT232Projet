@@ -19,7 +19,7 @@ namespace ProjetIft232
         private Game _Game;
         public void Interact(Game game)
         {
-            _Game = game;     
+            _Game = game;
             // Game initial setup
             Console.WriteLine("Bienvenue!!!!");
             Console.WriteLine("Veuillez entrer le nombre de joueur pour la partie.");
@@ -63,7 +63,7 @@ namespace ProjetIft232
             {
                 _Game.NextTurn();
             }
-        }      
+        }
 
         private void PrincipalMenu()
         {
@@ -86,12 +86,12 @@ namespace ProjetIft232
 12) Save
 13) Quitter
 ", Game.TourIndex, _Game.CurrentPlayer.CurrentCity, _Game.CurrentPlayer.playerName);
-                 option = int.Parse(Console.ReadLine());             
+                option = int.Parse(Console.ReadLine());
                 switch (option)
                 {
                     case 0:
                         Console.WriteLine("Vos villes : ");
-                        _Game.CurrentPlayer.Cities.ForEach(n => Console.WriteLine( string.Format("{0} \n", n.Name)));
+                        _Game.CurrentPlayer.Cities.ForEach(n => Console.WriteLine(string.Format("{0} \n", n.Name)));
                         break;
                     case 1:
                         ShowCurrentBuildings(_Game.CurrentPlayer.CurrentCity.Buildings);
@@ -116,10 +116,10 @@ namespace ProjetIft232
                     case 6:
                         ChangeCityFocus();
                         break;
-                   case 7:
+                    case 7:
                         TransferResources();
                         break;
-                    case 8 : 
+                    case 8:
                         AchatRessources();
                         break;
                     case 9:
@@ -129,7 +129,7 @@ namespace ProjetIft232
                     case 10:
                         ApplyTechMenu();
                         break;
-                   case 11:
+                    case 11:
                         _Game.NextTurn();
                         Console.WriteLine("Nous avons progressé d'un tour, on ne va pas rester à l'âge de pierre");
                         break;
@@ -174,7 +174,7 @@ namespace ProjetIft232
             Technology[] alltech = new Technology[Techs.Count];
             foreach (var technology in Techs)
             {
-                Console.WriteLine(string.Format("{0}) {1}",compteur,technology.Key));
+                Console.WriteLine(string.Format("{0}) {1}", compteur, technology.Key));
                 alltech[compteur] = technology.Value;
                 compteur++;
             }
@@ -194,8 +194,8 @@ namespace ProjetIft232
         private void TransferResources()
         {
             string nomville;
-            
-            
+
+
             Console.WriteLine(" Entrez le nom de la ville bénéficiaire");
             nomville = Console.ReadLine();
             Console.WriteLine(" Quel type de ressources voulez-vous envoyer ");
@@ -207,7 +207,7 @@ namespace ProjetIft232
 5) Population
 ");
             bool result = false;
-            int option = int.Parse(Console.ReadLine());  
+            int option = int.Parse(Console.ReadLine());
             switch (option)
             {
                 case 1:
@@ -226,12 +226,12 @@ namespace ProjetIft232
                     result = _Game.Transfer(nomville, 0, 0, viande, 0, 0);
                     break;
                 case 4:
-                      Console.Write(" Combien de Pierre ? ");
+                    Console.Write(" Combien de Pierre ? ");
                     int pierre = Convert.ToInt32(Console.ReadLine());
                     result = _Game.Transfer(nomville, 0, 0, 0, pierre, 0);
                     break;
                 case 5:
-                      Console.Write(" Combien de Population ? ");
+                    Console.Write(" Combien de Population ? ");
                     int pop = Convert.ToInt32(Console.ReadLine());
                     result = _Game.Transfer(nomville, 0, 0, 0, 0, pop);
                     break;
@@ -251,7 +251,7 @@ namespace ProjetIft232
         }
 
 
-        private void PrintAchat(int accepte, ResourcesType type, int qtte,Market m)
+        private void PrintAchat(int accepte, ResourcesType type, int qtte, Market m)
         {
             switch (accepte)
             {
@@ -273,7 +273,7 @@ namespace ProjetIft232
 
             if (_Game.getMarket() != null)
             {
-                Market m =(Market)_Game.getMarket();
+                Market m = (Market)_Game.getMarket();
 
                 Console.WriteLine(" Quel type de ressources voulez-vous acheter ");
                 Console.WriteLine(@" 
@@ -291,13 +291,13 @@ namespace ProjetIft232
                         Console.Write(" Combien de bois ? ");
                         int bois = Convert.ToInt32(Console.ReadLine());
 
-                        bois2 = m.Conversion(bois,ResourcesType.Wood);
+                        bois2 = m.Conversion(bois, ResourcesType.Wood);
                         Console.Write(" Nous vous proposons " + bois2 + " unitées de bois contre " + bois2 / 15 + " unitées d'or : acceptez vous ?" + @"
 1 : oui
 2 : non");
-                        PrintAchat(Convert.ToInt32(Console.ReadLine()),ResourcesType.Wood,bois2/15,m);
+                        PrintAchat(Convert.ToInt32(Console.ReadLine()), ResourcesType.Wood, bois2 / 15, m);
                         break;
-                        
+
                     case 2:
                         Console.Write(" Combien de viande ? ");
                         int viande = Convert.ToInt32(Console.ReadLine());
@@ -338,7 +338,7 @@ namespace ProjetIft232
             Console.WriteLine("Il n'y pas présentement pas de marché dans votre ville ou alors il est encore en construction");
         }
 
-        private void ResourcesExchange() 
+        private void ResourcesExchange()
         {
             if (_Game.getMarket() != null)
             {
@@ -362,7 +362,7 @@ namespace ProjetIft232
                 ResourcesType output = (ResourcesType)Enum.Parse(typeof(ResourcesType), Console.ReadLine());
 
                 Console.WriteLine("Combien de {0} voulez vous echanger contre du {1}", input.ToString(), output.ToString());
-                int qte =  (int)Math.Min(_Game.CurrentPlayer.CurrentCity.Ressources[input],int.Parse(Console.ReadLine()));
+                int qte = (int)Math.Min(_Game.CurrentPlayer.CurrentCity.Ressources[input], int.Parse(Console.ReadLine()));
 
 
 
@@ -382,7 +382,7 @@ namespace ProjetIft232
                     case 3:
                         break;
                 }
-               
+
             }
             Console.WriteLine("Il n'y pas présentement pas de marché dans votre ville ou alors il est encore en construction");
         }
@@ -409,33 +409,32 @@ namespace ProjetIft232
 
         private void ArmyMenu()
         {
-            var armyUnit = Enum.GetNames(typeof(ArmyUnitType));
+            var armyUnit = ArmyLoader.GetInstance().Soldiers().ToArray();
 
-            for (int i = 0; i < armyUnit.Length; i++)
+            foreach (var army in armyUnit)
             {
-                Console.WriteLine("{0} : {1}", i + 1, armyUnit[i]);
+                Console.WriteLine("{0} : {1}", army.ID + 1, army.Name);
             }
             int option = int.Parse(Console.ReadLine());
 
 
-            if (_Game.CurrentPlayer.CurrentCity.AddArmy((ArmyUnitType)(option - 1)))
+            if (_Game.CurrentPlayer.CurrentCity.AddArmy((option - 1)))
             {
-                Console.WriteLine(" L'unité " + armyUnit[option - 1] + " a bien été créée");
+                Console.WriteLine(" L'unité " + armyUnit[option - 1].Name + " a bien été créée");
             }
         }
 
         private void BuildingMenu()
         {
-            var buildings = Enum.GetNames(typeof(BuildingType));
-
-            for (int i = 0; i < buildings.Length-1; i++)
+            var buildings = BuildingLoader.GetInstance().Buildings().ToArray();
+            foreach (var building in buildings)
             {
-                Console.WriteLine("{0} : {1}", i + 1, buildings[i]);
+                Console.WriteLine("{0} : {1}", building.ID + 1, building.Name);
             }
             int option = int.Parse(Console.ReadLine());
 
 
-            if (_Game.CurrentPlayer.CurrentCity.AddBuilding((BuildingType)(option - 1)))
+            if (_Game.CurrentPlayer.CurrentCity.AddBuilding(option - 1))
             {
                 Console.WriteLine(" Le bâtiment " + buildings[option - 1] + " a bien été créé");
             }
@@ -451,21 +450,11 @@ namespace ProjetIft232
 
         private void ShowArmy(IEnumerable<ArmyUnit> army)
         {
-            int[] units= new int[1];
-            int Form = 0;
-            foreach(var soldier in army)
+            foreach (var soldier in army.Where(x => !x.InConstruction).GroupBy(x => x.Name).Select(x => String.Format("{0} : {1}", x.Key, x.Count())))
             {
-                if (!soldier.InFormation) {
-                    if (soldier.Type == ArmyUnitType.Warrior)
-                    {
-                        units[0]++;
-                    }}
-            else {
-                Form++;
-                }
+                Console.WriteLine(soldier);
             }
-            Console.WriteLine("Guerriers : "+units[0]);
-            Console.WriteLine("Troupe en formation : " + Form);
+            Console.WriteLine("Troupe en formation : " + army.Count(x=>x.InConstruction));
         }
 
     }

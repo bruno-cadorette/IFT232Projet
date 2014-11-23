@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace ProjetIft232
@@ -39,10 +40,11 @@ namespace ProjetIft232
         };
     }
 
+    [DataContract]
     public class Resources
     {
         private const int MAX_POP = 500000;
-
+        [DataMember]
         private Dictionary<ResourcesType, int> resources;
 
         public Resources ()

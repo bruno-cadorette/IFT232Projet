@@ -80,7 +80,7 @@ namespace ProjetIft232
             return false;
         }
 
-        public bool AddBuilding(BuildingType type)
+        public bool AddBuilding(int type)
         {
             City city = this;
             var building = BuildingFactory.CreateBuilding(type, ref city);
@@ -92,11 +92,11 @@ namespace ProjetIft232
             int nbrCasern = 0;
             if (Buildings.Count > nb)
             {
-                if (Buildings[nb].Type == BuildingType.Casern)
+                if (Buildings[nb] is Casern)
                 {
                     for (int i = 0; i < Buildings.Count; i++)
                     {
-                        if (Buildings[nb].Type == BuildingType.Casern)
+                        if (Buildings[nb] is Casern)
                         {
                             nbrCasern++;
                         }
@@ -105,7 +105,7 @@ namespace ProjetIft232
                     {
                         for (int i = Army.Count - 1; i >= 0; i--)
                         {
-                            if (Army[i].InFormation == true)
+                            if (Army[i].InConstruction == true)
                             {
                                 Army.Remove(Army[i]);
                             }
@@ -116,13 +116,11 @@ namespace ProjetIft232
             }
         }
 
-        public bool IsBuilt(BuildingType bt)
+        public bool IsBuilt(int bt)
         {
-            if (bt == BuildingType.Null)
-                return false;
            foreach (Building building in Buildings)
             {
-                if (building.Type == bt)
+                if (building.ID == (int)bt)
                     return true;
             }
            return false;
@@ -149,9 +147,10 @@ namespace ProjetIft232
             Ressources.Update(rsc);
         }
 
-        public bool AddArmy(ArmyUnitType type)
+        public bool AddArmy(int type)
         {
-            var armyUnit = ArmyFactory.CreateArmyUnit(type, this);
+            City city = this;
+            var armyUnit = ArmyFactory.CreateArmyUnit(type, ref city);
             if (armyUnit != null)
             {
                 Army.Add(armyUnit);
@@ -165,17 +164,17 @@ namespace ProjetIft232
 
         public Building FindBuildingForReschearded(Technology tech)
         {
-            return Buildings.ToList().FirstOrDefault(n => !n.AlreadyApplied(tech.ID) && tech.AffectedBuilding.Contains(n.Type));
+            return Buildings.ToList().FirstOrDefault(n => !n.AlreadyApplied(tech.ID) && tech.AffectedBuilding.Contains(n.ID));
         }
 
         public string Attack(List<ArmyUnit> BarbarianArmy)
         {
             string Resume = string.Format("La ville est attaqué par des barbares, ils sont {0} \n ", BarbarianArmy.Count);
             Random rand = new Random();
-            int ourdefence = Army.Where(n => n.InFormation == false).Sum(n => n.Defense);
+            int ourdefence = Army.Where(n => n.InConstruction == false).Sum(n => n.Defense);
             int theirattack = BarbarianArmy.Sum(n => n.Attack);
             int theirdefence = BarbarianArmy.Sum(n => n.Defense);
-            int ourattack = Army.Where(n => n.InFormation == false).Sum(n => n.Attack);
+            int ourattack = Army.Where(n => n.InConstruction == false).Sum(n => n.Attack);
 
             if (ourdefence < theirattack)
             {
@@ -189,7 +188,7 @@ namespace ProjetIft232
             }
             else
             {
-                int diff = theirattack - ourdefence;
+                int diff = Math.Max(theirattack - ourdefence,0);
                 int lost = (diff / 2);
                 lost = lost > Army.Count ? BarbarianArmy.Count : lost;
                 Army.RemoveRange(0, lost / 2);

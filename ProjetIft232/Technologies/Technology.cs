@@ -15,7 +15,7 @@ namespace ProjetIft232.Technologies
         public Requirement Requirement { get; private set; }
         public int TurnsLeft { get; private set; }
         public bool InConstruction { get; private set; }
-        public IEnumerable<BuildingType> AffectedBuilding { get; private set; }
+        public IEnumerable<int> AffectedBuilding { get; private set; }
         public Resources ApplicationCost { get; private set; }
         
         //Ca serait bien qu'une technologie puisse avoir differents effets sur differents batiments
@@ -24,7 +24,7 @@ namespace ProjetIft232.Technologies
         public Technology()
         {
             Requirement = Requirement.Zero();
-            AffectedBuilding = Enumerable.Empty<BuildingType>();
+            AffectedBuilding = Enumerable.Empty<int>();
             ApplicationCost = Resources.Zero();
             Enhancements = new Enhancement(new Resources(100, 100, 100, 100, 100), 0);
         }
@@ -48,7 +48,7 @@ namespace ProjetIft232.Technologies
             string description, 
             Requirement requirement, 
             int turnsLeft, 
-            IEnumerable<BuildingType> affectedBuilding,
+            IEnumerable<int> affectedBuilding,
             Resources applicationCost, 
             Enhancement enhancements)
         {

@@ -60,11 +60,11 @@ namespace ProjetIft232
     public class Event
     {
         public string name {get; private set;}
-        public BuildingType counter { get; private set; }
+        public int counter { get; private set; }
         public Effect normalEffect { get; private set; }
         public Effect counterEffect { get; private set; }
 
-        public Event(string nm,  BuildingType ct, Effect ef1, Effect ef2)
+        public Event(string nm,  int ct, Effect ef1, Effect ef2)
         {
             name =nm;
             counter = ct;
@@ -76,7 +76,7 @@ namespace ProjetIft232
         public Event(string nm, Effect ef1)
         {
             name =nm;
-            counter = BuildingType.Null;
+            counter = -1;
             normalEffect = ef1;
             counterEffect = null;
 
@@ -111,15 +111,15 @@ namespace ProjetIft232
 
         public RandomEvent()
         {
-            events.Add(new Event("Météorites", BuildingType.House,new Effect(new Resources(1000, 200, 100, 0, 100),3,"C'est un oiseau ! Non ! C'est un avion ! Ah non, une meteorite..."), new Effect(1,"Waouh ! Sauvé par la maison ! :D")));
-            events.Add(new Event("Zombies", BuildingType.Casern, new Effect(new Resources(0,0,1000,0,200),0, "Les zombies attaquent ! Coureeeeeeeez !"), new Effect(new Resources(0,0,200,0,10),0,"Grâce à la caserne, les villageois on pu se défendre !")));
-            events.Add(new Event("Ebola", BuildingType.Hospital, new Effect(new Resources(0,0,200,0,1000),1,"Un ebola sauvage apparait dans les hautes herbes ! Gotta catch'em all ! :D"),new Effect(new Resources(0,0,0,0,15),"L'hôpital nous a tous sauvé ! Gloire à l'hôpital ! ")));
+            events.Add(new Event("Météorites", 0,new Effect(new Resources(1000, 200, 100, 0, 100),3,"C'est un oiseau ! Non ! C'est un avion ! Ah non, une meteorite..."), new Effect(1,"Waouh ! Sauvé par la maison ! :D")));
+            events.Add(new Event("Zombies", 5, new Effect(new Resources(0,0,1000,0,200),0, "Les zombies attaquent ! Coureeeeeeeez !"), new Effect(new Resources(0,0,200,0,10),0,"Grâce à la caserne, les villageois on pu se défendre !")));
+            events.Add(new Event("Ebola", 6, new Effect(new Resources(0,0,200,0,1000),1,"Un ebola sauvage apparait dans les hautes herbes ! Gotta catch'em all ! :D"),new Effect(new Resources(0,0,0,0,15),"L'hôpital nous a tous sauvé ! Gloire à l'hôpital ! ")));
             events.Add(new Event("Extra-terrestres", new Effect(new Resources(100,0,0,200,200),1,"Une soucoupe est passee et a recupere quelques ressources...")));
-            events.Add(new Event("Chevres enragees", BuildingType.Farm, new Effect(new Resources(0, 0, 0, 0, 500), 1, "On nous attaque ! Une troupe de chevres enragees met nos vies en danger !"),new Effect(new Resources(0,0,-500,0,0),"Elles ont trouvees dans la ferme la sedentarite qui leur manquait")));
+            events.Add(new Event("Chevres enragees", 1, new Effect(new Resources(0, 0, 0, 0, 500), 1, "On nous attaque ! Une troupe de chevres enragees met nos vies en danger !"),new Effect(new Resources(0,0,-500,0,0),"Elles ont trouvees dans la ferme la sedentarite qui leur manquait")));
             events.Add(new Event("Singes malicieux",new Effect(new Resources(0,3000,0,0,0),"Ces singes etaient mignons... Mais ils nous ont vole notre or !")));
             events.Add(new Event("Seisme",new Effect(new Resources(0,0,0,-1000,500),2,"Ca tremble ! Ca tremble ! ")));
             events.Add(new Event("Godzilla",new Effect(new Resources(500,200,500,500,200),3,"J'ai cru voir un gros lezard se balader dans la ville...")));
-            events.Add(new Event("Mode des bijoux en or", BuildingType.Market, new Effect(new Resources(0, 1000, 0, 0, 0), 0, "Mon precieux..."), new Effect(new Resources(0, 0, 0, 0, 0), "Heureusement, le marché était là pour approvisionner la population avant qu'ils piochent dans les réserves...")));
+            events.Add(new Event("Mode des bijoux en or", 7, new Effect(new Resources(0, 1000, 0, 0, 0), 0, "Mon precieux..."), new Effect(new Resources(0, 0, 0, 0, 0), "Heureusement, le marché était là pour approvisionner la population avant qu'ils piochent dans les réserves...")));
             events.Add(new Event("Pluie feconde", new Effect(new Resources(0, 0, -1000, 0, 0), 0, "Une pluie a amélioré les récoltes chef !")));
             events.Add(new Event("Decouverte d'un leprechaun", new Effect(new Resources(0, -2000, 0, 0, 0), 0, "On a trouve un leprechaun ! Ce petit homme faisait une drole de tete quand on a requisitionne son or ! :D")));
             events.Add(new Event("Incendie quantique", new Effect(new Resources(-1000, 0, 0, 0, 0),1,"J'aurai jure qu'il y avait un bâtiment ici... Pas une forêt.")));
@@ -132,7 +132,7 @@ namespace ProjetIft232
 
             int nombre = random.Next(0, events.Count);
             string result = "Votre ville a subi : " + events[nombre].name + "\n";
-            if (!city.IsBuilt(events[nombre].counter))
+            if (!city.IsBuilt((int)events[nombre].counter))
             {
 
                 return result + events[nombre].normalEffect.Apply(city);

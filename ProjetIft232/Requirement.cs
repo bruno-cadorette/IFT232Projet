@@ -5,47 +5,46 @@ using System.Text;
 using System.Threading.Tasks;
 using ProjetIft232.Buildings;
 using ProjetIft232.Technologies;
+using System.Runtime.Serialization;
 
 namespace ProjetIft232
 {
+    [DataContract]
     public class Requirement
     {
-        private IEnumerable<BuildingType> _Buildings;
+        [DataMember]
+        public IEnumerable<int> Buildings {get; private set;}
+        [DataMember]
         private IEnumerable<int> _Technologies;
+        [DataMember]
         public Resources Resources { get; set; }
 
-        public Requirement(IEnumerable<BuildingType> buildings, Resources resources)
+        public Requirement(IEnumerable<int> buildings, Resources resources)
         {
-            _Buildings = buildings;
+            Buildings = buildings;
             Resources = resources;
         }
 
-        
-        public Requirement(IEnumerable<BuildingType> buildings, IEnumerable<int> technologies, Resources resources)
+
+        public Requirement(IEnumerable<int> buildings, IEnumerable<int> technologies, Resources resources)
         {
-            _Buildings = buildings;
+            Buildings = buildings;
             Resources = resources;
             _Technologies = technologies;
         }
 
-        public Requirement()
-        {
-            _Buildings = new BuildingType[0];
-            Resources = Resources.Zero();
-        }
-
         public static Requirement Zero()
         {
-            return new Requirement(new BuildingType[0], new int[0], Resources.Zero());
+            return new Requirement(new int[0], new int[0], Resources.Zero());
         }
 
 
         public bool IsValid(Resources actualResource, IEnumerable<Building> actualBuildings)
         {
-            return actualResource >= Resources && 
-                _Buildings.All(type =>
+            return actualResource >= Resources &&
+                Buildings.All(type =>
                 actualBuildings.Any(x => 
-                    x.Type == type && !x.InConstruction)
+                    x.ID == type && !x.InConstruction)
                 );
         }
         public bool IsValid(Resources actualResource, IEnumerable<Building> actualBuildings, IEnumerable<Technology> actualTechnologies)

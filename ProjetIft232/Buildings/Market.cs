@@ -1,31 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ProjetIft232.Buildings
 {
+    [DataContract]
     public class Market : Building
     {
+        [DataMember]
         private Resources resources;
+        [DataMember]
         public int RatioBois { get; private set; }
+        [DataMember]
         public int RatioViande { get; private set; }
+        [DataMember]
         public int RatioPierre{ get; private set; }
 
+        public Market()
+        {
 
-        public Market( Resources MarketResources)
-            : base(3)
+        }
+
+        public Market(Building building,  Resources marketResources)
+            : base(building)
         {
             resources = new Resources(100000, 100000, 100000, 100000, 0);
             this.RatioBois = 15;
             this.RatioPierre = 12;
             this.RatioViande = 8;
-
-            Name = "Marché";
-            Description =
-                "Un bâtiment permettant l'échange de ressources.\n Qui sait, peut-être que si vous aidez le marchand il vous donnera un peu d'or...\n";
             
         }
 
