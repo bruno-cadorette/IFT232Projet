@@ -16,17 +16,17 @@ namespace ProjetIft232
             barbarianCamp = new City("Barbarian Camp");
             barbarianCamp.AddResources(new Resources(10000, 10000, 10000, 10000, 10000));
         }
-        public static  List<ArmyUnit> CreateArmy(int tourIndex)
+        public static  Armies CreateArmy(int tourIndex)
         {
-            List<ArmyUnit> returnList = new List<ArmyUnit>();
+            Armies res = new Armies();
             Random random = new Random();
 
                 int nombre = random.Next(1, tourIndex);
                 for (int i = 0; i < nombre; i++)
                 {
-                    returnList.Add( ArmyFactory.CreateBarbarian(0));
+                    res.addUnit( ArmyFactory.CreateBarbarian(0));
                 }
-            return returnList;
+            return res;
         }
         
     }

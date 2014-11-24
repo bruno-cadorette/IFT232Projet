@@ -46,6 +46,7 @@
     <Compile Include="Army\ArmyFactory.cs" />
     <Compile Include="Army\ArmyLoader.cs" />
     <Compile Include="Army\ArmyUnit.cs" />
+    <Compile Include="Army\Armies.cs" />
     <Compile Include="BuildableEntity.cs" />
     <Compile Include="Buildings\BuildingLoader.cs" />
     <Compile Include="Buildings\Casern.cs" />
