@@ -30,7 +30,7 @@ namespace ProjetIft232
             }
         }
 
-        private int _indexCity;
+        public int _indexCity { get; private set; }
 
         public void NextCity()
         {

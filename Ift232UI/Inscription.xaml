@@ -1,0 +1,15 @@
+﻿<Window x:Class="Ift232UI.Inscription"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Inscription" Height="300" Width="300" Background="White">
+    <Grid Background="#FFC7C7C7">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Button Content="Solitaire" HorizontalAlignment="Left" Margin="56,85,0,0" VerticalAlignment="Top" Width="179" Grid.ColumnSpan="2" Height="43" Click="Button_Click"/>
+        <Button Grid.ColumnSpan="2" Content="Multijoueur" HorizontalAlignment="Left" Margin="56,162,0,0" VerticalAlignment="Top" Width="179" Height="43" Click="Button_Click_1"/>
+        <Label Content="ProjetIft232" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="91,27,0,0" VerticalAlignment="Top" FontSize="20"/>
+
+    </Grid>
+</Window>

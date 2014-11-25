@@ -20,16 +20,15 @@
             <Grid.RowDefinitions>
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <ComboBox Grid.Row="0" Grid.Column="0">
-                <ComboBoxItem>Joueur</ComboBoxItem>
+            <ComboBox Name="Players" Grid.Row="0" Grid.Column="0" IsReadOnly="True" SelectionChanged="Players_SelectionChanged">
             </ComboBox>
-            <ComboBox Grid.Row="0" Grid.Column="1">
-                <ComboBoxItem>Ville</ComboBoxItem>
-            </ComboBox>
-            <DockPanel  Grid.Row="0" Grid.Column="2">
+            <DockPanel  Grid.Row="0" Grid.Column="2" Margin="0,0,75,0">
                 <Label>Tour:</Label>
-                <Label>1</Label>
+                <Label x:Name="Turns" Content="0" Width="94" Height="30" VerticalAlignment="Bottom" RenderTransformOrigin="0.316,0.5"/>
             </DockPanel>
+            <Button Name="NextTurn" Content="Prochain Tour" Grid.Column="2" HorizontalAlignment="Left" Margin="121,0,0,0" VerticalAlignment="Top" Width="86" Height="30" Click="NextTurn_Click"/>
+            <Label Name="Cities" Grid.Column="1" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" Width="146"/>
+            <Button Name="getCities" Content="->" Grid.Column="1" HorizontalAlignment="Left" Margin="146,2,0,0" VerticalAlignment="Top" Width="57" Height="28" Click="getCities_Click"/>
         </Grid>
         <TabControl Grid.Row="1" Grid.Column="0">
             <TabItem Header="Ville">
@@ -45,7 +44,7 @@
                         <ColumnDefinition Width="7*"/>
                         <ColumnDefinition Width="442*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Name="btnNewCity" Content="Créer ville" Grid.Column="2" HorizontalAlignment="Left" Margin="300,48,0,0" VerticalAlignment="Top" Width="119" Height="29"/>
+                    <Button Name="btnNewCity" Content="Créer ville" Grid.Column="2" HorizontalAlignment="Left" Margin="300,48,0,0" VerticalAlignment="Top" Width="119" Height="29" Click="btnNewCity_Click"/>
                     <Button Name="btnNewBuilding" Content="Créer bâtiment" HorizontalAlignment="Left" Margin="300,147,0,0" VerticalAlignment="Top" Width="132" Height="101" Grid.Column="2"/>
                     <TextBox Name="tbNewCity" HorizontalAlignment="Left" Height="23" Margin="159,51,0,0" TextWrapping="Wrap" Text="Nom future ville" VerticalAlignment="Top" Width="120" Grid.Column="2"/>
                     <ComboBox Name="cbSelectBuilding" HorizontalAlignment="Left" Margin="159,104,0,0" VerticalAlignment="Top" Width="120" Grid.Column="2"/>
@@ -68,7 +67,7 @@
                         <ColumnDefinition Width="35*"/>
                         <ColumnDefinition Width="353*"/>
                     </Grid.ColumnDefinitions>
-                    <ComboBox Grid.ColumnSpan="3" HorizontalAlignment="Left" Margin="24,19,0,0" VerticalAlignment="Top" Width="120"/>
+                    <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,17,0,0" Width="95"/>
                     <Button Content="Button" Grid.Column="3" HorizontalAlignment="Left" Margin="250,18,0,0" VerticalAlignment="Top" Width="93"/>
                     <TextBox Grid.Column="3" HorizontalAlignment="Left" Height="23" Margin="62,17,0,0" TextWrapping="Wrap" Text="Nombre" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.507,0.203"/>
                     <ListBox Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="144" Margin="24,62,0,0" VerticalAlignment="Top" Width="473"/>
@@ -85,9 +84,13 @@
                     </LinearGradientBrush>
                 </TabItem.Background>
                 <Grid Background="#FFDCEACD">
-                   
-                    <Button Content="Valider l'échange" HorizontalAlignment="Left" Margin="88,140,0,0" VerticalAlignment="Top" Width="437" Height="84"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="174,79,0,0" VerticalAlignment="Top" Width="120">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="323*"/>
+                        <ColumnDefinition Width="291*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Name="ValidateTransaction" Content="Valider l'échange" HorizontalAlignment="Left" Margin="88,140,0,0" VerticalAlignment="Top" Width="437" Height="84" Grid.ColumnSpan="2"/>
+                    <ComboBox Name="SoldResources" HorizontalAlignment="Left" Margin="174,79,0,0" VerticalAlignment="Top" Width="120">
                         <ComboBoxItem>Bois</ComboBoxItem>
                         <ComboBoxItem>Whatever</ComboBoxItem>
                     </ComboBox>
@@ -95,14 +98,14 @@
                         <ComboBoxItem>Bois</ComboBoxItem>
                         <ComboBoxItem>Whatever</ComboBoxItem>
                     </ComboBox>-->
-                    <xctk:IntegerUpDown Value="1564"  Margin="88,81,454,0" VerticalAlignment="Top"/>
+                    <xctk:IntegerUpDown Name="FirstValue" Value="1564"  Margin="88,81,163.5,0" VerticalAlignment="Top"/>
                     <Label Content="Échanger " HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top"/>
-                    <Label Content="contre " HorizontalAlignment="Left" Margin="299,75,0,0" VerticalAlignment="Top"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="450,79,0,0" VerticalAlignment="Top" Width="120">
+                    <Label Content="contre " HorizontalAlignment="Left" Margin="299,75,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                    <ComboBox Name="BoughtResources" HorizontalAlignment="Left" Margin="127.5,79,0,0" VerticalAlignment="Top" Width="120" Grid.Column="1">
                         <ComboBoxItem Content="Bois"/>
                         <ComboBoxItem Content="Whatever"/>
                     </ComboBox>
-                    <TextBox HorizontalAlignment="Left" Height="23" Margin="351,77,0,0" TextWrapping="Wrap" Text="5449" VerticalAlignment="Top" Width="81" IsEnabled="False"/>
+                    <TextBox Name="SecondValue" HorizontalAlignment="Left" Height="23" Margin="28.5,77,0,0" TextWrapping="Wrap" Text="5449" VerticalAlignment="Top" Width="81" IsEnabled="False" Grid.Column="1"/>
 
                 </Grid>
             </TabItem>
@@ -144,5 +147,8 @@
                 </Grid>
             </TabItem>
         </TabControl>
+        <Popup Name="popup"  VerticalOffset="20"  PlacementRectangle="300,140,100,150" PopupAnimation="Fade"  AllowsTransparency="True" Margin="300,100,100,10" Placement="Mouse"  IsOpen="False">
+            <Label Name="labelPopup" Content="This is help!" Height="112" Width="158"></Label>
+        </Popup>
     </Grid>
 </Window>

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -50,23 +51,45 @@ namespace Ift232UI
         public MainWindow()
         {
             this.DataContext = this;
-            test1 = "lol";
             InitializeComponent();
-            t = new Timer();
-            t.Interval = 1000;
-            t.Elapsed += t_Elapsed;
-            t.Start();
             Game = new Game();
-            Game.Players.Add(new Player());
-            
+            Inscription inscription = new Inscription(Game);
+            inscription.ShowDialog();
+            foreach(var player in Game.Players){
+                Players.Items.Add(player.playerName);
+            }
+            Players.SelectedIndex = Game.PlayerIndex;
+            Cities.Content = Game.CurrentPlayer.CurrentCity;
         }
 
-        void t_Elapsed(object sender, ElapsedEventArgs e)
+
+        private void btnNewCity_Click(object sender, RoutedEventArgs e)
         {
-            Random rd = new Random();
-            test1 = rd.Next().ToString();
-            Game.Players.Add(new Player());
+            Game.CreateCity(tbNewCity.Text);
+            labelPopup.Content = "Ville créée !";
+            popup.IsOpen = true;
+            popup.StaysOpen = false;
         }
+
+        private void Players_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Players.SelectedIndex = Game.PlayerIndex;
+        }
+
+        private void NextTurn_Click(object sender, RoutedEventArgs e)
+        {
+            Game.NextTurn();
+            Turns.Content = Game.TourIndex;
+            Players.SelectedIndex = Game.PlayerIndex;
+            Cities.Content= Game.CurrentPlayer.CurrentCity;
+        }
+
+        private void getCities_Click(object sender, RoutedEventArgs e)
+        {
+            Game.CurrentPlayer.NextCity();
+            Cities.Content = Game.CurrentPlayer.CurrentCity;
+        }
+
 
     }
 }
