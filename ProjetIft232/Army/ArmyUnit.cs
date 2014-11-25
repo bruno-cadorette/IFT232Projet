@@ -12,13 +12,14 @@ namespace ProjetIft232.Army
     [DataContract]
     public class ArmyUnit : BuildableEntity
     {
-        public ArmyUnit(int id, string name, string desc, int attack, int def, int turn,Resources transport, Requirement requirement)
+        public ArmyUnit(int id, string name, string desc, int attack, int def, int size, int turn,Resources transport, Requirement requirement)
             : base(id, name, desc, turn, requirement)
         {
             Attack = attack;
             Defense = def;
             Transport = transport;
-
+            Size = size;
+            moral = 100;
         }
 
         public ArmyUnit(ArmyUnit army)
@@ -27,12 +28,8 @@ namespace ProjetIft232.Army
             Attack = army.Attack;
             Defense = army.Defense;
             Transport = army.Transport;
-
-        }
-
-        public ArmyUnit()
-        {
-
+            Size = army.Size;
+            moral = 100;
         }
 
 
@@ -41,9 +38,14 @@ namespace ProjetIft232.Army
         [DataMember]
         public int Defense { get; set; }
 
+        [DataMember]
+        public int Size { get; set; }
+
 
        [DataMember]
         public Resources Transport { get; set; }
+
+       public int moral { get; set; }
 
 
         public void Update()

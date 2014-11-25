@@ -69,6 +69,7 @@
     <Compile Include="Technologies\Enhancement.cs" />
     <Compile Include="Technologies\Technology.cs" />
     <Compile Include="Technologies\TechnologyFactory.cs" />
+    <Compile Include="Utility\RandomGen.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -2,20 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ProjetIft232.Utility;
 
 namespace ProjetIft232.Army
 {
     public class Armies
     {
 
-        private int moral;
-
         private List<ArmyUnit> units;
+        private List<ArmyUnit> flees; 
 
         public Armies()
         {
-            moral = 100;
             units = new List<ArmyUnit>();
+            flees = new List<ArmyUnit>();
+        }
+
+        public void Rally()
+        {
+            foreach (ArmyUnit unit in flees)
+            {
+                units.Add(unit);
+            }
+            flees.Clear();
         }
 
         public void addUnit(ArmyUnit unit)
@@ -28,40 +37,68 @@ namespace ProjetIft232.Army
             return units;
         }
 
-        public int getMoral()
-        {
-            return moral;
-        }
-
-        public void setMoral(int moral)
-        {
-            this.moral = moral;
-        }
-
         public int getDefense()
         {
-            return units.Sum(n => n.Defense);
+            return units.Where(n => n.moral > 0).Sum(n => n.Defense * n.Size);
         }
 
         public int getAttack()
         {
-            return units.Sum(n => n.Attack);
+            return units.Where(n => n.moral > 0).Sum(n => n.Attack * n.Size);
         }
 
         public int size()
         {
-            return units.Count;
+            return units.Sum(n => n.Size);
         }
 
-        public void loose(int n)
+
+        public void LoseUnit(int n)
         {
-            int lost = n > size() ? size() : n;
-            units.RemoveRange(0, lost);
+            int place;
+            int number;
+            int moral;
+            int rand;
+            ArmyUnit tmp;
+            int lost = n;
+            if (lost > size())
+                units.Clear();
+            while (lost > 0 && units.Any())
+            {
+                place = RandomGen.GetInstance().Next(0,units.Count);
+                number = RandomGen.GetInstance().Next(1, Math.Min(units[place].Size,lost));
+                tmp = units[place];
+                tmp.moral -= (number * 100 / tmp.Size) * 100 / tmp.moral;
+                moral = (number*100/size())*100;
+
+                    foreach (var unit in units)
+                    {
+                        unit.moral -= moral/unit.moral;
+                        if (unit.moral < 30)
+                        {
+                            rand = RandomGen.GetInstance().Next(0, 100);
+                            if (unit.moral < rand)
+                            {
+                                flees.Add(unit);
+                                unit.moral = 0;
+                            }
+                        }
+                    }
+                
+                
+                tmp.Size -= number;
+                if (tmp.Size == 0)
+                {
+                    units.Remove(tmp);
+                }
+                units = units.Where(w => w.moral > 0).ToList();
+                lost -= number;
+            }
         }
 
         public bool Fight(Armies opponent)
         {
-            Random rand = new Random();
+            var rand = RandomGen.GetInstance();
 
             int ourDefense;
             int ourAttack;
@@ -71,9 +108,6 @@ namespace ProjetIft232.Army
 
             int ourDamage;
             int theirDamage;
-
-            int ourlooses;
-            int theirlooses;
 
 
             if (size() == 0)
@@ -92,30 +126,20 @@ namespace ProjetIft232.Army
                 ourDamage = Math.Max(size() * (1 + ourAttack / theirDefense) / 20, 1);
                 theirDamage = Math.Max(opponent.size() * (1 + theirAttack / ourDefense) / 20, 1);
 
-                ourlooses = theirDamage * 100 / size();
-                theirlooses = ourDamage * 100 / opponent.size();
+                LoseUnit(theirDamage);
 
-                loose(theirDamage);
+                opponent.LoseUnit(ourDamage);
 
-                opponent.loose(ourDamage);
-
-                moral = moral - ourlooses * 100 / moral;
-                opponent.setMoral(opponent.getMoral() - theirlooses * 100 / opponent.getMoral());
 
                 if (size() == 0)
+                {
+                    opponent.Rally();
                     return false;
-                if (opponent.size() == 0)
-                    return true;
-
-                if (ourlooses > 25)
-                {
-                    if (getMoral() < rand.Next(100))
-                        return false;
                 }
-                if (theirlooses > 25)
+                if (opponent.size() == 0)
                 {
-                    if (opponent.getMoral() < rand.Next(100))
-                        return true;
+                    Rally();
+                    return true;
                 }
             }
         }

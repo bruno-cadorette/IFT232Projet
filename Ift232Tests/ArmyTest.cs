@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProjetIft232;
 using ProjetIft232.Buildings;
 using ProjetIft232.Army;
+using ProjetIft232.Utility;
 
 namespace Ift232Tests
 {
@@ -21,6 +22,7 @@ namespace Ift232Tests
 
         private void SetUp()
         {
+            RandomGen.GetInstance().SetRandom(false);
             city = new City("Toulouse");
             Building house = BuildingFactory.CreateBuilding((int)BuildingType.House, ref city);
             house.FinishConstruction();
@@ -73,13 +75,13 @@ namespace Ift232Tests
 
             city.AddArmy(0);
             city.AddArmy(0);
-            city.army.getUnits().ForEach(unit => unit.Update());
-            city.army.getUnits().ForEach(unit => unit.Update());
-            city.army.getUnits().ForEach(unit => unit.Update());
+            city.Update();
+            city.Update();
+            city.Update();
             Resources old = new Resources(city.Ressources);
             city.Attack(BarbarianArmyGenerator.CreateArmy(1));
             Assert.IsTrue(old == city.Ressources);
-            //Assert.IsTrue(city.army.size() == 2);
+            Assert.IsTrue(city.army.size() == 19);
         }
 
         [TestMethod]
@@ -87,19 +89,18 @@ namespace Ift232Tests
         {
             SetUp();
             city.AddArmy(0);
-            city.army.getUnits().ForEach(unit => unit.Update());
-            city.army.getUnits().ForEach(unit => unit.Update());
-            city.army.getUnits().ForEach(unit => unit.Update());
+            city.Update();
+            city.Update();
+            city.Update();
             Resources old = new Resources(city.Ressources);
             Armies opponent = new Armies();
 
             for (int i = 0; i < 10; i++)
             {
-                opponent.addUnit(ArmyFactory.CreateArmyUnit(0,ref city));
+                opponent.addUnit(ArmyFactory.CreateBarbarian(0));
             }
             city.Attack(opponent);
-            Assert.IsTrue(old > city.Ressources);
-            //Assert.IsFalse(city.army.size() == 1);
+            Assert.IsTrue(old != city.Ressources);
         }
 
 

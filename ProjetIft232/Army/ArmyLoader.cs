@@ -39,7 +39,8 @@ namespace ProjetIft232.Army
             string specialType = Special(element);
             int Attack = int.Parse(GetAttribute(element, "Attack"));
             int Defense = int.Parse(GetAttribute(element, "Defense"));
-            ArmyUnit army = new ArmyUnit(id, name, description,Attack,Defense, turns, resources, requirement);
+            int Size = int.Parse(GetAttribute(element, "size"));
+            ArmyUnit army = new ArmyUnit(id, name, description,Attack,Defense,Size, turns, resources, requirement);
 
             switch (specialType)
             {

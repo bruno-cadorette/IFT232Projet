@@ -99,7 +99,7 @@ namespace ProjetIft232
 
         public  bool CreateCity(string name)
         {
-            if (CurrentPlayer.CurrentCity.Ressources > City.CostToCreate)
+            if (CurrentPlayer.CurrentCity.Ressources >= City.CostToCreate)
             {
                 CurrentPlayer.CurrentCity.RemoveResources(City.CostToCreate);
                 CurrentPlayer.CreateCity(name);
@@ -107,9 +107,9 @@ namespace ProjetIft232
             }
             else
             {
-                if (CurrentPlayer.Cities.Any(n => n.Ressources > City.CostToCreate))
+                if (CurrentPlayer.Cities.Any(n => n.Ressources >= City.CostToCreate))
                 {
-                    CurrentPlayer.Cities.First(n => n.Ressources > City.CostToCreate).RemoveResources(City.CostToCreate);
+                    CurrentPlayer.Cities.First(n => n.Ressources >= City.CostToCreate).RemoveResources(City.CostToCreate);
                     CurrentPlayer.CreateCity(name);
                     return true;
                 }

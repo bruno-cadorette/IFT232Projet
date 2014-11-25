@@ -18,7 +18,7 @@ namespace ProjetIft232
         End
     }
 
-    public sealed class Resource
+    public class Resource
     {
         public static Dictionary<ResourcesType, string> Name = new Dictionary<ResourcesType, string>()
         {
@@ -43,37 +43,39 @@ namespace ProjetIft232
     [DataContract]
     public class Resources
     {
-        private const int MAX_POP = 500000;
         [DataMember]
-        private Dictionary<ResourcesType, int> resources;
+        private int[] resources;
 
         public Resources ()
         {
-            resources = new Dictionary<ResourcesType,int>();
+            resources = new int[(int)ResourcesType.End];
         }
         public Resources(int wood, int gold, int meat, int rock, int population) : this()
         {
-            resources.Add(ResourcesType.Wood, wood);
-            resources.Add(ResourcesType.Gold, gold);
-            resources.Add(ResourcesType.Meat, meat);
-            resources.Add(ResourcesType.Rock, rock);
-            resources.Add(ResourcesType.Population, population);
+            resources[(int)ResourcesType.Wood] =  wood;
+            resources[(int)ResourcesType.Gold]=  gold;
+            resources[(int)ResourcesType.Meat] = meat;
+            resources[(int)ResourcesType.Rock] = rock;
+            resources[(int)ResourcesType.Population] = population;
            
         }
 
 
         public Resources(Resources a) : this()
         {
-            foreach (KeyValuePair<ResourcesType, int> kvp in a.resources)
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                this.resources.Add(kvp.Key, kvp.Value);
+                resources[i] = a.resources[i];
             }
         }
 
         public Resources(Dictionary<ResourcesType, int> resources)
             :this()
         {
-            this.resources = resources;
+            foreach (var resource in resources)
+            {
+                this.resources[(int)(resource.Key)] = resource.Value;
+            }
         }
 
         public bool isEmpty()
@@ -83,16 +85,14 @@ namespace ProjetIft232
 
         public int get(string resource) {
             ResourcesType r = Resource.Name.FirstOrDefault(x => x.Value == resource).Key;
-            int value;
-            resources.TryGetValue(r, out value);
-            return value;
+            return resources[(int) r];
         }
 
         
         public int this[ResourcesType i]
 {
-    get { return resources[i]; }
-    set { resources[i] = (int)value; }
+    get { return resources[(int)i]; }
+    set { resources[(int)i] = (int)value; }
 }
 
         public static Resources Zero()
@@ -102,142 +102,88 @@ namespace ProjetIft232
 
         public static Resources operator+(Resources debut, Resources b)
         {
-            int old;
-            Resources a = new Resources(debut);
-            foreach (KeyValuePair<ResourcesType, int> kvp in b.resources)
+            Resources ress = Zero();
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                if (a.resources.TryGetValue(kvp.Key, out old))
-                {
-                    a.resources[kvp.Key] = old + kvp.Value;
-                }
-                else a.resources.Add(kvp.Key, kvp.Value);
+                ress.resources[i] = debut.resources[i] + b.resources[i];
             }
-            return a;
+            return ress;
         }
 
 
 
         public static Resources operator -(Resources debut, Resources b)
         {
-            int old;
-            Resources a = new Resources(debut);
-            foreach (KeyValuePair<ResourcesType, int> kvp in b.resources)
+            Resources ress = Zero();
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                if (a.resources.TryGetValue(kvp.Key, out old))
-                {
-                    a.resources[kvp.Key] = old - kvp.Value;
-                }
-                else a.resources.Add(kvp.Key, -kvp.Value);
-                if (a.resources[kvp.Key] < 0)
-                    a.resources[kvp.Key] = 0;
+                ress.resources[i] = debut.resources[i] - b.resources[i];
             }
-            return a;
+            return ress;
         }
 
         public static bool operator <(Resources a, Resources b)
         {
-            int old;
-            if (b.isEmpty())
-                return false;
-            foreach (KeyValuePair<ResourcesType, int> kvp in b.resources)
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                if (a.resources.TryGetValue(kvp.Key, out old))
-                {
-                    if (old >= kvp.Value)
-                        return false;
-                }
-                else return true;
+                if (a.resources[i] >= b.resources[i])
+                    return false;
+
             }
             return true;
         }
 
+        public void Abs()
+        {
+            for (int i = 0; i < (int)ResourcesType.End; i++)
+            {
+                if (resources[i] < 0)
+                    resources[i] = 0;
+
+            }
+        }
+
         public static bool operator <=(Resources a, Resources b)
         {
-            int old;
-            if (b.isEmpty() && !a.isEmpty())
-                return false;
-            foreach (KeyValuePair<ResourcesType, int> kvp in b.resources)
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                if (a.resources.TryGetValue(kvp.Key, out old))
-                {
-                    if (old > kvp.Value)
-                        return false;
-                }
-                else return true;
+                if (a.resources[i] > b.resources[i])
+                    return false;
+
             }
             return true;
         }
 
         public static bool operator >(Resources a, Resources b)
         {
-            int old;
-            if (a.isEmpty())
-                return false;
-            foreach (KeyValuePair<ResourcesType, int> kvp in b.resources)
+            bool greaterKnow = false;
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                if (a.resources.TryGetValue(kvp.Key, out old))
-                {
-                    if (old <= kvp.Value)
-                        return false;
-                }
-                else
-                {
-                    if (kvp.Value != 0) 
-                        return false;
-                }
+                if (a.resources[i] < b.resources[i])
+                    return false;
+                if (a.resources[i] > b.resources[i])
+                    greaterKnow = true;
             }
-            return true;
+            return greaterKnow;
         }
 
         public static bool operator >=(Resources a, Resources b)
         {
-            int old;
-            if (a.isEmpty() && !b.isEmpty())
-                return false;
-            foreach (KeyValuePair<ResourcesType, int> kvp in b.resources)
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                if (a.resources.TryGetValue(kvp.Key, out old))
-                {
-                    if (old < kvp.Value)
-                        return false;
-                }
-                else
-                {
-                    if (kvp.Value != 0)
-                        return false;
-                }
+                if (a.resources[i] < b.resources[i])
+                    return false;
+
             }
             return true;
         }
 
         public static bool operator ==(Resources a, Resources b)
         {
-            int old;
-            foreach (KeyValuePair<ResourcesType, int> kvp in b.resources)
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                if (a.resources.TryGetValue(kvp.Key, out old))
-                {
-                    if (old != kvp.Value)
-                        return false;
-                }
-                else
-                {
-                    if (kvp.Value != 0)
-                        return false;
-                }
-            }
-            foreach (KeyValuePair<ResourcesType, int> kvp in a.resources)
-            {
-                if (b.resources.TryGetValue(kvp.Key, out old))
-                {
-                    if (old != kvp.Value)
-                        return false;
-                }
-                else
-                {
-                    if (kvp.Value != 0)
-                        return false;
-                }
+                if (a.resources[i] != b.resources[i])
+                    return false;
             }
             return true;
         }
@@ -249,24 +195,19 @@ namespace ProjetIft232
 
         public override string ToString()
         {
-            string format = "";
-            foreach (KeyValuePair<ResourcesType, int> kvp in this.resources)
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                format = format + Resource.Name[kvp.Key] + " : " + kvp.Value.ToString() + "\n";
+                sb.Append(string.Format(" {0} : {1} ", (ResourcesType) i, resources[i]));
             }
-            return format;
+            return sb.ToString();
         }
 
         public void Update(Resources a)
         {
-            int old;
-            foreach (KeyValuePair<ResourcesType, int> kvp in a.resources)
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                if (this.resources.TryGetValue(kvp.Key, out old))
-                {
-                    this.resources[kvp.Key] = old + kvp.Value;
-                }
-                else this.resources.Add(kvp.Key, kvp.Value);
+                resources[i] += a.resources[i];
             }
         }
 

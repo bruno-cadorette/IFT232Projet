@@ -63,6 +63,7 @@ namespace ProjetIft232
         public void RemoveResources(Resources resource)
         {
             Ressources -= resource;
+            Ressources.Abs();
         }
 
         public void AddResources(Resources resource)
