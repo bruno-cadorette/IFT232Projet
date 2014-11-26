@@ -39,12 +39,12 @@ namespace ProjetIft232.Army
 
         public int getDefense()
         {
-            return units.Where(n => n.moral > 0).Sum(n => n.Defense * n.Size);
+            return units.Sum(n => n.Defense * n.Size);
         }
 
         public int getAttack()
         {
-            return units.Where(n => n.moral > 0).Sum(n => n.Attack * n.Size);
+            return units.Sum(n => n.Attack * n.Size);
         }
 
         public int size()

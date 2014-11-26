@@ -40,17 +40,21 @@
                 </TabItem.Background>
                 <Grid Background="#FFE8E4D6"  >
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50*"/>
-                        <ColumnDefinition Width="7*"/>
-                        <ColumnDefinition Width="442*"/>
+                        <ColumnDefinition Width="15*"/>
+                        <ColumnDefinition Width="46*"/>
+                        <ColumnDefinition Width="9*"/>
+                        <ColumnDefinition Width="48*"/>
+                        <ColumnDefinition Width="111*"/>
+                        <ColumnDefinition Width="17*"/>
+                        <ColumnDefinition Width="371*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Name="btnNewCity" Content="Créer ville" Grid.Column="2" HorizontalAlignment="Left" Margin="300,48,0,0" VerticalAlignment="Top" Width="119" Height="29" Click="btnNewCity_Click"/>
-                    <Button Name="btnNewBuilding" Content="Créer bâtiment" HorizontalAlignment="Left" Margin="300,147,0,0" VerticalAlignment="Top" Width="132" Height="101" Grid.Column="2"/>
-                    <TextBox Name="tbNewCity" HorizontalAlignment="Left" Height="23" Margin="159,51,0,0" TextWrapping="Wrap" Text="Nom future ville" VerticalAlignment="Top" Width="120" Grid.Column="2"/>
-                    <ComboBox Name="cbSelectBuilding" HorizontalAlignment="Left" Margin="159,104,0,0" VerticalAlignment="Top" Width="120" Grid.Column="2"/>
-                    <TextBox Name="tbBuildingDatas"  Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="101" Margin="10,147,0,0" TextWrapping="Wrap" Text="Données sur bâtiment" VerticalAlignment="Top" Width="326"/>
-                    <Label Content="Sélectionnez un bâtiment :" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top" Width="175" Grid.ColumnSpan="3"/>
-                    <Label Content="Nommez votre ville : " HorizontalAlignment="Left" Margin="10,48,0,0" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="129"/>
+                    <Button Name="btnNewCity" Content="Créer ville" Grid.Column="6" HorizontalAlignment="Left" Margin="124,48,0,0" VerticalAlignment="Top" Width="119" Height="29" Click="btnNewCity_Click"/>
+                    <Button Name="btnNewBuilding" Content="Créer bâtiment" HorizontalAlignment="Left" Margin="124,147,0,0" VerticalAlignment="Top" Width="132" Height="101" Grid.Column="6" Click="btnNewBuilding_Click"/>
+                    <TextBox Name="tbNewCity" HorizontalAlignment="Left" Height="23" Margin="0,51,0,0" TextWrapping="Wrap" Text="Nom future ville" VerticalAlignment="Top" Width="120" Grid.Column="5" Grid.ColumnSpan="2"/>
+                    <ComboBox Name="cbSelectBuilding" HorizontalAlignment="Left" Margin="0,104,0,0" VerticalAlignment="Top" Width="120" Grid.Column="5" Loaded="cbSelectBuilding_Loaded" SelectionChanged="cbSelectBuilding_SelectionChanged" Grid.ColumnSpan="2"/>
+                    <TextBox Name="tbBuildingDatas"  Grid.ColumnSpan="7" HorizontalAlignment="Left" Height="101" Margin="10,147,0,0" TextWrapping="Wrap" Text="Données sur bâtiment" VerticalAlignment="Top" Width="326"/>
+                    <Label Content="Sélectionnez un bâtiment :" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top" Width="175" Grid.ColumnSpan="5"/>
+                    <Label Content="Nommez votre ville : " HorizontalAlignment="Left" Margin="10,48,0,0" VerticalAlignment="Top" Grid.ColumnSpan="5" Width="129"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Armée">
@@ -85,27 +89,30 @@
                 </TabItem.Background>
                 <Grid Background="#FFDCEACD">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="323*"/>
-                        <ColumnDefinition Width="291*"/>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="13*"/>
+                        <ColumnDefinition Width="239*"/>
+                        <ColumnDefinition Width="66*"/>
+                        <ColumnDefinition Width="292*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button Name="ValidateTransaction" Content="Valider l'échange" HorizontalAlignment="Left" Margin="88,140,0,0" VerticalAlignment="Top" Width="437" Height="84" Grid.ColumnSpan="2"/>
-                    <ComboBox Name="SoldResources" HorizontalAlignment="Left" Margin="174,79,0,0" VerticalAlignment="Top" Width="120">
-                        <ComboBoxItem>Bois</ComboBoxItem>
-                        <ComboBoxItem>Whatever</ComboBoxItem>
+                    <Button Name="ValidateTransaction" Content="Valider l'échange" HorizontalAlignment="Left" Margin="68,140,0,0" VerticalAlignment="Top" Width="437" Height="84" Grid.ColumnSpan="3" Grid.Column="2"/>
+                    <ComboBox Name="SoldResources" HorizontalAlignment="Left" Margin="184,79,0,0" VerticalAlignment="Top" Width="90" Grid.Column="2" Grid.ColumnSpan="2" Loaded="SoldResources_Loaded">
                     </ComboBox>
                     <!--<ComboBox HorizontalAlignment="Left" Margin="347,79,0,0" VerticalAlignment="Top" Width="120">
                         <ComboBoxItem>Bois</ComboBoxItem>
                         <ComboBoxItem>Whatever</ComboBoxItem>
-                    </ComboBox>-->
-                    <xctk:IntegerUpDown Name="FirstValue" Value="1564"  Margin="88,81,163.5,0" VerticalAlignment="Top"/>
-                    <Label Content="Échanger " HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top"/>
-                    <Label Content="contre " HorizontalAlignment="Left" Margin="299,75,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-                    <ComboBox Name="BoughtResources" HorizontalAlignment="Left" Margin="127.5,79,0,0" VerticalAlignment="Top" Width="120" Grid.Column="1">
-                        <ComboBoxItem Content="Bois"/>
-                        <ComboBoxItem Content="Whatever"/>
+                    </ComboBox-->
+                    <TextBox Name="FirstValue" HorizontalAlignment="Left" Height="23" Margin="68,79,0,0" TextWrapping="Wrap" Text="Nombre d'unités" VerticalAlignment="Top" Width="102" Grid.Column="2"/>
+                    <!--<WatermarkService.Watermark>
+                                <TextBlock>Type here to search text</TextBlock>
+                            </WatermarkService.Watermark>
+                        </TextBox>-->
+                    <Label Content="Échanger " HorizontalAlignment="Left" Margin="3,75,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Grid.Column="1"/>
+                    <Label Content="contre " HorizontalAlignment="Left" Margin="40,75,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Grid.Column="3"/>
+                    <ComboBox Name="BoughtResources" HorizontalAlignment="Left" Margin="127,79,0,0" VerticalAlignment="Top" Width="120" Grid.Column="4" Loaded="BoughtResources_Loaded">
                     </ComboBox>
-                    <TextBox Name="SecondValue" HorizontalAlignment="Left" Height="23" Margin="28.5,77,0,0" TextWrapping="Wrap" Text="5449" VerticalAlignment="Top" Width="81" IsEnabled="False" Grid.Column="1"/>
+                    <TextBox Name="SecondValue" HorizontalAlignment="Left" Height="23" Margin="29,77,0,0" TextWrapping="Wrap" Text="5449" VerticalAlignment="Top" Width="80" IsEnabled="False" Grid.Column="4"/>
 
                 </Grid>
             </TabItem>
@@ -121,6 +128,27 @@
                 <Grid Background="#FFD0E6E5">
                     <ComboBox HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="120"/>
                     <Button Content="Button" HorizontalAlignment="Left" Margin="393,220,0,0" VerticalAlignment="Top" Width="104" Height="28"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Etat de la ville">
+                <TabItem.Background>
+                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                        <GradientStop Color="#FFF3F3F3" Offset="0"/>
+                        <GradientStop Color="#FFEBEBEB" Offset="0.5"/>
+                        <GradientStop Color="#FFDDDDDD" Offset="0.5"/>
+                        <GradientStop Color="#FFBAE8F0" Offset="1"/>
+                    </LinearGradientBrush>
+                </TabItem.Background>
+                <Grid Background="Purple">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="17*"/>
+                        <ColumnDefinition Width="153*"/>
+                        <ColumnDefinition Width="447*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListBox Name="Listboxdereve" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="160" Height="200" Loaded="ListBox_Loaded" Grid.ColumnSpan="2" SelectionChanged="Listboxdereve_SelectionChanged"/>
+                    <Button Content="Button" HorizontalAlignment="Left" Margin="223,220,0,0" VerticalAlignment="Top" Width="104" Height="28" Grid.Column="2"/>
+                    <Label Name="Nbrcree" Content="Nombre de batiments créés" HorizontalAlignment="Center" Margin="32,22,249,209" VerticalAlignment="Center" Width="166" Height="30" Grid.Column="2"/>
+                    <TextBox Name="tnbrbat" IsEnabled="False" HorizontalAlignment="Left" Height="23" Margin="203,22,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Column="2"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Information">

@@ -71,6 +71,11 @@ namespace ProjetIft232
             Ressources += resource;
         }
 
+        public int CountBuilding(String buildingName)
+        {
+            return Buildings.Where(n => n.Name == buildingName).Count();
+        }
+
 
         public bool TransferResources(City city, Resources resource)
         {

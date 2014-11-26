@@ -66,6 +66,8 @@
     <Compile Include="Inscription.xaml.cs">
       <DependentUpon>Inscription.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WatermarkAdorner.cs" />
+    <Compile Include="WatermarkService.cs" />
     <Page Include="CreationJoueur.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

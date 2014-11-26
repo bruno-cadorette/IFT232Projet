@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Xceed.Wpf.Toolkit;
 using ProjetIft232;
+using ProjetIft232.Buildings;
 
 namespace Ift232UI
 {
@@ -32,7 +33,10 @@ namespace Ift232UI
         }
         public event PropertyChangedEventHandler PropertyChanged;
         public Game Game;
-
+        private bool comboBoxBuildingIsLoaded = false;
+        private bool listBoxBuildingIsLoaded = false;
+        private bool soldResourcesIsLoaded = false;
+        private bool boughtResourcesIsLoaded = false;
 
         string _test1;
         public string test1 { 
@@ -89,6 +93,98 @@ namespace Ift232UI
             Game.CurrentPlayer.NextCity();
             Cities.Content = Game.CurrentPlayer.CurrentCity;
         }
+
+        private void cbSelectBuilding_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (!comboBoxBuildingIsLoaded)
+            {
+                var buildings = BuildingLoader.GetInstance().Buildings().ToArray();
+                foreach (var building in buildings)
+                {
+                    cbSelectBuilding.Items.Add(building.Name);
+                }
+                cbSelectBuilding.SelectedValue = buildings.FirstOrDefault().Name;
+            }
+            comboBoxBuildingIsLoaded = true;
+        }
+
+        private void cbSelectBuilding_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var buildings = BuildingLoader.GetInstance().Buildings().ToArray();
+            var currentValue = (sender as ComboBox).SelectedItem.ToString();
+            tbBuildingDatas.Text = buildings.Where(n => n.Name == currentValue).First().Description;
+        }
+
+        private void btnNewBuilding_Click(object sender, RoutedEventArgs e)
+        {
+            if (Game.CurrentPlayer.CurrentCity.AddBuilding(cbSelectBuilding.SelectedIndex))
+            {
+                Game.CurrentPlayer.CurrentCity.AddBuilding(cbSelectBuilding.SelectedIndex);
+                labelPopup.Content = "Bâtiment créé !!!";
+                popup.IsOpen = true;
+                popup.StaysOpen = false;
+
+            }
+            else 
+            {
+                labelPopup.Content = "Le bâtiment n'a pu être créé faute de ressources!";
+                popup.IsOpen = true;
+                popup.StaysOpen = false;
+
+            }
+           
+        }
+
+        private void ListBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (!listBoxBuildingIsLoaded)
+            {
+                var buildings = BuildingLoader.GetInstance().Buildings().ToArray();
+                foreach (var building in buildings)
+                {
+                    Listboxdereve.Items.Add(building.Name);
+                }
+            }
+            listBoxBuildingIsLoaded = true;
+        }
+
+        private void Listboxdereve_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var currentValue = (sender as ListBox).SelectedItem.ToString();
+            tnbrbat.Text = Game.CurrentPlayer.CurrentCity.CountBuilding(currentValue).ToString();
+        }
+
+        private void SoldResources_Loaded(object sender, RoutedEventArgs e)
+        {
+            ResourcesType[] listeEchange = { ResourcesType.Wood, ResourcesType.Gold,  ResourcesType.Meat, ResourcesType.Rock };
+            if(!soldResourcesIsLoaded)
+            {
+                foreach (var elmt in listeEchange)
+                {
+                    SoldResources.Items.Add(elmt.ToString());
+                }
+            }
+            soldResourcesIsLoaded = true;
+        }
+
+        private void BoughtResources_Loaded(object sender, RoutedEventArgs e)
+        {
+            ResourcesType[] listeEchange = { ResourcesType.Wood, ResourcesType.Meat, ResourcesType.Rock };
+            if (!boughtResourcesIsLoaded)
+            {
+                foreach (var elmt in listeEchange)
+                {
+                    BoughtResources.Items.Add(elmt.ToString());
+                }
+            }
+            boughtResourcesIsLoaded = true;
+        }
+
+      
+
+
+
+    
 
 
     }
