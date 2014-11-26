@@ -7,7 +7,7 @@ using ProjetIft232.Technologies;
 
 namespace ProjetIft232.Buildings
 {
-    public class BuildingFactory
+    public static class BuildingFactory
     {
         public static Building CreateBuilding(int type,ref City city)
         {
@@ -41,7 +41,6 @@ namespace ProjetIft232.Buildings
         private static Building GetBuilding(int type)
         {
             return BuildingLoader.GetInstance().GetBuilding(type);
-
         }
     }
 }

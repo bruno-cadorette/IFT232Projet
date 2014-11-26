@@ -69,14 +69,14 @@
     <Compile Include="Technologies\Enhancement.cs" />
     <Compile Include="Technologies\Technology.cs" />
     <Compile Include="Technologies\TechnologyFactory.cs" />
+    <Compile Include="Technologies\TechnologyLoader.cs" />
     <Compile Include="Utility\RandomGen.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Army.xml" />
-    <Content Include="Buildings.xml">
+    <Content Include="Config.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>

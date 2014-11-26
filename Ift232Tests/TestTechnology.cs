@@ -22,15 +22,15 @@ namespace Ift232Tests
         [TestMethod]
         public void UpgradeBuilding()
         {
-            Technology technology = TechnologyFactory.CreateTechnology();
+            Building farm = BuildingFactory.CreateBuilding((int)BuildingType.Farm, ref city);
+            farm.FinishConstruction();
             Building house = BuildingFactory.CreateBuilding((int)BuildingType.House, ref city);
-            for (int i = 0; i < 10; i++)
-			{
-                house.Update();
-			}
+            house.FinishConstruction();
+
+            Technology technology = TechnologyFactory.ResearchTechnology(0, city);
             
             BuildingFactory.UpgrateBuilding(ref house,technology, ref city);
-            Resources expected = new Resources(100,100,100,100,101);
+            Resources expected = new Resources(0, 0, 0, 0, 2);
             Assert.AreEqual(expected,house.Resource);
         }
 

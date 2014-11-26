@@ -9,20 +9,20 @@ namespace ProjetIft232
 {
     public class Game
     {
-        
+
         //static public Game CurrentGame
         public List<Player> Players { get; set; }
 
-        public Player CurrentPlayer 
-        { 
-            get 
+        public Player CurrentPlayer
+        {
+            get
             {
                 return Players[PlayerIndex];
             }
         }
 
         private int _playerIndex = 0;
-        private int Hostility { get;  set; }
+        private int Hostility { get; set; }
         private int Alea { get; set; }
         public int PlayerIndex { get; private set; }
 
@@ -43,7 +43,7 @@ namespace ProjetIft232
         {
             do
             {
-                 Console.WriteLine(NextTurnInternal());
+                Console.WriteLine(NextTurnInternal());
                 if (CurrentPlayer is PlayerAI)
                 {
                     Console.WriteLine("\nTour du joueur AI: {0}", CurrentPlayer.playerName);
@@ -93,11 +93,11 @@ namespace ProjetIft232
             Building build = CurrentPlayer.CurrentCity.FindBuildingForReschearded(tech);
             if (build == null) return false;
             City city = CurrentPlayer.CurrentCity;
-            return BuildingFactory.UpgrateBuilding(ref build,tech,ref city);
-            
+            return BuildingFactory.UpgrateBuilding(ref build, tech, ref city);
+
         }
 
-        public  bool CreateCity(string name)
+        public bool CreateCity(string name)
         {
             if (CurrentPlayer.CurrentCity.Ressources >= City.CostToCreate)
             {
@@ -127,7 +127,7 @@ namespace ProjetIft232
             City city = CurrentPlayer.Cities.FirstOrDefault(n => n.Name == nomville);
             if (city != null)
             {
-                return CurrentPlayer.CurrentCity.TransferResources(city, new Resources(bois,or,viande,rock,pop));
+                return CurrentPlayer.CurrentCity.TransferResources(city, new Resources(bois, or, viande, rock, pop));
             }
             else
             {
@@ -135,27 +135,30 @@ namespace ProjetIft232
             }
         }
 
-            // Méthode getMarket pour récupérer une instance de Market (construit) si elle existe
+        // Méthode getMarket pour récupérer une instance de Market (construit) si elle existe
 
-            public Building getMarket()
-            {
-                Building m = CurrentPlayer.CurrentCity.Buildings.FirstOrDefault(n => (n is Market) && (n.InConstruction == false)) ;
-
-                return m  ;
-                
-            }
-
-        public bool ReshearchedTech(Technology choix)
+        public Building getMarket()
         {
-            Technology tech = TechnologyFactory.ReshearcheTech(CurrentPlayer.CurrentCity,
-                choix.Name);
-            if (tech == null)
+            Building m = CurrentPlayer.CurrentCity.Buildings.FirstOrDefault(n => (n is Market) && (n.InConstruction == false));
+
+            return m;
+
+        }
+
+        public bool ResearchTechnology(int type)
+        {
+            Technology technology = TechnologyFactory.ResearchTechnology(type, CurrentPlayer.CurrentCity);
+            if (technology == null)
             {
                 return false;
             }
-            CurrentPlayer.ResearchedTech.Add(tech);
-            return true;
+            else
+            {
+                CurrentPlayer.ResearchedTech.Add(technology);
+                CurrentPlayer.CurrentCity.RemoveResources(technology.Requirement.Resources);
+                return true;
+            }
         }
     }
-    }
+}
 

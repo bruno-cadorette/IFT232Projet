@@ -20,7 +20,7 @@ namespace ProjetIft232
         protected Loader()
         {
             _entities = new Dictionary<int, BuildableEntity>();
-            document = XDocument.Load("Buildings.xml");
+            document = XDocument.Load("Config.xml");
             LoadBuilding();
         }
 

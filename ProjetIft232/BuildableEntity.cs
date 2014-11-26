@@ -12,6 +12,7 @@ namespace ProjetIft232
     [DataContract]
     [KnownType(typeof(Building))]
     [KnownType(typeof(ArmyUnit))]
+    [KnownType(typeof(Technology))]
     public abstract class BuildableEntity
     {
         [DataMember]
@@ -61,7 +62,7 @@ namespace ProjetIft232
         {
             TurnsLeft = ((TurnsLeft - minus) < 0) ? 0 : TurnsLeft - minus;
         }
-        public bool CanBeBuild(Resources ressources, List<Building> buildings, List<Technology> techs)
+        public bool CanBeBuild(Resources ressources, IEnumerable<Building> buildings, IEnumerable<Technology> techs)
         {
             return Requirement.IsValid(ressources, buildings, techs);
         }

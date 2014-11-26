@@ -50,10 +50,26 @@ namespace ProjetIft232
             return playerName;
         }
 
-        public Dictionary<string, Technology> GetTechnologies()
+        public IEnumerable<Technology> GetTechnologies()
         {
-            return TechnologyFactory.Technologies.Where(n => ResearchedTech.All(m => n.Key != m.Name && m.InConstruction == false)).ToDictionary(n => n.Key, w => w.Value);
+            return TechnologyLoader.GetInstance().Technologies()
+                .Where(n => ResearchedTech.All(m => n.ID != m.ID && !m.InConstruction));
 
+        }
+
+        public bool ResearchTechnology(int type)
+        {
+            Technology technology = TechnologyFactory.ResearchTechnology(type, CurrentCity);
+            if (technology == null)
+            {
+                return false;
+            }
+            else
+            {
+                ResearchedTech.Add(technology);
+                CurrentCity.RemoveResources(technology.Requirement.Resources);
+                return true;
+            }
         }
 
         public void WriteXML()

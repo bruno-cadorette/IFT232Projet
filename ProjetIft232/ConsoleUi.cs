@@ -169,18 +169,13 @@ namespace ProjetIft232
         private void TechMenu()
         {
             Console.WriteLine("Liste des Technologies disponibles");
-            var Techs = _Game.CurrentPlayer.GetTechnologies();
-            int compteur = 0;
-            Technology[] alltech = new Technology[Techs.Count];
-            foreach (var technology in Techs)
+            foreach (var technology in _Game.CurrentPlayer.GetTechnologies())
             {
-                Console.WriteLine(string.Format("{0}) {1}", compteur, technology.Key));
-                alltech[compteur] = technology.Value;
-                compteur++;
+                Console.WriteLine(string.Format("{0}) {1}", technology.ID, technology.Name));
             }
             Console.WriteLine("Choisissez une technologie à rechercher");
             int choix = int.Parse(Console.ReadLine());
-            if (_Game.ReshearchedTech(alltech[choix]))
+            if (_Game.CurrentPlayer.ResearchTechnology(choix))
             {
                 Console.WriteLine("La technologie est en cours de recherche");
             }

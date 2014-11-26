@@ -14,7 +14,7 @@ namespace ProjetIft232.Utility
         private static object SyncRoot= new object();
         private RandomGen()
         {
-            random = false;
+            random = true;
             randomGen = new Random();
         }
 

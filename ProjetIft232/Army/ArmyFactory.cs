@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace ProjetIft232.Army
 {
-    public class ArmyFactory
-    {
-
+    public static class ArmyFactory
+    { 
         public static ArmyUnit CreateArmyUnit(int id, ref City city)
         {
             ArmyUnit unit = ArmyLoader.GetInstance().GetSoldier(id);

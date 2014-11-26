@@ -4,43 +4,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ProjetIft232.Buildings;
+using System.Runtime.Serialization;
 
 namespace ProjetIft232.Technologies
 {
-    public class Technology
+    [DataContract]
+    public class Technology : BuildableEntity
     {
-        public int ID { get; private set; }
-        public string Name { get; private set; }
-        public string Description { get; private set; }
-        public Requirement Requirement { get; private set; }
-        public int TurnsLeft { get; private set; }
-        public bool InConstruction { get; private set; }
+        [DataMember]
         public IEnumerable<int> AffectedBuilding { get; private set; }
+        [DataMember]
         public Resources ApplicationCost { get; private set; }
         
         //Ca serait bien qu'une technologie puisse avoir differents effets sur differents batiments
+        [DataMember]
         public Enhancement Enhancements { get; private set; }
 
         public Technology()
         {
-            Requirement = Requirement.Zero();
-            AffectedBuilding = Enumerable.Empty<int>();
-            ApplicationCost = Resources.Zero();
-            Enhancements = new Enhancement(new Resources(100, 100, 100, 100, 100), 0);
         }
 
-        public Technology(Technology pattern)
+        public Technology(Technology technology)
+            : base(technology)
         {
-            Name = pattern.Name;
-            Requirement = pattern.Requirement;
-            AffectedBuilding = pattern.AffectedBuilding;
-            ApplicationCost = pattern.ApplicationCost;
-            Enhancements = pattern.Enhancements;
-            TurnsLeft = pattern.TurnsLeft;
-            InConstruction = true;
-            ID = pattern.ID;
-            Enhancements = pattern.Enhancements;
-            Description = pattern.Description;
+            AffectedBuilding = technology.AffectedBuilding;
+            ApplicationCost = technology.ApplicationCost;
+            Enhancements = technology.Enhancements;
         }
 
         public Technology(int id, 
@@ -51,13 +40,8 @@ namespace ProjetIft232.Technologies
             IEnumerable<int> affectedBuilding,
             Resources applicationCost, 
             Enhancement enhancements)
+            :base(id,name,description,turnsLeft,requirement)
         {
-            ID = id;
-            Name = name;
-            Description = description;
-            Requirement = requirement;
-            TurnsLeft = turnsLeft;
-            InConstruction = true;
             AffectedBuilding = affectedBuilding;
             ApplicationCost = applicationCost;
             Enhancements = enhancements;
@@ -68,10 +52,8 @@ namespace ProjetIft232.Technologies
         {
             if (InConstruction)
             {
-                TurnsLeft--;
-                InConstruction = TurnsLeft > 0;
+                Build();
             }
-
         }
     }
 }
