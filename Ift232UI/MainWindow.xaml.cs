@@ -163,6 +163,7 @@ namespace Ift232UI
                 {
                     SoldResources.Items.Add(elmt.ToString());
                 }
+                SoldResources.SelectedValue = listeEchange.FirstOrDefault().ToString();
             }
             soldResourcesIsLoaded = true;
         }
@@ -176,10 +177,121 @@ namespace Ift232UI
                 {
                     BoughtResources.Items.Add(elmt.ToString());
                 }
+                BoughtResources.SelectedValue = listeEchange.FirstOrDefault().ToString();
             }
             boughtResourcesIsLoaded = true;
         }
 
+        private void FirstValue_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateMarketUI();
+        }
+
+        public void UpdateMarketUI()
+        {
+            try
+            {
+                int val1 = int.Parse(FirstValue.Text);
+                String currentValue = SoldResources.SelectedItem.ToString();
+                Market m = (Market)Game.getMarket();
+                var boughtType = Resource.Name.First(n => n.Value == BoughtResources.SelectedItem.ToString());
+                if (currentValue == "Gold")
+                {
+                    int val2 = m.Conversion(val1, boughtType.Key);
+                    SecondValue.Text = val2.ToString();
+                }
+                else
+                {
+                    var soldType = Resource.Name.First(n => n.Value == SoldResources.SelectedItem.ToString());
+                    int val2 = m.Trade(val1, soldType.Key, boughtType.Key);
+                    SecondValue.Text = val2.ToString();
+                }
+                
+            }
+            catch (NullReferenceException)
+            {
+                labelPopup.Content = "Votre marché n'est pas créé";
+                popup.IsOpen = true;
+                popup.StaysOpen = false;
+            }
+            catch (FormatException)
+            {
+                
+            }
+        }
+
+        private void SoldResources_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateMarketUI();
+        }
+
+        private void BoughtResources_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateMarketUI();
+        }
+
+        private void ValidateTransaction_Click(object sender, RoutedEventArgs e)
+        {
+
+            try
+            {
+                String currentValue = SoldResources.SelectedItem.ToString();
+                int val1 = int.Parse(FirstValue.Text);
+                if (currentValue == "Gold")
+                {
+                    var boughtType = Resource.Name.First(n => n.Value == BoughtResources.SelectedItem.ToString());
+                    bool done =((Market)Game.getMarket()).Achat(Game.CurrentPlayer.CurrentCity, boughtType.Key, val1);
+                    if (done)
+                    {
+                        labelPopup.Content = "Votre échange a bien eu lieu !!!";
+                        popup.IsOpen = true;
+                        popup.StaysOpen = false;
+                    }
+                    else
+                    {
+                        labelPopup.Content = "Votre échange n'a pas eu lieu !!!";
+                        popup.IsOpen = true;
+                        popup.StaysOpen = false;
+                    }
+                }
+          
+         
+            }
+            catch (NullReferenceException)
+            {
+                labelPopup.Content = "Votre marché n'est pas créé";
+                popup.IsOpen = true;
+                popup.StaysOpen = false;
+            }
+            catch (FormatException)
+            {
+                labelPopup.Content = "On attend une valeur pour l'échange";
+                popup.IsOpen = true;
+                popup.StaysOpen = false;
+
+            }
+
+
+        }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void Resourcesvilles_Loaded(object sender, RoutedEventArgs e)
+        {
+            string resources ="";
+            foreach(var i in Resource.Name){
+                resources += Game.CurrentPlayer.CurrentCity.Ressources.get(i.Value);
+                if (i.Key != ResourcesType.End - 1)
+                    resources += "/";
+            }
+            Resourcesvilles.Text = resources;
+
+        }
+
+      
       
 
 

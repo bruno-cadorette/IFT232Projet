@@ -37,7 +37,7 @@ namespace ProjetIft232.Buildings
 
         public bool Achat( City city, ResourcesType resourceWanted, int amountGold)
         {
-            if (amountGold >= 1) { 
+            if (amountGold >= 1 && (city.Ressources.get("Gold") - amountGold >= 0)) { 
            
             switch(resourceWanted)
             {
@@ -68,7 +68,7 @@ namespace ProjetIft232.Buildings
 
         public int Conversion (int nb, ResourcesType type)
         {
-            int reste;
+           
             int ratio=0;
             switch (type){
                 case ResourcesType.Wood:
@@ -83,10 +83,8 @@ namespace ProjetIft232.Buildings
                 default:
                     return 0;
             }
-            reste = nb % ratio;
-            if (reste == 0)
-                return nb;
-            return ratio * (nb / ratio) + ratio;
+             return nb*ratio;
+           
         }
 
 
