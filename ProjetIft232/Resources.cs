@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Security.AccessControl;
 using System.Text;
 
 namespace ProjetIft232
@@ -50,6 +51,14 @@ namespace ProjetIft232
         {
             resources = new int[(int)ResourcesType.End];
         }
+
+        public Resources(ResourcesType type, int qty)
+            : this()
+        {
+            resources = new int[(int)ResourcesType.End];
+            resources[(int) type] = qty;
+        }
+
         public Resources(int wood, int gold, int meat, int rock, int population) : this()
         {
             resources[(int)ResourcesType.Wood] =  wood;

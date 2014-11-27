@@ -37,9 +37,9 @@ namespace Ift232Tests
 
            
 
-            market.Achat(city1,ResourcesType.Wood, 20);
-            market.Achat(city1, ResourcesType.Rock, 20);
-            market.Achat(city1, ResourcesType.Meat, 20);
+            market.Achat(city1, 20, TODO, ResourcesType.Wood);
+            market.Achat(city1, 20, TODO, ResourcesType.Rock);
+            market.Achat(city1, 20, TODO, ResourcesType.Meat);
             bois2 = city1.Ressources.get("Wood");
             viande2 = city1.Ressources.get("Meat");
             rock2 = city1.Ressources.get("Rock");
@@ -63,10 +63,10 @@ namespace Ift232Tests
 
             int or = market.Resource.get("Gold");
 
-            market.Achat(city1, ResourcesType.Wood, 20);
+            market.Achat(city1, 20, TODO, ResourcesType.Wood);
 
-            market.Achat(city1, ResourcesType.Rock, 20);
-            market.Achat(city1, ResourcesType.Meat, 20);
+            market.Achat(city1, 20, TODO, ResourcesType.Rock);
+            market.Achat(city1, 20, TODO, ResourcesType.Meat);
             bois2 = market.Resource.get("Wood");
             viande2 = market.Resource.get("Meat");
             rock2 = market.Resource.get("Rock");

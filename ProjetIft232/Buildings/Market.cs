@@ -35,32 +35,13 @@ namespace ProjetIft232.Buildings
             
         }
 
-        public bool Achat( City city, ResourcesType resourceWanted, int amountGold)
+        public bool Achat(City city, int amount, ResourcesType resourceSold, ResourcesType resourceWanted)
         {
-            if (amountGold >= 1 && (city.Ressources.get("Gold") - amountGold >= 0)) { 
-           
-            switch(resourceWanted)
+            if (city.Ressources[resourceSold] >= amount)
             {
-                case ResourcesType.Wood:
-                    city.AddResources(new Resources(amountGold*RatioBois,0,0,0,0));
-                   
-                    break;
-                case ResourcesType.Meat:
-                    city.AddResources(new Resources(0, 0, amountGold*RatioViande, 0, 0));
-                    
-                    break;
-
-                case ResourcesType.Rock:
-                    city.AddResources(new Resources(0, 0,0, amountGold * RatioPierre, 0));
-                    
-
-                    break;
-            }
-            city.RemoveResources(new Resources(0, amountGold, 0, 0, 0));
+                city.RemoveResources(new Resources(resourceSold, amount));
+                city.AddResources(new Resources(resourceWanted, Trade(amount,resourceSold,resourceWanted)));
                 return true;
-
-             
-
             }
             return false;
         }

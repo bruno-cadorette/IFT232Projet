@@ -77,7 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>

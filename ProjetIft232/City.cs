@@ -24,7 +24,12 @@ namespace ProjetIft232
             {ResourcesType.Population, Convert.ToInt32(1 + _tourDepuisCreation * 0.1)}
         });
         }
-        public ObservableCollection<Building> Buildings { get; private set; }
+        public List<Building> Buildings { get; private set; }
+
+        public IEnumerable<Building> FinishedBuildings
+        {
+            get { return Buildings.Where(t => !t.InConstruction); }
+        }
 
         public List<ArmyUnit> recruitement { get; private set; }
         public Armies army { get; private set; }
@@ -41,20 +46,13 @@ namespace ProjetIft232
             ResearchedTechnologies = new List<Technology>();
             Name = name;
             Ressources = new Resources(10000, 10000, 10000, 10000, 10000);
-            Buildings = new ObservableCollection<Building>();
-            Buildings.CollectionChanged += Buildings_CollectionChanged;
+            Buildings = new List<Building>();
 
             recruitement = new List<ArmyUnit>();
             army = new Army.Armies();
             _tourDepuisCreation = 0;
         }
 
-        //WTF please explain
-        void Buildings_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if(Buildings.Any(t=>t==null))
-                throw new InvalidOperationException();
-        }
         public override string ToString()
         {
             return "Ville de " + Name;
@@ -71,9 +69,9 @@ namespace ProjetIft232
             Ressources += resource;
         }
 
-        public int CountBuilding(String buildingName)
+        public int CountBuilding(String buildingName, bool inConstruction)
         {
-            return Buildings.Where(n => n.Name == buildingName).Count();
+            return Buildings.Count(n => n.Name == buildingName && n.InConstruction == inConstruction);
         }
 
 
@@ -98,24 +96,22 @@ namespace ProjetIft232
         public void RemoveBuilding(int nb)
         {
             int nbrCasern = 0;
-            if (Buildings.Count > nb)
+            if (Buildings.Count <= nb) return;
+            if (Buildings[nb] is Casern) // TODO: Fix this. We wont do it. KTHXBYE
             {
-                if (Buildings[nb] is Casern)
+                for (int i = 0; i < Buildings.Count; i++)
                 {
-                    for (int i = 0; i < Buildings.Count; i++)
+                    if (Buildings[nb] is Casern)
                     {
-                        if (Buildings[nb] is Casern)
-                        {
-                            nbrCasern++;
-                        }
-                    }
-                    if (nbrCasern == 1)
-                    {
-                        recruitement.Clear();
+                        nbrCasern++;
                     }
                 }
-                Buildings.Remove(Buildings[nb]);
+                if (nbrCasern == 1)
+                {
+                    recruitement.Clear();
+                }
             }
+            Buildings.Remove(Buildings[nb]);
         }
 
         public bool IsBuilt(int bt)
@@ -216,5 +212,6 @@ namespace ProjetIft232
                 }
             }
         }
+
     }
 }

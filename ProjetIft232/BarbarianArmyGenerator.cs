@@ -21,7 +21,7 @@ namespace ProjetIft232
             Armies res = new Armies();
             Random random = new Random();
 
-                int nombre = random.Next(1, tourIndex);
+                int nombre = random.Next(1, tourIndex + 1);
                 for (int i = 0; i < nombre; i++)
                 {
                     res.addUnit( ArmyFactory.CreateBarbarian(0));

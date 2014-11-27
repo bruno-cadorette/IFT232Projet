@@ -251,7 +251,7 @@ namespace ProjetIft232
             switch (accepte)
             {
                 case 1:
-                    m.Achat(_Game.CurrentPlayer.CurrentCity, type, qtte);
+                    //m.Achat(_Game.CurrentPlayer.CurrentCity, qtte, TODO, type);
                     break;
                 case 2:
                     Console.WriteLine("Vous n'avez pas accepté la commande.");

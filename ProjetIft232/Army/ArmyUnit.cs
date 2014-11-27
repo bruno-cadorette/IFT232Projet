@@ -56,6 +56,10 @@ namespace ProjetIft232.Army
             }
         }
 
+        public override string ToString()
+        {
+            return string.Format("{0} Atk : {1}, Def : {2}", Name, Attack, Defense);
 
+        }
     }
 }

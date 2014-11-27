@@ -35,6 +35,8 @@ namespace ProjetIft232.Buildings
             {
                 case "Market":
                     return new Market(building, Resources.Zero());
+                case "Casern":
+                    return new Casern(building);
                 default:
                     return building;
             }

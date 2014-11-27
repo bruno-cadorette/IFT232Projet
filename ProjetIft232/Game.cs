@@ -139,7 +139,7 @@ namespace ProjetIft232
 
         public Building getMarket()
         {
-            Building m = CurrentPlayer.CurrentCity.Buildings.FirstOrDefault(n => (n is Market) && (n.InConstruction == false));
+            Building m = CurrentPlayer.CurrentCity.FinishedBuildings.FirstOrDefault(n => n is Market);
 
             return m;
 

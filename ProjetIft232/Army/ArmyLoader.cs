@@ -28,10 +28,6 @@ namespace ProjetIft232.Army
             return _entities.Select(x => (ArmyUnit)x.Value);
         }
 
-        public IEnumerable<ArmyUnit> ArmyUnit()
-        {
-            return _entities.Select(x => (ArmyUnit)x.Value);
-        }
 
         protected override BuildableEntity CreateEntity(XElement element, int id, string name, string description, int turns, Requirement requirement)
         {

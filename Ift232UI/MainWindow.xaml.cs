@@ -16,9 +16,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ProjetIft232.Army;
 using Xceed.Wpf.Toolkit;
 using ProjetIft232;
 using ProjetIft232.Buildings;
+using MessageBox = Xceed.Wpf.Toolkit.MessageBox;
 
 namespace Ift232UI
 {
@@ -38,20 +40,6 @@ namespace Ift232UI
         private bool soldResourcesIsLoaded = false;
         private bool boughtResourcesIsLoaded = false;
 
-        string _test1;
-        public string test1 { 
-            get
-        {
-            return _test1;
-        }
-        set
-        {
-            _test1 = value;
-            SetPropertyChanged("test1");
-        }
-        }
-
-        Timer t;
         public MainWindow()
         {
             this.DataContext = this;
@@ -62,8 +50,11 @@ namespace Ift232UI
             foreach(var player in Game.Players){
                 Players.Items.Add(player.playerName);
             }
+            
+            Update();
             Players.SelectedIndex = Game.PlayerIndex;
             Cities.Content = Game.CurrentPlayer.CurrentCity;
+            UnitBox.ItemsSource = ArmyLoader.GetInstance().Soldiers();
         }
 
 
@@ -78,20 +69,37 @@ namespace Ift232UI
         private void Players_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Players.SelectedIndex = Game.PlayerIndex;
+            Update();
         }
 
         private void NextTurn_Click(object sender, RoutedEventArgs e)
         {
             Game.NextTurn();
             Turns.Content = Game.TourIndex;
+            Update();
+        }
+
+        private void Update()
+        {
             Players.SelectedIndex = Game.PlayerIndex;
-            Cities.Content= Game.CurrentPlayer.CurrentCity;
+            Cities.Content = Game.CurrentPlayer.CurrentCity;
+            UnitBox.ItemsSource = ArmyLoader.GetInstance().Soldiers();
+            CurrentUnit.ItemsSource = Game.CurrentPlayer.CurrentCity.army.getUnits().Where(n => !n.InConstruction);
+            TabArmy.IsEnabled = Game.CurrentPlayer.CurrentCity.FinishedBuildings.Any(t => t.ID == 5);
+            TabTrade.IsEnabled = Game.CurrentPlayer.CurrentCity.FinishedBuildings.Any(t => t is Market);
+            UpdateRessource();
+            if (Listboxdereve.IsLoaded && Listboxdereve.SelectedItem != null)
+            {
+                var currentValue = Listboxdereve.SelectedItem.ToString();
+                tnbrbat.Text = Game.CurrentPlayer.CurrentCity.CountBuilding(currentValue, false).ToString();
+                NBProdTextBox.Text = Game.CurrentPlayer.CurrentCity.CountBuilding(currentValue, true).ToString();
+            }
         }
 
         private void getCities_Click(object sender, RoutedEventArgs e)
         {
             Game.CurrentPlayer.NextCity();
-            Cities.Content = Game.CurrentPlayer.CurrentCity;
+            Update();
         }
 
         private void cbSelectBuilding_Loaded(object sender, RoutedEventArgs e)
@@ -103,7 +111,9 @@ namespace Ift232UI
                 {
                     cbSelectBuilding.Items.Add(building.Name);
                 }
-                cbSelectBuilding.SelectedValue = buildings.FirstOrDefault().Name;
+                var firstBuilding = buildings.FirstOrDefault();
+                if (firstBuilding != null)
+                    cbSelectBuilding.SelectedValue = firstBuilding.Name;
             }
             comboBoxBuildingIsLoaded = true;
         }
@@ -112,14 +122,13 @@ namespace Ift232UI
         {
             var buildings = BuildingLoader.GetInstance().Buildings().ToArray();
             var currentValue = (sender as ComboBox).SelectedItem.ToString();
-            tbBuildingDatas.Text = buildings.Where(n => n.Name == currentValue).First().Description;
+            tbBuildingDatas.Text = buildings.First(n => n.Name == currentValue).Description;
         }
 
         private void btnNewBuilding_Click(object sender, RoutedEventArgs e)
         {
             if (Game.CurrentPlayer.CurrentCity.AddBuilding(cbSelectBuilding.SelectedIndex))
             {
-                Game.CurrentPlayer.CurrentCity.AddBuilding(cbSelectBuilding.SelectedIndex);
                 labelPopup.Content = "Bâtiment créé !!!";
                 popup.IsOpen = true;
                 popup.StaysOpen = false;
@@ -132,7 +141,8 @@ namespace Ift232UI
                 popup.StaysOpen = false;
 
             }
-           
+            Update();
+
         }
 
         private void ListBox_Loaded(object sender, RoutedEventArgs e)
@@ -150,8 +160,7 @@ namespace Ift232UI
 
         private void Listboxdereve_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var currentValue = (sender as ListBox).SelectedItem.ToString();
-            tnbrbat.Text = Game.CurrentPlayer.CurrentCity.CountBuilding(currentValue).ToString();
+            Update();
         }
 
         private void SoldResources_Loaded(object sender, RoutedEventArgs e)
@@ -182,122 +191,110 @@ namespace Ift232UI
             boughtResourcesIsLoaded = true;
         }
 
-        private void FirstValue_TextChanged(object sender, TextChangedEventArgs e)
+        public void UpdateMarketUi()
         {
-            UpdateMarketUI();
-        }
+            if (SoldResources.SelectedItem == null || BoughtResources.SelectedItem == null)
+                return;
+            int val1 = FirstValue.Value.HasValue ? FirstValue.Value.Value : 0;
+            String currentValue = SoldResources.SelectedItem.ToString();
+            Market m = (Market) Game.getMarket();
+            if (m == null)
+                return;
+            var boughtType = Resource.Name.First(n => n.Value == BoughtResources.SelectedItem.ToString());
 
-        public void UpdateMarketUI()
-        {
-            try
-            {
-                int val1 = int.Parse(FirstValue.Text);
-                String currentValue = SoldResources.SelectedItem.ToString();
-                Market m = (Market)Game.getMarket();
-                var boughtType = Resource.Name.First(n => n.Value == BoughtResources.SelectedItem.ToString());
-                if (currentValue == "Gold")
-                {
-                    int val2 = m.Conversion(val1, boughtType.Key);
-                    SecondValue.Text = val2.ToString();
-                }
-                else
-                {
-                    var soldType = Resource.Name.First(n => n.Value == SoldResources.SelectedItem.ToString());
-                    int val2 = m.Trade(val1, soldType.Key, boughtType.Key);
-                    SecondValue.Text = val2.ToString();
-                }
-                
-            }
-            catch (NullReferenceException)
-            {
-                labelPopup.Content = "Votre marché n'est pas créé";
-                popup.IsOpen = true;
-                popup.StaysOpen = false;
-            }
-            catch (FormatException)
-            {
-                
-            }
+            var soldType = Resource.Name.First(n => n.Value == SoldResources.SelectedItem.ToString());
+
+            int val2 = m.Trade(val1, soldType.Key, boughtType.Key);
+            SecondValue.Text = val2.ToString();
+
+            FirstValue.Maximum = Game.CurrentPlayer.CurrentCity.Ressources[soldType.Key];
+            
         }
 
         private void SoldResources_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UpdateMarketUI();
+            UpdateMarketUi();
         }
 
         private void BoughtResources_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UpdateMarketUI();
+            UpdateMarketUi();
         }
 
         private void ValidateTransaction_Click(object sender, RoutedEventArgs e)
         {
+            if (!FirstValue.Value.HasValue)
+                return;
 
-            try
+            var soldType = Resource.Name.First(n => n.Value == SoldResources.SelectedItem.ToString());
+            var boughtType = Resource.Name.First(n => n.Value == BoughtResources.SelectedItem.ToString());
+
+            int qty = FirstValue.Value.Value;
+
+            bool done = ((Market)Game.getMarket()).Achat(Game.CurrentPlayer.CurrentCity, qty, soldType.Key, boughtType.Key);
+            if (done)
             {
-                String currentValue = SoldResources.SelectedItem.ToString();
-                int val1 = int.Parse(FirstValue.Text);
-                if (currentValue == "Gold")
-                {
-                    var boughtType = Resource.Name.First(n => n.Value == BoughtResources.SelectedItem.ToString());
-                    bool done =((Market)Game.getMarket()).Achat(Game.CurrentPlayer.CurrentCity, boughtType.Key, val1);
-                    if (done)
-                    {
-                        labelPopup.Content = "Votre échange a bien eu lieu !!!";
-                        popup.IsOpen = true;
-                        popup.StaysOpen = false;
-                    }
-                    else
-                    {
-                        labelPopup.Content = "Votre échange n'a pas eu lieu !!!";
-                        popup.IsOpen = true;
-                        popup.StaysOpen = false;
-                    }
-                }
+                labelPopup.Content = "Votre échange a bien eu lieu !!!";
+                popup.IsOpen = true;
+                popup.StaysOpen = false;
+            }
+            else
+            {
+                labelPopup.Content = "Votre échange n'a pas eu lieu !!!";
+                popup.IsOpen = true;
+                popup.StaysOpen = false;
+            }
           
          
-            }
-            catch (NullReferenceException)
-            {
-                labelPopup.Content = "Votre marché n'est pas créé";
-                popup.IsOpen = true;
-                popup.StaysOpen = false;
-            }
-            catch (FormatException)
-            {
-                labelPopup.Content = "On attend une valeur pour l'échange";
-                popup.IsOpen = true;
-                popup.StaysOpen = false;
-
-            }
-
+            
+            Update();
 
         }
 
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
 
         private void Resourcesvilles_Loaded(object sender, RoutedEventArgs e)
         {
-            string resources ="";
-            foreach(var i in Resource.Name){
-                resources += Game.CurrentPlayer.CurrentCity.Ressources.get(i.Value);
-                if (i.Key != ResourcesType.End - 1)
-                    resources += "/";
-            }
-            Resourcesvilles.Text = resources;
+            UpdateRessource();
+        }
+
+        private void UpdateRessource()
+        {
+            lbResGold.Content = Game.CurrentPlayer.CurrentCity.Ressources[ResourcesType.Gold];
+            lbResMeat.Content = Game.CurrentPlayer.CurrentCity.Ressources[ResourcesType.Meat];
+            lbResWood.Content = Game.CurrentPlayer.CurrentCity.Ressources[ResourcesType.Wood];
+            lbResRock.Content = Game.CurrentPlayer.CurrentCity.Ressources[ResourcesType.Rock];
+            lbResPop.Content = Game.CurrentPlayer.CurrentCity.Ressources[ResourcesType.Population];
 
         }
 
-      
-      
 
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (SoldierQuantityBox.Value.HasValue)
+            {
+                int armyTypeId = ((ArmyUnit) UnitBox.SelectedItem).ID;
+                int quantity = SoldierQuantityBox.Value.Value;
+                for (var i = 0; i < quantity; i++)
+                {
+                    if (!Game.CurrentPlayer.CurrentCity.AddArmy(armyTypeId))
+                    {
+                        MessageBox.Show("Pas assez de ressource pour en produire!", "Production échoué", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                        break;
+                    }
+                }
+            }
+            
+        }
 
+        private void btnAttaquer(object sender, RoutedEventArgs e)
+        {
+            //CurrentUnit.SelectedItems
+            MessageBox.Show("Not implemented yet. Sorry Fortin.");
+        }
 
-    
-
-
+        private void FirstValue_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            UpdateMarketUi();
+        }
     }
 }

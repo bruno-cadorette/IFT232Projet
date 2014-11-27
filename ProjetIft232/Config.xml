@@ -4,6 +4,15 @@
       <Resources>
         <Population>1</Population>
       </Resources>
+      <Requirements>
+        <Resources>
+          <Gold>20</Gold>
+          <Wood>15</Wood>
+          <Meat>25</Meat>
+          <Rock>15</Rock>
+          <Population>10</Population>
+        </Resources>
+      </Requirements>
     </Batiment>
 
     <Batiment Name="Ferme" id = "1" turns="3" Description="Une parcelle de terre réservée à l'élevage et la culture afin de récolter de la nourriture.\n">
@@ -30,8 +39,6 @@
       </Resources>
     </Batiment>
 
-
-
     <Batiment Name="Caserne" id = "5" turns="5" Description="Un camp d'entraînement pour des soldats d'élite !\nEnfin...Jusqu'à ce qu'on trouve meilleur que ces bras cassés...\n">
       <Requirements>
         <Buildings>
@@ -46,6 +53,7 @@
           <Population>10</Population>
         </Resources>
       </Requirements>
+      <Special type="Caserne" />
     </Batiment>
 
     <Batiment Name="École" id = "6" turns="3" Description= "Un bâtiment assez banal...\nEnfin, il y a quelques personnes un peu bizarre qui font des recherches dedans...\n">
