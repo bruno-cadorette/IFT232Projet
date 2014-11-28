@@ -39,18 +39,37 @@ namespace ProjetIft232
             Alea = 0;
         }
 
-        public void NextTurn()
+        public string NextTurn()
         {
+            string turnText = "";
+            int win = 0;
             do
-            {
-                Console.WriteLine(NextTurnInternal());
+            {      
+                turnText = NextTurnInternal();
+                Console.WriteLine(turnText);
                 if (CurrentPlayer is PlayerAI)
                 {
                     Console.WriteLine("\nTour du joueur AI: {0}", CurrentPlayer.playerName);
                     ((PlayerAI)CurrentPlayer).Play();
+
                 }
             }
             while (CurrentPlayer is PlayerAI);
+            win = ifWin();
+            if (win == 0)
+            {
+                win = ifLose();
+            }
+            if (win == 1)
+            {
+                return "Vous avez gagné!";
+            }
+
+            if (win == -1)
+            {
+                return "Vous avez perdu!  :'( ";
+            }
+            return turnText;
         }
 
         private string NextTurnInternal()
@@ -159,6 +178,37 @@ namespace ProjetIft232
                 return true;
             }
         }
+
+        private int ifWin()
+        {
+            int population=0;
+            foreach (var city in CurrentPlayer.Cities){
+                population += city.Ressources.get("Population");
+            }
+            if (population >= 10000)
+            {
+                return 1;
+            }
+            return 0;
+        }
+
+        private int ifLose()
+        {
+            int population=0;
+            foreach (var city in CurrentPlayer.Cities){
+                population += city.Ressources.get("Population");
+            }
+            if (population <= 0)
+            {
+                return -1;
+            }
+            if (Game.TourIndex >= 150)
+            {
+                return -1;
+            }
+            return 0;
+        }
+        
     }
 }
 

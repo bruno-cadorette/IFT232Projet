@@ -94,7 +94,7 @@ namespace ProjetIft232
         // {Meteores,(((Ressources, (( nombre de batiments détruits,description),(batiment requis, antidescription))))}
         public static Dictionary<string, Event> cost = new Dictionary<string, Event>()
         {
-   /*         {"Zombies", Tuple.Create<Resources, Tuple<int, string>>(new Resources(0,0,1000,0,200), Tuple.Create<int, string>(0,"Les zombies attaquent ! Coureeeeeeeez !"))},
+   /*       {"Zombies", Tuple.Create<Resources, Tuple<int, string>>(new Resources(0,0,1000,0,200), Tuple.Create<int, string>(0,"Les zombies attaquent ! Coureeeeeeeez !"))},
             {"Ebola", Tuple.Create<Resources, Tuple<int, string>>(new Resources(0,0,200,0,1000), Tuple.Create<int, string>(1,"Il fallait se laver les mains..."))},
             {"Extra-terrestres", Tuple.Create<Resources, Tuple<int, string>>(new Resources(100,0,0,200,200), Tuple.Create<int, string>(1,"Une soucoupe est passee et a recupere quelques ressources..."))},
             {"Chevres enragees", Tuple.Create<Resources, Tuple<int, string>>(new Resources(0,0,0,0,500), Tuple.Create<int, string>(1,"On nous attaque ! Une troupe de chevres enragees met nos vies en danger !"))},

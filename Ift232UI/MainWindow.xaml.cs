@@ -60,10 +60,17 @@ namespace Ift232UI
 
         private void btnNewCity_Click(object sender, RoutedEventArgs e)
         {
-            Game.CreateCity(tbNewCity.Text);
-            labelPopup.Content = "Ville créée !";
-            popup.IsOpen = true;
-            popup.StaysOpen = false;
+            if (Game.CurrentPlayer.CurrentCity.Ressources.get("Population")>500)
+            {
+                Game.CreateCity(tbNewCity.Text);
+                labelPopup.Content = "Ville créée !";
+                popup.IsOpen = true;
+                popup.StaysOpen = false;
+            }
+            else
+            {
+                MessageBox.Show("Vous devez avoir plus de population pour créer une nouvelle ville.");
+            }
         }
 
         private void Players_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -74,9 +81,24 @@ namespace Ift232UI
 
         private void NextTurn_Click(object sender, RoutedEventArgs e)
         {
-            Game.NextTurn();
+            string turnText = "";
+            turnText = Game.NextTurn();
             Turns.Content = Game.TourIndex;
             Update();
+            if (turnText != "" && turnText != "Vous avez perdu!  :'( " && turnText != "Vous avez gagné!")
+            {
+                MessageBox.Show(turnText);
+            }
+            else if (turnText == "Vous avez perdu!  :'( ")
+            {
+                MessageBox.Show(turnText + "le jeu va quitter de manière Brutale");
+                Application.Current.Shutdown();
+            }
+            else if (turnText == "Vous avez gagné!")
+            {
+                MessageBox.Show(turnText + "le jeu va quitter de manière Brutale");
+                Application.Current.Shutdown();
+            }
         }
 
         private void Update()

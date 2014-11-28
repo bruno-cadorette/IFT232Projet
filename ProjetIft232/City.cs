@@ -13,15 +13,15 @@ namespace ProjetIft232
 {
     public class City
     { 
-        public static Resources CostToCreate = new Resources(500, 500, 500, 500, 500);
+        public static Resources CostToCreate = new Resources(1000, 1000, 1000, 1000, 500);
         private Resources BaseProduction()
         {
             return new Resources(new Dictionary<ResourcesType, int>() {
-            {ResourcesType.Wood, 5},
-            {ResourcesType.Gold, 5},
-            {ResourcesType.Meat, 5},
-            {ResourcesType.Rock, 5},
-            {ResourcesType.Population, Convert.ToInt32(1 + _tourDepuisCreation * 0.1)}
+            {ResourcesType.Wood, 0},
+            {ResourcesType.Gold, 0},
+            {ResourcesType.Meat, 0},
+            {ResourcesType.Rock, 0},
+            {ResourcesType.Population, 0 /*Convert.ToInt32(1 + _tourDepuisCreation * 0.1)*/}
         });
         }
         public List<Building> Buildings { get; private set; }
@@ -45,7 +45,7 @@ namespace ProjetIft232
         {
             ResearchedTechnologies = new List<Technology>();
             Name = name;
-            Ressources = new Resources(10000, 10000, 10000, 10000, 10000);
+            Ressources = new Resources(10000, 10000, 10000, 10000, 500);
             Buildings = new List<Building>();
 
             recruitement = new List<ArmyUnit>();
@@ -179,23 +179,23 @@ namespace ProjetIft232
 
         public string Attack(Armies BarbarianArmy)
         {
-            string Resume = string.Format("La ville est attaqué par des barbares, ils sont {0} \n ", BarbarianArmy.size());
+            string Resume = string.Format("La ville est attaqué par des barbares, ils sont {0} ", BarbarianArmy.size());
 
             int armySize = army.size();
             int BarbarianArmySize = BarbarianArmy.size();
 
             if (army.size() == 0) {
                 BarbarianArmy.getUnits().ForEach(n => RemoveResources(n.Transport));
-                return "Nous n'avions aucune defense, nous nous somme fait ecraser\n";
+                return Resume += string.Format( "Nous n'avions aucune defense, nous nous somme fait ecraser");
             }
             if (BarbarianArmy.Fight(army))
             {
                 BarbarianArmy.getUnits().ForEach(n => RemoveResources(n.Transport));
-                Resume += string.Format("Nous avons perdu... \n");
+                Resume += string.Format("Nous avons perdu... Les Barbars sont repartis avec ns ressources !");
             }
             else
             {
-                Resume += string.Format("Nous avons gagné! \n");
+                Resume += string.Format("Nous avons gagné!        ");
             }
             Resume += string.Format("Dans la bataille nous avons perdu  {0} soldats et eux {1}", armySize - army.size(), BarbarianArmySize - BarbarianArmy.size());
             return Resume;

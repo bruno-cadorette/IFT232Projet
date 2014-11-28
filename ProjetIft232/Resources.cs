@@ -165,15 +165,13 @@ namespace ProjetIft232
 
         public static bool operator >(Resources a, Resources b)
         {
-            bool greaterKnow = false;
             for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                if (a.resources[i] < b.resources[i])
+                if (a.resources[i] <= b.resources[i])
                     return false;
-                if (a.resources[i] > b.resources[i])
-                    greaterKnow = true;
+
             }
-            return greaterKnow;
+            return true;
         }
 
         public static bool operator >=(Resources a, Resources b)
