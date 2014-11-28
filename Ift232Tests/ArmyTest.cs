@@ -24,13 +24,13 @@ namespace Ift232Tests
         {
             RandomGen.GetInstance().SetRandom(false);
             city = new City("Toulouse");
-            Building house = BuildingFactory.CreateBuilding((int)BuildingType.House, ref city);
+            Building house = city.AddBuilding((int)BuildingType.House);
             house.FinishConstruction();
 
-            Building farm = BuildingFactory.CreateBuilding((int)BuildingType.Farm, ref city);
+            Building farm = city.AddBuilding((int)BuildingType.Farm);
             farm.FinishConstruction();
 
-            caserne = BuildingFactory.CreateBuilding((int)BuildingType.Casern, ref city);
+            caserne = city.AddBuilding((int)BuildingType.Casern);
             caserne.FinishConstruction();
         }
 
@@ -38,8 +38,8 @@ namespace Ift232Tests
         public void CreateUnit()
         {
             SetUp();
-            ArmyUnit unit = ArmyFactory.CreateArmyUnit(0, ref city);
-            Assert.IsTrue(unit.Attack == 2);
+            ArmyUnit unit = ArmyFactory.CreateArmyUnit(0, city);
+            Assert.IsTrue(unit.Attributes.Attack == 2);
             Assert.IsTrue(unit.InConstruction);
             unit.Update();
             unit.Update();
@@ -52,7 +52,7 @@ namespace Ift232Tests
         public void RequirementTestFail()
         {
             SetUp();
-            ArmyUnit unit = ArmyFactory.CreateArmyUnit(0, ref city);
+            ArmyUnit unit = ArmyFactory.CreateArmyUnit(0, city);
             var resource = new Resources(1000, 50000, 0, 10000, 100000);
             var buildings = new Building[] { caserne, };
             Assert.IsFalse(unit.CanBeBuild(resource, buildings.ToList()));
@@ -62,7 +62,7 @@ namespace Ift232Tests
         public void RequirementTest()
         {
             SetUp();
-            ArmyUnit unit = ArmyFactory.CreateArmyUnit(0, ref city);
+            ArmyUnit unit = ArmyFactory.CreateArmyUnit(0, city);
             var resource = new Resources(1000, 50000, 60000, 10000, 100000);
             var buildings = new Building[] { caserne, };
             Assert.IsTrue(unit.CanBeBuild(resource, buildings));

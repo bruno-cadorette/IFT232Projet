@@ -16,7 +16,10 @@ namespace ProjetIft232
 
         public Dictionary<int, BuildableEntity> _entities { get; set; } 
         private static object SyncRoot = new object();
-
+        protected BuildableEntity GetEntity(int type)
+        {
+            return (_entities.ContainsKey(type)) ? DeepCopy(_entities[type]) : null;
+        }
         protected Loader()
         {
             _entities = new Dictionary<int, BuildableEntity>();

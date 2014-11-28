@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjetIft232.Army;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace ProjetIft232.Technologies
 
         public Technology GetTechnology(int type)
         {
-            return (Technology)DeepCopy(_entities[type]);
+            return (Technology)GetEntity(type);
         }
 
         public IEnumerable<Technology> Technologies()
@@ -24,7 +25,8 @@ namespace ProjetIft232.Technologies
 
         protected override BuildableEntity CreateEntity(XElement element, int id, string name, string description, int turns, Requirement requirement)
         {
-            return new Technology(id, name, description, requirement, turns, GetAffectedEntities(element), GetApplicationCost(element), GetEnhancement(element));
+            var affectedEntities = GetAffectedEntities(element);
+            return new Technology(id, name, description, requirement, turns, affectedEntities.Item1,affectedEntities.Item2, GetApplicationCost(element), GetEnhancement(element));
         }
 
         protected override IEnumerable<XElement> GetChilds(XElement root)
@@ -32,14 +34,17 @@ namespace ProjetIft232.Technologies
             return root.Element(XName.Get("Technologies")).Elements(XName.Get("Technology"));
         }
 
-        private IEnumerable<int> GetAffectedEntities(XElement element)
+        private Tuple<IEnumerable<int>, IEnumerable<int>> GetAffectedEntities(XElement element)
         {
             var entities = element.Element(XName.Get("AffectedEntities"));
             if (entities != null)
             {
-                return entities.Elements(XName.Get("AffectedEntity")).Select(x=>int.Parse(x.Value));
+                return Tuple.Create(
+                    entities.Elements(XName.Get("AffectedBuilding")).Select(x=>int.Parse(x.Value)),
+                    entities.Elements(XName.Get("AffectedSoldier")).Select(x=>int.Parse(x.Value)))
+                    ;
             }
-            return Enumerable.Empty<int>();
+            return Tuple.Create(Enumerable.Empty<int>(), Enumerable.Empty<int>());
         }
 
         private Resources GetApplicationCost(XElement element)
@@ -57,9 +62,20 @@ namespace ProjetIft232.Technologies
             if (enhancement != null)
             {
                 var resources = GetResources(enhancement);
-                var x = enhancement.Element(XName.Get("ConstructionTime"));
-                int constructionTime = (x!=null)?int.Parse(x.Value):0;
-                return new Enhancement(resources, constructionTime);
+                var construction = enhancement.Element(XName.Get("ConstructionTime"));
+                int constructionTime = (construction != null) ? int.Parse(construction.Value) : 0;
+
+                var soldierAttributes = enhancement.Element(XName.Get("SoldierAttributes"));
+                int attack = 0;
+                int defence = 0;
+                if (soldierAttributes != null)
+                {
+                    var xElementAttack = soldierAttributes.Element(XName.Get("Attack"));
+                    var xElementDefence = soldierAttributes.Element(XName.Get("Defence"));
+                    attack = (xElementAttack != null) ? int.Parse(xElementAttack.Value) : 0;
+                    defence = (xElementDefence != null) ? int.Parse(xElementDefence.Value) : 0;
+                }
+                return new Enhancement(resources, new SoldierAttributes(attack,defence), constructionTime);
             }
             return Enhancement.Zero();
         }

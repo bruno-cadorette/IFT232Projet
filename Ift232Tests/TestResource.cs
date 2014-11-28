@@ -124,11 +124,11 @@ namespace Ift232Tests
 
             Resources res = new Resources(rsc);
             Dictionary<ResourcesType, int> rsc6 = new Dictionary<ResourcesType, int>();
-            rsc6.Add(ResourcesType.Gold, 5);
-            rsc6.Add(ResourcesType.Meat, 5);
-            rsc6.Add(ResourcesType.Wood, 5);
-            rsc6.Add(ResourcesType.Rock, 5);
-            rsc6.Add(ResourcesType.Population, 1);
+            rsc6.Add(ResourcesType.Gold, 0);
+            rsc6.Add(ResourcesType.Meat, 0);
+            rsc6.Add(ResourcesType.Wood, 0);
+            rsc6.Add(ResourcesType.Rock, 0);
+            rsc6.Add(ResourcesType.Population, 0);
 
             Assert.AreEqual(city.Ressources, new Resources());
             city.Update();

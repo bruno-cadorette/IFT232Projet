@@ -9,33 +9,21 @@ namespace ProjetIft232.Buildings
 {
     public static class BuildingFactory
     {
-        public static Building CreateBuilding(int type,ref City city)
+        public static Building CreateBuilding(int type, City city)
         {
             Building building = GetBuilding(type);
-            var techs = city.ResearchedTechnologies.Where(n => n.AffectedBuilding.Any(m => m == building.ID) && n.InConstruction == false);
-            foreach (var technology in techs)
+            if (building != null)
             {
-                building.Upgrade(technology); 
-                building.ReduceTurnLeft(technology.Enhancements.ConstructionTime);
-            }
-            if (building != null && building.CanBeBuild(city.Ressources, city.Buildings))
-            {
-                city.RemoveResources(building.Requirement.Resources);
-                city.Buildings.Add(building);
-                return building;
+                foreach (var technology in city.ResearchedTechnologies.Where(n => n.AffectedBuildings.Any(m => m == building.ID) && !n.InConstruction))
+                {
+                    building.Upgrade(technology);
+                }
+                if (building.CanBeBuild(city.Ressources, city.Buildings))
+                {
+                    return building;
+                }
             }
             return null;
-        }
-
-        public static bool UpgrateBuilding(ref Building building, Technology technology, ref City city)
-        {
-           if(building.CanBeUpgraded(city.Ressources,technology))
-           {
-               building.Upgrade(technology);
-               city.RemoveResources(technology.ApplicationCost);
-               return true;
-           }
-            return false;
         }
 
         private static Building GetBuilding(int type)

@@ -149,7 +149,7 @@ namespace Ift232UI
 
         private void btnNewBuilding_Click(object sender, RoutedEventArgs e)
         {
-            if (Game.CurrentPlayer.CurrentCity.AddBuilding(cbSelectBuilding.SelectedIndex))
+            if (Game.CurrentPlayer.CurrentCity.AddBuilding(cbSelectBuilding.SelectedIndex)!=null)
             {
                 labelPopup.Content = "Bâtiment créé !!!";
                 popup.IsOpen = true;

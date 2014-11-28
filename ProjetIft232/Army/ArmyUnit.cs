@@ -10,13 +10,12 @@ using System.Runtime.Serialization;
 namespace ProjetIft232.Army
 {
     [DataContract]
-    public class ArmyUnit : BuildableEntity
+    public class ArmyUnit : UpgradableEntity
     {
         public ArmyUnit(int id, string name, string desc, int attack, int def, int size, int turn,Resources transport, Requirement requirement)
             : base(id, name, desc, turn, requirement)
         {
-            Attack = attack;
-            Defense = def;
+            Attributes = new SoldierAttributes(attack, def);
             Transport = transport;
             Size = size;
             moral = 100;
@@ -25,18 +24,14 @@ namespace ProjetIft232.Army
         public ArmyUnit(ArmyUnit army)
             :base(army)
         {
-            Attack = army.Attack;
-            Defense = army.Defense;
+            Attributes = army.Attributes;
             Transport = army.Transport;
             Size = army.Size;
             moral = 100;
         }
 
-
-        [DataMember]
-        public int Attack { get; set; }
-        [DataMember]
-        public int Defense { get; set; }
+        public SoldierAttributes Attributes { get; set; }
+        
 
         [DataMember]
         public int Size { get; set; }
@@ -58,8 +53,13 @@ namespace ProjetIft232.Army
 
         public override string ToString()
         {
-            return string.Format("{0} Atk : {1}, Def : {2}", Name, Attack, Defense);
+            return string.Format("{0} Atk : {1}, Def : {2}", Name, Attributes.Attack, Attributes.Defence);
 
+        }
+
+        protected override void UpgradeEntity(Technology technology)
+        {
+            Attributes += technology.Enhancements.SoldierAttributes;
         }
     }
 }

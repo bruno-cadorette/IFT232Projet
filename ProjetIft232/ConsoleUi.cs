@@ -134,7 +134,7 @@ namespace ProjetIft232
                         Console.WriteLine("Nous avons progressé d'un tour, on ne va pas rester à l'âge de pierre");
                         break;
                     case 12:
-                        _Game.CurrentPlayer.WriteXML();
+                        _Game.Save("test.ift232");
                         break;
                     default:
                         break;
@@ -156,14 +156,14 @@ namespace ProjetIft232
             }
             Console.WriteLine("Choisissez une technologie à appliquer");
             int choix = int.Parse(Console.ReadLine());
-            if (_Game.ApplyTech(alltech[choix].Name))
+            /*if (_Game.ApplyTech(alltech[choix]))
             {
                 Console.WriteLine("La technologie a été appliquée au premier bâtiment.");
             }
             else
             {
                 Console.WriteLine("La technologie n'est pas appliquable.");
-            }
+            }*/
         }
 
         private void TechMenu()
@@ -429,7 +429,7 @@ namespace ProjetIft232
             int option = int.Parse(Console.ReadLine());
 
 
-            if (_Game.CurrentPlayer.CurrentCity.AddBuilding(option - 1))
+            if (_Game.CurrentPlayer.CurrentCity.AddBuilding(option - 1)!=null)
             {
                 Console.WriteLine(" Le bâtiment " + buildings[option - 1] + " a bien été créé");
             }

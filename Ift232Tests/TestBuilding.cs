@@ -15,7 +15,7 @@ namespace Ift232Tests
         public void Build()
         {
             City city = new City("Toulouse!");
-            Building house = BuildingFactory.CreateBuilding((int)BuildingType.House,ref city);
+            Building house = BuildingFactory.CreateBuilding((int)BuildingType.House, city);
             Assert.IsTrue(house.InConstruction);
             Assert.IsTrue(house.TurnsLeft==3);
             house.Update();
@@ -28,7 +28,7 @@ namespace Ift232Tests
         public void UpdateHouse()
         {
             City city = new City("Toulouse!");
-            Building house = BuildingFactory.CreateBuilding((int)BuildingType.House, ref city);
+            Building house = BuildingFactory.CreateBuilding((int)BuildingType.House, city);
             Dictionary<ResourcesType, int> rsc = new Dictionary<ResourcesType, int>();
             rsc.Add(ResourcesType.Population, 1);
             Assert.AreEqual(house.Update(),new Resources());
@@ -41,7 +41,7 @@ namespace Ift232Tests
         public void CreateBuilding()
         {
             City city = new City("Toulouse!");
-            Assert.AreEqual(BuildingType.Farm, (BuildingType)BuildingFactory.CreateBuilding((int)BuildingType.Farm, ref city).ID);
+            Assert.AreEqual(BuildingType.Farm, (BuildingType)BuildingFactory.CreateBuilding((int)BuildingType.Farm, city).ID);
         }
 
         [TestMethod]
@@ -66,13 +66,13 @@ namespace Ift232Tests
         public void CanBeBuild()
         {
             City city = new City("Toulouse!");
-            Building house = BuildingFactory.CreateBuilding((int)BuildingType.House,ref city);
+            Building house = BuildingFactory.CreateBuilding((int)BuildingType.House, city);
             house.Update();
             house.Update();
             house.Update();
             house.Update();
 
-            Building farm = BuildingFactory.CreateBuilding((int)BuildingType.Farm, ref city);
+            Building farm = BuildingFactory.CreateBuilding((int)BuildingType.Farm,  city);
             farm.Update();
             farm.Update();
             farm.Update();

@@ -21,9 +21,6 @@ namespace Ift232Tests
         public Building instancem2 { get; set; }
 
         [TestMethod]
-
-          
-
         public void TestGetMarket()
         {
             game = new Game();
@@ -55,12 +52,24 @@ namespace Ift232Tests
 
            Assert.IsNotNull(instancem1);
            Assert.IsTrue(instancem2 == null);
+        }
 
+        [TestMethod]
+        public void LoadAndSave()
+        {
+            Game game = new Game();
+            var player = new Player();
+            player.playerName = "blabla";
+            player.CreateCity("Sherbrooke");
+            player.CurrentCity.AddBuilding(0);
+            game.Players.Add(player);
+            game.Save("game.txt");
 
+            var newGame = Game.Load("game.txt");
 
-            // _Game.getMarket() != null
-
-
+            Assert.AreEqual(game.CurrentPlayer.playerName, newGame.CurrentPlayer.playerName);
+            Assert.AreEqual(game.CurrentPlayer.CurrentCity.Name, newGame.CurrentPlayer.CurrentCity.Name);
+            Assert.AreEqual(game.CurrentPlayer.CurrentCity.Buildings[0].ID, newGame.CurrentPlayer.CurrentCity.Buildings[0].ID);
 
         }
     }

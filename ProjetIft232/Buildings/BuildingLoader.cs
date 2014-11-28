@@ -17,7 +17,7 @@ namespace ProjetIft232.Buildings
 
         public Building GetBuilding(int type)
         {
-            return (Building)DeepCopy(_entities[type]);
+            return (Building)GetEntity(type);
         }
 
         public IEnumerable<Building> Buildings()

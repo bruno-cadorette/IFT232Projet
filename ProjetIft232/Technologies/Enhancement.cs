@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjetIft232.Army;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -15,16 +16,19 @@ namespace ProjetIft232.Technologies
         [DataMember]
         public int ConstructionTime { get; private set; }
 
+        public SoldierAttributes SoldierAttributes { get; private set; }
 
-        public Enhancement(Resources resources, int constructionTime)
+
+        public Enhancement(Resources resources, SoldierAttributes soldierAttributes, int constructionTime)
         {
             Resources = resources;
+            SoldierAttributes = soldierAttributes;
             ConstructionTime = constructionTime;
         }
 
         public static Enhancement Zero()
         {
-            return new Enhancement(Resources.Zero(), 0);
+            return new Enhancement(Resources.Zero(), new SoldierAttributes(), 0);
         }
     }
 }

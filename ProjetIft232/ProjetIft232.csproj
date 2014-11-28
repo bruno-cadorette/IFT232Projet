@@ -47,6 +47,7 @@
     <Compile Include="Army\ArmyLoader.cs" />
     <Compile Include="Army\ArmyUnit.cs" />
     <Compile Include="Army\Armies.cs" />
+    <Compile Include="Army\SoldierAttributes.cs" />
     <Compile Include="BuildableEntity.cs" />
     <Compile Include="Buildings\BuildingLoader.cs" />
     <Compile Include="Buildings\Casern.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Technologies\Technology.cs" />
     <Compile Include="Technologies\TechnologyFactory.cs" />
     <Compile Include="Technologies\TechnologyLoader.cs" />
+    <Compile Include="UpgradableEntity.cs" />
     <Compile Include="Utility\RandomGen.cs" />
   </ItemGroup>
   <ItemGroup>

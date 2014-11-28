@@ -8,9 +8,11 @@ using ProjetIft232.Army;
 using ProjetIft232.Buildings;
 using ProjetIft232.Technologies;
 using System.Collections.ObjectModel;
+using System.Runtime.Serialization;
 
 namespace ProjetIft232
 {
+    [DataContract]
     public class City
     { 
         public static Resources CostToCreate = new Resources(1000, 1000, 1000, 1000, 500);
@@ -24,22 +26,30 @@ namespace ProjetIft232
             {ResourcesType.Population, 0 /*Convert.ToInt32(1 + _tourDepuisCreation * 0.1)*/}
         });
         }
+        [DataMember]
         public List<Building> Buildings { get; private set; }
 
         public IEnumerable<Building> FinishedBuildings
         {
             get { return Buildings.Where(t => !t.InConstruction); }
         }
-
+        [DataMember]
         public List<ArmyUnit> recruitement { get; private set; }
+
+        [DataMember]
         public Armies army { get; private set; }
 
+        [DataMember]
         public List<Technology> ResearchedTechnologies { get; private set; }
 
+        [DataMember]
         public Resources Ressources { get; private set; }
+
+        [DataMember]
         public string Name { get; private set; }
 
-        private int _tourDepuisCreation;
+        [DataMember]
+        private int _turnsSinceCreation;
 
         public City(string name)
         {
@@ -50,7 +60,7 @@ namespace ProjetIft232
 
             recruitement = new List<ArmyUnit>();
             army = new Army.Armies();
-            _tourDepuisCreation = 0;
+            _turnsSinceCreation = 0;
         }
 
         public override string ToString()
@@ -86,11 +96,19 @@ namespace ProjetIft232
             return false;
         }
 
-        public bool AddBuilding(int type)
+        public Building AddBuilding(int type)
         {
-            City city = this;
-            var building = BuildingFactory.CreateBuilding(type, ref city);
-            return building != null;
+            var building = BuildingFactory.CreateBuilding(type, this);
+            if (building != null)
+            {
+                RemoveResources(building.Requirement.Resources);
+                Buildings.Add(building);
+                return building;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public void RemoveBuilding(int nb)
@@ -126,7 +144,7 @@ namespace ProjetIft232
 
         public void Update()
         {
-            _tourDepuisCreation++;
+            _turnsSinceCreation++;
             //rsc n'est pas une reelle ressource, c'est une ressource 'theorique'
             //rsc est en fait un multiplicateur, il nous dira de combien multiplier
             //notre constante de base de récupération des ressources
@@ -159,10 +177,10 @@ namespace ProjetIft232
 
         public bool AddArmy(int type)
         {
-            City city = this;
-            var armyUnit = ArmyFactory.CreateArmyUnit(type, ref city);
+            var armyUnit = ArmyFactory.CreateArmyUnit(type, this);
             if (armyUnit != null)
             {
+                RemoveResources(armyUnit.Requirement.Resources);
                 recruitement.Add(armyUnit);
                 return true;
             }
@@ -174,7 +192,7 @@ namespace ProjetIft232
 
         public Building FindBuildingForReschearded(Technology tech)
         {
-            return Buildings.ToList().FirstOrDefault(n => !n.AlreadyApplied(tech.ID) && tech.AffectedBuilding.Contains(n.ID));
+            return Buildings.FirstOrDefault(n => !n.AlreadyApplied(tech.ID) && tech.AffectedBuildings.Contains(n.ID));
         }
 
         public string Attack(Armies BarbarianArmy)

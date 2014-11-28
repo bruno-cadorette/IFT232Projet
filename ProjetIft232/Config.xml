@@ -152,9 +152,9 @@
   <Technologies>
     <Technology Name="Paille" id = "0" turns="3" Description="Recherche pour faire des maisons de paille">
       <AffectedEntities>
-        <AffectedEntity>
+        <AffectedBuilding>
           0
-        </AffectedEntity>
+        </AffectedBuilding>
       </AffectedEntities>
       <Requirements>
         <Buildings>
@@ -185,9 +185,9 @@
     
     <Technology Name="Taxes" id = "1" turns="3" Description="Le marché nous donne de l'argent!!!!">
       <AffectedEntities>
-        <AffectedEntity>
+        <AffectedBuilding>
           7
-        </AffectedEntity>
+        </AffectedBuilding>
       </AffectedEntities>
       <Requirements>
         <Resources>
@@ -204,7 +204,33 @@
         </Resources>
       </Enhancement>
     </Technology>
-
+    
+    <Technology Name="Cote de maille" id = "2" turns="3" Description="Améliore les armures">
+      <AffectedEntities>
+        <AffectedSoldier>
+          0
+        </AffectedSoldier>
+        <AffectedSoldier>
+          1
+        </AffectedSoldier>
+      </AffectedEntities>
+      <Requirements>
+        <Resources>
+          <Gold>100</Gold>
+          <Wood>15</Wood>
+          <Meat>75</Meat>
+          <Rock>100</Rock>
+          <Population>20</Population>
+        </Resources>
+      </Requirements>
+      <Enhancement>
+        <SoldierAttributes>
+          <Defence>
+            10
+          </Defence>
+        </SoldierAttributes>
+      </Enhancement>
+    </Technology>
 
   </Technologies>
 

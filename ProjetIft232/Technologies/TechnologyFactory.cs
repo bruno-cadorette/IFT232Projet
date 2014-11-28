@@ -9,7 +9,7 @@ namespace ProjetIft232.Technologies
 {
     public static class TechnologyFactory
     {
-        public static Technology ResearchTechnology(int type, City city)
+        public static Technology CreateTechnology(int type, City city)
         {
             Technology technology = GetTechnology(type);
             if (technology.CanBeBuild(city.Ressources, city.Buildings, city.ResearchedTechnologies))

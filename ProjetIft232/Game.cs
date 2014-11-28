@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using ProjetIft232.Buildings;
 using ProjetIft232.Technologies;
+using System.Runtime.Serialization;
+using System.IO;
 
 namespace ProjetIft232
 {
+    [DataContract]
     public class Game
     {
-
-        //static public Game CurrentGame
+        [DataMember]
         public List<Player> Players { get; set; }
 
         public Player CurrentPlayer
@@ -22,8 +24,11 @@ namespace ProjetIft232
         }
 
         private int _playerIndex = 0;
+        [DataMember]
         private int Hostility { get; set; }
+        [DataMember]
         private int Alea { get; set; }
+        [DataMember]
         public int PlayerIndex { get; private set; }
 
         //Variable global, à changer 
@@ -37,6 +42,25 @@ namespace ProjetIft232
             Players = new List<Player>();
             Hostility = 3;
             Alea = 0;
+        }
+
+        public void Save(string fileName)
+        {
+            using (var fileStream = File.Create(fileName))
+            {
+                DataContractSerializer serializer = new DataContractSerializer(typeof(Game));
+                serializer.WriteObject(fileStream, this);
+            }
+        }
+
+        public static Game Load(string fileName)
+        {
+            using (var fileStream = File.Open(fileName,FileMode.Open))
+            {
+                DataContractSerializer serializer = new DataContractSerializer(typeof(Game));
+                fileStream.Position = 0;
+                return serializer.ReadObject(fileStream) as Game;
+            }
         }
 
         public string NextTurn()
@@ -105,16 +129,13 @@ namespace ProjetIft232
             return turnText;
         }
 
-        public bool ApplyTech(string name)
+        public void ApplyTech(UpgradableEntity entity, Technology technology)
         {
-            Technology tech = CurrentPlayer.ResearchedTech.FirstOrDefault(n => n.Name == name);
-            if (tech == null) return false;
-            Building build = CurrentPlayer.CurrentCity.FindBuildingForReschearded(tech);
-            if (build == null) return false;
-            City city = CurrentPlayer.CurrentCity;
-            return BuildingFactory.UpgrateBuilding(ref build, tech, ref city);
-
+            entity.Upgrade(technology);
+            CurrentPlayer.CurrentCity.RemoveResources(technology.ApplicationCost);
         }
+
+
 
         public bool CreateCity(string name)
         {
@@ -166,7 +187,7 @@ namespace ProjetIft232
 
         public bool ResearchTechnology(int type)
         {
-            Technology technology = TechnologyFactory.ResearchTechnology(type, CurrentPlayer.CurrentCity);
+            Technology technology = TechnologyFactory.CreateTechnology(type, CurrentPlayer.CurrentCity);
             if (technology == null)
             {
                 return false;

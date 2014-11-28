@@ -11,25 +11,22 @@ namespace Ift232Tests
     public class TestTechnology
     {
         private City city;
-        private Technology tech;
 
         [TestInitialize]
         public void SetUp()
         {
             city = new City("Toulouse!");
-            tech = new Technology(2,"Maconnerie",null,Requirement.Zero(),2,new List<int>(){(int)BuildingType.Farm},new Resources(0,10,100,10,10),new Enhancement(new Resources(20,20,20,20,20),53));
         }
         [TestMethod]
         public void UpgradeBuilding()
         {
-            Building farm = BuildingFactory.CreateBuilding((int)BuildingType.Farm, ref city);
+            Building farm = city.AddBuilding((int)BuildingType.Farm);
             farm.FinishConstruction();
-            Building house = BuildingFactory.CreateBuilding((int)BuildingType.House, ref city);
+            Building house = city.AddBuilding((int)BuildingType.House);
             house.FinishConstruction();
 
-            Technology technology = TechnologyFactory.ResearchTechnology(0, city);
-            
-            BuildingFactory.UpgrateBuilding(ref house,technology, ref city);
+            Technology technology = TechnologyFactory.CreateTechnology(0, city);
+            house.Upgrade(technology);
             Resources expected = new Resources(0, 0, 0, 0, 2);
             Assert.AreEqual(expected,house.Resource);
         }
@@ -37,24 +34,28 @@ namespace Ift232Tests
         [TestMethod]
         public void UpgradedNewBuilding()
         {
-            city.ResearchedTechnologies.Add(tech);
+            Building farm = city.AddBuilding((int)BuildingType.Farm);
+            farm.FinishConstruction();
+            city.ResearchedTechnologies.Add(TechnologyFactory.CreateTechnology(0, city));
             for (int i = 0; i < 10; i++)
             {
                 city.ResearchedTechnologies.ForEach(n => n.Update());
             }
-            Building farm = BuildingFactory.CreateBuilding((int)BuildingType.Farm, ref city);
+            Building house = BuildingFactory.CreateBuilding((int)BuildingType.House, city);
             for (int i = 0; i < 10; i++)
             {
-                farm.Update();
+                house.Update();
             }
-            Assert.IsTrue(farm.Resource[ResourcesType.Rock]>0);
+            Assert.IsTrue(house.Resource[ResourcesType.Population] == 2);
         }
 
         [TestMethod]
         public void NotUpgradedBuilding()
         {
-            city.ResearchedTechnologies.Add(tech);
-            Building farm = BuildingFactory.CreateBuilding((int)BuildingType.Farm, ref city);
+            Building farm = city.AddBuilding((int)BuildingType.Farm);
+            farm.FinishConstruction();
+            city.ResearchedTechnologies.Add(TechnologyFactory.CreateTechnology(0, city)); 
+            Building house = city.AddBuilding((int)BuildingType.Farm);
             for (int i = 0; i < 10; i++)
             {
                 city.ResearchedTechnologies.ForEach(n => n.Update());
@@ -65,13 +66,15 @@ namespace Ift232Tests
         [TestMethod]
         public void TurnUpdate()
         {
-            city.ResearchedTechnologies.Add(tech);
+            Building farm = city.AddBuilding((int)BuildingType.Farm);
+            farm.FinishConstruction();
+            city.ResearchedTechnologies.Add(TechnologyFactory.CreateTechnology(0, city));
             for (int i = 0; i < 10; i++)
             {
                 city.ResearchedTechnologies.ForEach(n => n.Update());
             }
-            Building farm = BuildingFactory.CreateBuilding((int)BuildingType.Farm, ref city);
-            Assert.IsTrue(farm.TurnsLeft == 0);
+            Building house = BuildingFactory.CreateBuilding((int)BuildingType.House, city);
+            Assert.IsTrue(house.TurnsLeft == 2);
         }
     }
 }

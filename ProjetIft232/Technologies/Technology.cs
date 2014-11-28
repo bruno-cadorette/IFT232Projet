@@ -12,7 +12,10 @@ namespace ProjetIft232.Technologies
     public class Technology : BuildableEntity
     {
         [DataMember]
-        public IEnumerable<int> AffectedBuilding { get; private set; }
+        public IEnumerable<int> AffectedBuildings { get; private set; }
+
+        [DataMember]
+        public IEnumerable<int> AffectedSoldiers { get; private set; }
         [DataMember]
         public Resources ApplicationCost { get; private set; }
         
@@ -27,7 +30,8 @@ namespace ProjetIft232.Technologies
         public Technology(Technology technology)
             : base(technology)
         {
-            AffectedBuilding = technology.AffectedBuilding;
+            AffectedBuildings = technology.AffectedBuildings;
+            AffectedSoldiers = technology.AffectedSoldiers;
             ApplicationCost = technology.ApplicationCost;
             Enhancements = technology.Enhancements;
         }
@@ -37,12 +41,14 @@ namespace ProjetIft232.Technologies
             string description, 
             Requirement requirement, 
             int turnsLeft, 
-            IEnumerable<int> affectedBuilding,
+            IEnumerable<int> affectedBuildings,
+            IEnumerable<int> affectedSoldiers,
             Resources applicationCost, 
             Enhancement enhancements)
             :base(id,name,description,turnsLeft,requirement)
         {
-            AffectedBuilding = affectedBuilding;
+            AffectedBuildings = affectedBuildings;
+            AffectedSoldiers = affectedSoldiers;
             ApplicationCost = applicationCost;
             Enhancements = enhancements;
         }
