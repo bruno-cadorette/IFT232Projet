@@ -127,7 +127,9 @@
       <Name>ProjetIft232</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="ResourcesIcon\icon.ico" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="ResourcesIcon\gold.png" />
     <Resource Include="ResourcesIcon\meat.png" />

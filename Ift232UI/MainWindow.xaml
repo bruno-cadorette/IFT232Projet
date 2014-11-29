@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
-        Title="MainWindow" Height="433.382" Width="631.156">
+        Title="MainWindow" Height="433.382" Width="631.156"
+        Icon="ResourcesIcon/icon.ico">
 
     <Grid Name="MyGrid">
         <Grid.ColumnDefinitions>
