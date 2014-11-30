@@ -9,6 +9,7 @@ namespace ProjetIft232.Buildings
 {
     [DataContract]
     [KnownType(typeof(Market))]
+    [KnownType(typeof(Casern))]
     public class Building : UpgradableEntity
     {
         
