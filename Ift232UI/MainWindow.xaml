@@ -165,7 +165,7 @@
                         <GradientStop Color="#FFBAE8F0" Offset="1"/>
                     </LinearGradientBrush>
                 </TabItem.Background>
-                <Grid Background="Purple">
+                <Grid Background="#FFF5DBF5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="17*"/>
                         <ColumnDefinition Width="152*"/>
