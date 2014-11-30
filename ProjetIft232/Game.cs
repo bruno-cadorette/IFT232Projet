@@ -185,21 +185,6 @@ namespace ProjetIft232
 
         }
 
-        public bool ResearchTechnology(int type)
-        {
-            Technology technology = TechnologyFactory.CreateTechnology(type, CurrentPlayer.CurrentCity);
-            if (technology == null)
-            {
-                return false;
-            }
-            else
-            {
-                CurrentPlayer.ResearchedTech.Add(technology);
-                CurrentPlayer.CurrentCity.RemoveResources(technology.Requirement.Resources);
-                return true;
-            }
-        }
-
         private int ifWin()
         {
             int population=0;

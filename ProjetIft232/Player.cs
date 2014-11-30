@@ -69,7 +69,7 @@ namespace ProjetIft232
 
         public bool ResearchTechnology(int type)
         {
-            Technology technology = TechnologyFactory.CreateTechnology(type, CurrentCity);
+            Technology technology = TechnologyFactory.CreateTechnology(type, CurrentCity.Ressources,  CurrentCity.Buildings, ResearchedTech);
             if (technology == null)
             {
                 return false;

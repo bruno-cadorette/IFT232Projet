@@ -13,7 +13,7 @@ namespace ProjetIft232.Army
             ArmyUnit unit = ArmyLoader.GetInstance().GetSoldier(id);
             if (unit != null)
             {
-                foreach (var tech in city.ResearchedTechnologies)
+                foreach (var tech in city.ResearchedTechnologies.Where(x=>!x.InConstruction && x.AffectedSoldiers.Any(soldier=>soldier==id)))
                 {
                     unit.Upgrade(tech);
                 }

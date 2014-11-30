@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ProjetIft232.Buildings;
 using System.Runtime.Serialization;
+using ProjetIft232.Army;
 
 namespace ProjetIft232.Technologies
 {
@@ -53,7 +54,26 @@ namespace ProjetIft232.Technologies
             Enhancements = enhancements;
         }
 
-
+        public bool CanAffect(UpgradableEntity entity)
+        {
+            if (entity is Building)
+            {
+                return AffectedBuildings.Any(x => x == entity.ID);
+            }
+            if(entity is ArmyUnit)
+            {
+                return AffectedSoldiers.Any(x => x == entity.ID);
+            }
+            else
+            {
+                throw new NotImplementedException("Vous n'avez pas prévu de cas pour cette upgradable entity!");
+            }
+        }
+        public bool CanAffect(ArmyUnit soldier)
+        {
+            return AffectedSoldiers.Any(x => x == soldier.ID);
+        }
+        
         public void Update()
         {
             if (InConstruction)

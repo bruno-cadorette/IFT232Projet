@@ -70,7 +70,10 @@ namespace ProjetIft232
             TurnsLeft = 0;
             InConstruction = false;
         }
-        
+        public override string ToString()
+        {
+            return Name;
+        }
 
 
 

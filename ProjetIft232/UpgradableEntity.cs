@@ -46,14 +46,14 @@ namespace ProjetIft232
 
         protected abstract void UpgradeEntity(Technology technology);
 
-        public bool AlreadyApplied(int technology)
+        public bool CanBeAffected(Technology technology)
         {
-            return _CurrentTechnologies.Any(n => n == technology);
+            return technology.CanAffect(this) && _CurrentTechnologies.All(x => x != technology.ID);
         }
 
         public bool CanBeUpgraded(Resources actualResource, Technology technology)
         {
-            return !InConstruction && technology.ApplicationCost <= actualResource && _CurrentTechnologies.All(x => x != technology.ID);
+            return !InConstruction && technology.ApplicationCost <= actualResource && CanBeAffected(technology);
         }
     }
 }

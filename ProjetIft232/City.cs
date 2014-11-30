@@ -14,7 +14,7 @@ namespace ProjetIft232
 {
     [DataContract]
     public class City
-    { 
+    {
         public static Resources CostToCreate = new Resources(1000, 1000, 1000, 1000, 500);
         private Resources BaseProduction()
         {
@@ -37,7 +37,7 @@ namespace ProjetIft232
         public List<ArmyUnit> recruitement { get; private set; }
 
         [DataMember]
-        public Armies army { get; private set; }
+        public Armies Army { get; private set; }
 
         [DataMember]
         public List<Technology> ResearchedTechnologies { get; private set; }
@@ -59,7 +59,7 @@ namespace ProjetIft232
             Buildings = new List<Building>();
 
             recruitement = new List<ArmyUnit>();
-            army = new Army.Armies();
+            Army = new Army.Armies();
             _turnsSinceCreation = 0;
         }
 
@@ -84,6 +84,30 @@ namespace ProjetIft232
             return Buildings.Count(n => n.Name == buildingName && n.InConstruction == inConstruction);
         }
 
+        public void UpgradeEntities(UpgradableEntity entity, Technology technology, int count)
+        {
+            IEnumerable<UpgradableEntity> entities = Enumerable.Empty<UpgradableEntity>();
+            if (entity is Building)
+            {
+                entities = Buildings;
+            }
+            else if (entity is ArmyUnit)
+            {
+                entities = Army.getUnits();
+            }
+
+            int n = 0;
+            foreach (UpgradableEntity item in entities)
+            {
+                if (n < count && item.ID == entity.ID && item.CanBeUpgraded(Ressources, technology))
+                {
+                    item.Upgrade(technology);
+                    RemoveResources(technology.ApplicationCost);
+                    n++;
+                }
+
+            }
+        }
 
         public bool TransferResources(City city, Resources resource)
         {
@@ -134,12 +158,12 @@ namespace ProjetIft232
 
         public bool IsBuilt(int bt)
         {
-           foreach (Building building in Buildings)
+            foreach (Building building in Buildings)
             {
                 if (building.ID == (int)bt)
                     return true;
             }
-           return false;
+            return false;
         }
 
         public void Update()
@@ -157,7 +181,7 @@ namespace ProjetIft232
                 unit.Update();
                 if (unit.InConstruction == false)
                 {
-                    army.addUnit(unit);
+                    Army.addUnit(unit);
                     finished.Add(unit);
                 }
             }
@@ -190,23 +214,19 @@ namespace ProjetIft232
             }
         }
 
-        public Building FindBuildingForReschearded(Technology tech)
-        {
-            return Buildings.FirstOrDefault(n => !n.AlreadyApplied(tech.ID) && tech.AffectedBuildings.Contains(n.ID));
-        }
-
         public string Attack(Armies BarbarianArmy)
         {
             string Resume = string.Format("La ville est attaqué par des barbares, ils sont {0} ", BarbarianArmy.size());
 
-            int armySize = army.size();
+            int armySize = Army.size();
             int BarbarianArmySize = BarbarianArmy.size();
 
-            if (army.size() == 0) {
+            if (Army.size() == 0)
+            {
                 BarbarianArmy.getUnits().ForEach(n => RemoveResources(n.Transport));
-                return Resume += string.Format( "Nous n'avions aucune defense, nous nous somme fait ecraser");
+                return Resume += string.Format("Nous n'avions aucune defense, nous nous somme fait ecraser");
             }
-            if (BarbarianArmy.Fight(army))
+            if (BarbarianArmy.Fight(Army))
             {
                 BarbarianArmy.getUnits().ForEach(n => RemoveResources(n.Transport));
                 Resume += string.Format("Nous avons perdu... Les Barbars sont repartis avec ns ressources !");
@@ -215,7 +235,7 @@ namespace ProjetIft232
             {
                 Resume += string.Format("Nous avons gagné!        ");
             }
-            Resume += string.Format("Dans la bataille nous avons perdu  {0} soldats et eux {1}", armySize - army.size(), BarbarianArmySize - BarbarianArmy.size());
+            Resume += string.Format("Dans la bataille nous avons perdu  {0} soldats et eux {1}", armySize - Army.size(), BarbarianArmySize - BarbarianArmy.size());
             return Resume;
 
         }
@@ -226,7 +246,7 @@ namespace ProjetIft232
             {
                 foreach (var tech in e.NewItems)
                 {
-                    ResearchedTechnologies.Add((Technology) tech);
+                    ResearchedTechnologies.Add((Technology)tech);
                 }
             }
         }

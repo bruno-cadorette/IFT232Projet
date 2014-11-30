@@ -20,6 +20,7 @@ using ProjetIft232.Army;
 using Xceed.Wpf.Toolkit;
 using ProjetIft232;
 using ProjetIft232.Buildings;
+using ProjetIft232.Technologies;
 using MessageBox = Xceed.Wpf.Toolkit.MessageBox;
 
 namespace Ift232UI
@@ -39,7 +40,7 @@ namespace Ift232UI
         private bool listBoxBuildingIsLoaded = false;
         private bool soldResourcesIsLoaded = false;
         private bool boughtResourcesIsLoaded = false;
-
+        private bool technologySelectedIsResearched = false;
         public MainWindow()
         {
             this.DataContext = this;
@@ -55,6 +56,7 @@ namespace Ift232UI
             Players.SelectedIndex = Game.PlayerIndex;
             Cities.Content = Game.CurrentPlayer.CurrentCity;
             UnitBox.ItemsSource = ArmyLoader.GetInstance().Soldiers();
+            TechnologyList.ItemsSource = TechnologyLoader.GetInstance().Technologies();
         }
 
 
@@ -106,10 +108,11 @@ namespace Ift232UI
             Players.SelectedIndex = Game.PlayerIndex;
             Cities.Content = Game.CurrentPlayer.CurrentCity;
             UnitBox.ItemsSource = ArmyLoader.GetInstance().Soldiers();
-            CurrentUnit.ItemsSource = Game.CurrentPlayer.CurrentCity.army.getUnits().Where(n => !n.InConstruction);
-            TabArmy.IsEnabled = Game.CurrentPlayer.CurrentCity.FinishedBuildings.Any(t => t.ID == 5);
+            CurrentUnit.ItemsSource = Game.CurrentPlayer.CurrentCity.Army.getUnits().Where(n => !n.InConstruction);
+            TabArmy.IsEnabled = Game.CurrentPlayer.CurrentCity.FinishedBuildings.Any(t => t is Casern);
             TabTrade.IsEnabled = Game.CurrentPlayer.CurrentCity.FinishedBuildings.Any(t => t is Market);
             UpdateRessource();
+            UpdateTechnologyTab();
             if (Listboxdereve.IsLoaded && Listboxdereve.SelectedItem != null)
             {
                 var currentValue = Listboxdereve.SelectedItem.ToString();
@@ -317,6 +320,95 @@ namespace Ift232UI
         private void FirstValue_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             UpdateMarketUi();
+        }
+
+        private void UpdateTechnologyTab()
+        {
+            TechnologyList.SelectedIndex = 0;
+            ApplyCountSlider.Value = 0;
+            ApplyCountSlider.IsEnabled = false;
+        }
+
+
+        private void TechnologyList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var technology = (Technology)TechnologyList.SelectedItem;
+            if (technology == null)
+            {
+                return;
+            }
+
+            
+            if(Game.CurrentPlayer.ResearchedTech.Any(x => !x.InConstruction && x.ID == technology.ID))
+            {
+                //Technology déjà faite
+                ApplyTechGrid.Visibility = Visibility.Visible;
+                var buildings = Game.CurrentPlayer.CurrentCity.Buildings
+                    .Where(building =>  building.CanBeAffected(technology))
+                    .GroupBy(x => x.ID)
+                    .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count()));
+
+                var soldiers = Game.CurrentPlayer.CurrentCity.Army.getUnits()
+                    .Where(soldier => technology.AffectedSoldiers.Any(x => soldier.ID == x))
+                    .GroupBy(x => x.ID)
+                    .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count()));
+
+                UpgradableEntityList.ItemsSource = buildings.Union(soldiers);
+                technologySelectedIsResearched = true;
+            }
+            else
+            {
+                technologySelectedIsResearched = false;
+                //Technology pas encore faite
+
+            }
+        }
+
+        private void UpgradableEntityList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selection = (CountableListItem<UpgradableEntity>)UpgradableEntityList.SelectedItem;
+            if (selection != null)
+            {
+                UpgradableEntityList.ItemsSource = Enumerable.Empty<UpgradableEntity>();
+                ApplyCountSlider.IsEnabled = true;
+                ApplyCountSlider.Value = 0;
+                ApplyCountSlider.Maximum = selection.Count;
+            }
+        }
+
+        private void TechnologyButton_Click(object sender, RoutedEventArgs e)
+        {
+            var technology = (Technology)TechnologyList.SelectedItem;
+            if (technology == null)
+            {
+                return;
+            }
+            if(technologySelectedIsResearched)
+            {
+                var entity = (CountableListItem<UpgradableEntity>)UpgradableEntityList.SelectedItem;
+                if (entity != null)
+                {
+                    Game.CurrentPlayer.CurrentCity.UpgradeEntities(entity.Item, technology, (int)ApplyCountSlider.Value);
+                }
+                Update();
+            }
+            else
+            {
+                if(Game.CurrentPlayer.ResearchTechnology(technology.ID))
+                {
+                    Update();
+                    MessageBox.Show("La recherche de la technologie à été lancé !");
+                }
+                else
+                {
+                    MessageBox.Show("Vous n'avez pas les prérequis pour faire cette technologie !");
+                }
+            }
+        }
+
+        private void ApplyCountSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            SliderCount.Content = (int)ApplyCountSlider.Value;
         }
     }
 }

@@ -81,7 +81,7 @@ namespace Ift232Tests
             Resources old = new Resources(city.Ressources);
             city.Attack(BarbarianArmyGenerator.CreateArmy(1));
             Assert.IsTrue(old == city.Ressources);
-            Assert.IsTrue(city.army.size() == 19);
+            Assert.IsTrue(city.Army.size() == 19);
         }
 
         [TestMethod]

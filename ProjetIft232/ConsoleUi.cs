@@ -95,7 +95,7 @@ namespace ProjetIft232
                         break;
                     case 1:
                         ShowCurrentBuildings(_Game.CurrentPlayer.CurrentCity.Buildings);
-                        if (_Game.CurrentPlayer.CurrentCity.army.size() > 0)
+                        if (_Game.CurrentPlayer.CurrentCity.Army.size() > 0)
                             ShowArmy(_Game.CurrentPlayer.CurrentCity);
                         Console.WriteLine(_Game.CurrentPlayer.CurrentCity.Ressources);
                         break;
@@ -445,7 +445,7 @@ namespace ProjetIft232
 
         private void ShowArmy(City city)
         {
-            foreach (var soldier in city.army.getUnits().GroupBy(x => x.Name).Select(x => String.Format("{0} : {1}", x.Key, x.Count())))
+            foreach (var soldier in city.Army.getUnits().GroupBy(x => x.Name).Select(x => String.Format("{0} : {1}", x.Key, x.Count())))
             {
                 Console.WriteLine(soldier);
             }
