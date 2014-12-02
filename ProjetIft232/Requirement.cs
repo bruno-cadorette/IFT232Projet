@@ -51,5 +51,22 @@ namespace ProjetIft232
         {
             return IsValid(actualResource, actualBuildings) && _Technologies.All(tech => actualTechnologies.Any(x => x.ID == tech && !x.InConstruction));
         }
+
+        public string toString()
+        {
+            string result="";
+            result += "Or : " + Resources.get("Gold") + " Viande : " + Resources.get("Meat") + " Bois : " + Resources.get("Wood") + " Roche : " + Resources.get("Rock") + " Population : " + Resources.get("Population");
+            result += " Batiments : ";
+            foreach (var each in Buildings)
+            {
+                result += " " + BuildingLoader.GetInstance()._entities[each].Name + " ";
+            }
+            result += " Technologies : ";
+            foreach (var each in _Technologies)
+            {
+                result += " " + TechnologyLoader.GetInstance()._entities[each].Name + " ";
+            }
+            return result;
+        }
     }
 }

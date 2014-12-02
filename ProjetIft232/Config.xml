@@ -15,7 +15,7 @@
       </Requirements>
     </Batiment>
 
-    <Batiment Name="Ferme" id = "1" turns="3" Description="Une parcelle de terre réservée à l'élevage et la culture afin de récolter de la nourriture.\n">
+    <Batiment Name="Ferme" id = "1" turns="3" Description="Une parcelle de terre réservée à l'élevage et la culture afin de récolter de la nourriture.">
       <Resources>
         <Meat>10</Meat>
       </Resources>
@@ -30,7 +30,7 @@
       </Requirements>
     </Batiment>
 
-    <Batiment Name="Mine" id = "2" turns="3" Description="Une infrastructure basée sous la terre exploitant les minéraux afin d'obtenir de l'or.\nOn a toujours besoin d'or...\n">
+    <Batiment Name="Mine" id = "2" turns="3" Description="Une infrastructure basée sous la terre exploitant les minéraux afin d'obtenir de l'or. On a toujours besoin d'or...">
       <Resources>
         <Gold>100</Gold>
       </Resources>

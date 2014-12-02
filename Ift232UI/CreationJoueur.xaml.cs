@@ -33,12 +33,27 @@ namespace Ift232UI
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Player player = new Player();
-            player.playerName = tbPlayer.Text;
-            player.Cities.Add(new City(tbCity.Text));
-            player.NextCity();
-            Game.Players.Add(player);
-            this.Close();
+            if (tbPlayer.Text == "")
+            {
+                tbPlayer.Text = "Homme sans nom";
+                if (tbCity.Text == "")
+                    tbCity.Text = "La cité sans nom";
+            }
+            else if (tbCity.Text == "")
+            {
+                tbCity.Text = "La cité sans nom";
+            } else if (Game.Players.Find( n => n.playerName == tbPlayer.Text) != null)
+            {
+                tbPlayer.Text = "Je copie le nom des autres";
+            }else
+            {
+                Player player = new Player();
+                player.playerName = tbPlayer.Text;
+                player.Cities.Add(new City(tbCity.Text));
+                player.NextCity();
+                Game.Players.Add(player);
+                this.Close();
+            }
         }
     }
 }

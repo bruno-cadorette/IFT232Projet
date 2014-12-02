@@ -34,11 +34,12 @@ namespace Ift232UI
         private void CreatePlayers_Click(object sender, RoutedEventArgs e)
         {
             int j = FirstValue.Value.GetValueOrDefault();
-            CreationJoueur[] j1=new CreationJoueur[j];
-            for (int i =0; i <j; i++)
+            CreationJoueur j1;
+            while(Game.Players.Count < j)
             {
-                j1[i] = new CreationJoueur(Game);
-                j1[i].ShowDialog();
+                j1 = new CreationJoueur(Game);
+                j1.ShowDialog();
+                j1.Close();
             }
             this.Close();
         }

@@ -51,12 +51,11 @@ namespace Ift232UI
             foreach(var player in Game.Players){
                 Players.Items.Add(player.playerName);
             }
-            
             Update();
             Players.SelectedIndex = Game.PlayerIndex;
             Cities.Content = Game.CurrentPlayer.CurrentCity;
             UnitBox.ItemsSource = ArmyLoader.GetInstance().Soldiers();
-            TechnologyList.ItemsSource = TechnologyLoader.GetInstance().Technologies();
+           
         }
 
 
@@ -65,9 +64,7 @@ namespace Ift232UI
             if (Game.CurrentPlayer.CurrentCity.Ressources.get("Population")>500)
             {
                 Game.CreateCity(tbNewCity.Text);
-                labelPopup.Content = "Ville créée !";
-                popup.IsOpen = true;
-                popup.StaysOpen = false;
+                MessageBox.Show("Ville créée !");
             }
             else
             {
@@ -93,12 +90,12 @@ namespace Ift232UI
             }
             else if (turnText == "Vous avez perdu!  :'( ")
             {
-                MessageBox.Show(turnText + "le jeu va quitter de manière Brutale");
+                MessageBox.Show(turnText + "le jeu va quitter de manière brutale");
                 Application.Current.Shutdown();
             }
             else if (turnText == "Vous avez gagné!")
             {
-                MessageBox.Show(turnText + "le jeu va quitter de manière Brutale");
+                MessageBox.Show(turnText + "le jeu va quitter de manière brutale");
                 Application.Current.Shutdown();
             }
         }
@@ -154,16 +151,11 @@ namespace Ift232UI
         {
             if (Game.CurrentPlayer.CurrentCity.AddBuilding(cbSelectBuilding.SelectedIndex)!=null)
             {
-                labelPopup.Content = "Bâtiment créé !!!";
-                popup.IsOpen = true;
-                popup.StaysOpen = false;
-
+                MessageBox.Show("Bâtiment créé !!!");
             }
             else 
             {
-                labelPopup.Content = "Le bâtiment n'a pu être créé faute de ressources!";
-                popup.IsOpen = true;
-                popup.StaysOpen = false;
+                MessageBox.Show( "Le bâtiment n'a pu être créé faute de ressources!");
 
             }
             Update();
@@ -259,15 +251,11 @@ namespace Ift232UI
             bool done = ((Market)Game.getMarket()).Achat(Game.CurrentPlayer.CurrentCity, qty, soldType.Key, boughtType.Key);
             if (done)
             {
-                labelPopup.Content = "Votre échange a bien eu lieu !!!";
-                popup.IsOpen = true;
-                popup.StaysOpen = false;
+                MessageBox.Show("Votre échange a bien eu lieu !!!");
             }
             else
             {
-                labelPopup.Content = "Votre échange n'a pas eu lieu !!!";
-                popup.IsOpen = true;
-                popup.StaysOpen = false;
+                MessageBox.Show("Votre échange n'a pas eu lieu !!!");
             }
           
          
@@ -303,7 +291,7 @@ namespace Ift232UI
                 {
                     if (!Game.CurrentPlayer.CurrentCity.AddArmy(armyTypeId))
                     {
-                        MessageBox.Show("Pas assez de ressource pour en produire!", "Production échoué", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                        MessageBox.Show("Pas assez de ressource pour en produire!", "Production échouée", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                         break;
                     }
                 }
@@ -324,21 +312,43 @@ namespace Ift232UI
 
         private void UpdateTechnologyTab()
         {
-            TechnologyList.SelectedIndex = 0;
+            TechnologyToDo.SelectedIndex = 0;
             ApplyCountSlider.Value = 0;
             ApplyCountSlider.IsEnabled = false;
+            Dictionary<int, Technology> tech = new Dictionary<int, Technology>();
+            bool isDone = false;
+            foreach (var each in TechnologyLoader.GetInstance().Technologies())
+            {
+                foreach (var each2 in Game.CurrentPlayer.ResearchedTech)
+                {
+                    if (each.ID == each2.ID)
+                    {
+                        isDone = true;
+                    }
+                }
+                if (!isDone)
+                {
+                    tech.Add(each.ID, each);
+                }
+                isDone = false;
+            }
+            if (tech.Count > 0)
+                TechnologyToDo.ItemsSource = tech.Select(n=>(Technology)n.Value);
+
+            TechnologyDone.ItemsSource = Game.CurrentPlayer.ResearchedTech;
         }
 
 
-        private void TechnologyList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void TechnologyToDo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var technology = (Technology)TechnologyList.SelectedItem;
+            var technology = (Technology)TechnologyToDo.SelectedItem;
             if (technology == null)
             {
                 return;
             }
-
-            
+            tbDescription.Text = technology.Description;
+            TechnologyButton.Content = "Rechercher";
+            tbRequisite.Text = technology.Requirement.toString();
             if(Game.CurrentPlayer.ResearchedTech.Any(x => !x.InConstruction && x.ID == technology.ID))
             {
                 //Technology déjà faite
@@ -362,6 +372,7 @@ namespace Ift232UI
                 //Technology pas encore faite
 
             }
+
         }
 
         private void UpgradableEntityList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -378,7 +389,7 @@ namespace Ift232UI
 
         private void TechnologyButton_Click(object sender, RoutedEventArgs e)
         {
-            var technology = (Technology)TechnologyList.SelectedItem;
+            var technology = (Technology)TechnologyToDo.SelectedItem;
             if (technology == null)
             {
                 return;
@@ -397,18 +408,45 @@ namespace Ift232UI
                 if(Game.CurrentPlayer.ResearchTechnology(technology.ID))
                 {
                     Update();
-                    MessageBox.Show("La recherche de la technologie à été lancé !");
+                    MessageBox.Show("La recherche de la technologie à été lancée !");
                 }
                 else
                 {
                     MessageBox.Show("Vous n'avez pas les prérequis pour faire cette technologie !");
                 }
             }
+
+            TechnologyButton.Content = "Appliquer";
         }
 
         private void ApplyCountSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             SliderCount.Content = (int)ApplyCountSlider.Value;
+        }
+
+        private void TechnologyDone_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var technology = (Technology)TechnologyToDo.SelectedItem;
+            if (technology == null)
+            {
+                return;
+            }
+            tbDescription.Text = technology.Description;
+            TechnologyButton.Content = "Appliquer";
+        }
+
+        private void TechnologyDone_GotFocus(object sender, RoutedEventArgs e)
+        {
+            tbDescription.Text = ((Technology)TechnologyDone.SelectedItem).Description;
+            tbRequisite.Text = ((Technology)TechnologyDone.SelectedItem).Requirement.toString();
+            TechnologyButton.Content = "Appliquer";
+        }
+
+        private void TechnologyToDo_GotFocus(object sender, RoutedEventArgs e)
+        {
+            tbDescription.Text = ((Technology)TechnologyToDo.SelectedItem).Description;
+            tbRequisite.Text = ((Technology)TechnologyToDo.SelectedItem).Requirement.toString();
+            TechnologyButton.Content = "Rechercher";
         }
     }
 }

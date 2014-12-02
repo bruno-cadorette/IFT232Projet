@@ -32,7 +32,15 @@
             <Label Name="Cities" Grid.Column="1" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" Width="146"/>
             <Button Name="getCities" Content="->" Grid.Column="1" HorizontalAlignment="Left" Margin="146,2,0,0" VerticalAlignment="Top" Width="57" Height="28" Click="getCities_Click"/>
         </Grid>
-        <StackPanel Grid.Row="1" Grid.Column="0" Background="Aqua" FlowDirection="LeftToRight" Orientation="Horizontal">
+        <StackPanel Grid.Row="1" Grid.Column="0" FlowDirection="LeftToRight" Orientation="Horizontal">
+            <StackPanel.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="White" Offset="0.333"/>
+                    <GradientStop Color="#FFA8A1A1" Offset="1"/>
+                    <GradientStop Color="#FFA4A4A4"/>
+                    <GradientStop Color="White" Offset="0.612"/>
+                </LinearGradientBrush>
+            </StackPanel.Background>
 
             <Image Source="ResourcesIcon/gold.png"></Image>
             <Label Name="lbResGold"></Label>
@@ -70,7 +78,7 @@
                     <Button Name="btnNewBuilding" Content="Créer bâtiment" HorizontalAlignment="Left" Margin="124,147,0,0" VerticalAlignment="Top" Width="132" Height="101" Grid.Column="7" Click="btnNewBuilding_Click"/>
                     <TextBox Name="tbNewCity" HorizontalAlignment="Left" Height="23" Margin="0,51,0,0" TextWrapping="Wrap" Text="Nom future ville" VerticalAlignment="Top" Width="120" Grid.Column="6" Grid.ColumnSpan="2"/>
                     <ComboBox Name="cbSelectBuilding" HorizontalAlignment="Left" Margin="0,104,0,0" VerticalAlignment="Top" Width="120" Grid.Column="6" Loaded="cbSelectBuilding_Loaded" SelectionChanged="cbSelectBuilding_SelectionChanged" Grid.ColumnSpan="2"/>
-                    <TextBox Name="tbBuildingDatas"  Grid.ColumnSpan="8" HorizontalAlignment="Left" Height="101" Margin="10,147,0,0" TextWrapping="Wrap" Text="Données sur bâtiment" VerticalAlignment="Top" Width="326"/>
+                    <TextBox Name="tbBuildingDatas" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" Grid.ColumnSpan="8" HorizontalAlignment="Left" Height="101" Margin="10,147,0,0" Text="Données sur bâtiment" VerticalAlignment="Top" Width="326"/>
                     <Label Content="Sélectionnez un bâtiment :" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top" Width="175" Grid.ColumnSpan="6"/>
                     <Label Content="Nommez votre ville : " HorizontalAlignment="Left" Margin="10,48,0,0" VerticalAlignment="Top" Grid.ColumnSpan="6" Width="129"/>
                 </Grid>
@@ -146,14 +154,27 @@
                     </LinearGradientBrush>
                 </TabItem.Background>
                 <Grid Background="#FFD0E6E5">
-                    <ListBox x:Name="TechnologyList" HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="TechnologyList_SelectionChanged"/>
-                    <Grid x:Name="ApplyTechGrid" HorizontalAlignment="Left" Height="215" Margin="292,10,0,0" VerticalAlignment="Top" Width="315">
-                        <ListBox x:Name="UpgradableEntityList" HorizontalAlignment="Left" Height="100" Margin="166,10,0,0" VerticalAlignment="Top" Width="139" SelectionChanged="UpgradableEntityList_SelectionChanged"/>
-                        <Slider x:Name="ApplyCountSlider" TickFrequency="1" IsSnapToTickEnabled="True" HorizontalAlignment="Left" Margin="166,134,0,0" VerticalAlignment="Top" Width="139" ValueChanged="ApplyCountSlider_ValueChanged"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="18*"/>
+                        <ColumnDefinition Width="595*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListBox x:Name="TechnologyToDo" HorizontalAlignment="Left" Height="97" Margin="10,54,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="TechnologyToDo_SelectionChanged" Grid.ColumnSpan="2" GotFocus="TechnologyToDo_GotFocus"/>
+                    <Grid x:Name="ApplyTechGrid" HorizontalAlignment="Left" Height="215" Margin="274.134,10,0,0" VerticalAlignment="Top" Width="315" Grid.Column="1">
+                        <ListBox x:Name="UpgradableEntityList" HorizontalAlignment="Left" Height="90" Margin="166,47,0,0" VerticalAlignment="Top" Width="139" SelectionChanged="UpgradableEntityList_SelectionChanged"/>
+                        <Slider x:Name="ApplyCountSlider" TickFrequency="1" IsSnapToTickEnabled="True" HorizontalAlignment="Left" Margin="166,170,0,0" VerticalAlignment="Top" Width="139" ValueChanged="ApplyCountSlider_ValueChanged"/>
                         <Label x:Name="UpgradableCost" HorizontalAlignment="Left" Margin="166,169,0,0" VerticalAlignment="Top"/>
-                        <Label x:Name="SliderCount" Content="0" HorizontalAlignment="Left" Margin="216,169,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.553,0.192"/>
+                        <Label x:Name="SliderCount" Content="0" HorizontalAlignment="Left" Margin="225,197,0,-8" VerticalAlignment="Top" RenderTransformOrigin="0.553,0.192"/>
                     </Grid>
-                    <Button x:Name="TechnologyButton" Content="Ok" HorizontalAlignment="Left" Margin="453,265,0,0" VerticalAlignment="Top" Width="75" Click="TechnologyButton_Click"/>
+                    <Button x:Name="TechnologyButton" Content="Ok" HorizontalAlignment="Left" Margin="435.134,265,0,0" VerticalAlignment="Top" Width="75" Click="TechnologyButton_Click" Grid.Column="1"/>
+                    <ListBox x:Name="TechnologyDone" Height="100" Margin="10,187,503,0" VerticalAlignment="Top" Width="100" Grid.ColumnSpan="2" SelectionChanged="TechnologyDone_SelectionChanged" GotFocus="TechnologyDone_GotFocus" />
+                    <TextBox Name="tbDescription" IsReadOnly="True" HorizontalAlignment="Left" Height="93" Margin="134.134,54,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="262" Grid.Column="1"/>
+                    <TextBox Name ="tbRequisite" IsReadOnly="True"  HorizontalAlignment="Left" Height="100" Margin="134,187,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="262" Grid.Column="1"/>
+                    <Label Name="labelresearch" Content="A rechercher" HorizontalAlignment="Left" Margin="10,28,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                    <Label Name="labelapply" Content="Déja recherché" HorizontalAlignment="Left" Margin="10,156,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.415,-5.199" Grid.ColumnSpan="2"/>
+                    <Label x:Name="labelrequisite" Content="Prérequis" HorizontalAlignment="Left" Margin="134.134,156,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.415,-5.199" Grid.Column="1"/>
+                    <Label x:Name="labelDescription" Content="Description" HorizontalAlignment="Left" Margin="134.134,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.415,-5.199" Grid.Column="1"/>
+                    <Label x:Name="labelBuilding" Content="Appliquer sur" HorizontalAlignment="Left" Margin="440.134,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.415,-5.199" Grid.Column="1"/>
+                    <Label x:Name="labelnumber" Content="Nombre" HorizontalAlignment="Left" Margin="440.134,156,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.415,-5.199" Grid.Column="1"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Etat de la ville">

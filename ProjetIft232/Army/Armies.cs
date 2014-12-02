@@ -73,7 +73,8 @@ namespace ProjetIft232.Army
 
                     foreach (var unit in units)
                     {
-                        unit.moral -= moral/unit.moral;
+                        if(unit.moral > 0)
+                            unit.moral -= moral/unit.moral;
                         if (unit.moral < 30)
                         {
                             rand = RandomGen.GetInstance().Next(0, 100);

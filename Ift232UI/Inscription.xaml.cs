@@ -33,8 +33,13 @@ namespace Ift232UI
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            CreationJoueur j1 = new CreationJoueur(Game);
-            j1.ShowDialog();
+            CreationJoueur j1;
+            while (Game.Players.Count <= 0)
+            {
+                j1 = new CreationJoueur(Game);
+                j1.ShowDialog();
+                j1.Close();
+            }
             this.Close();
         }
 
