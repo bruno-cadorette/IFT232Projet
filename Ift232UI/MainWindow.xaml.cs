@@ -144,7 +144,11 @@ namespace Ift232UI
         {
             var buildings = BuildingLoader.GetInstance().Buildings().ToArray();
             var currentValue = (sender as ComboBox).SelectedItem.ToString();
-            tbBuildingDatas.Text = buildings.First(n => n.Name == currentValue).Description;
+            Building currentBuilding = buildings.First(n => n.Name == currentValue);
+            tbBuildingDatas.Text = currentBuilding.Description;
+            tbBuildingDatas.Text += currentBuilding.Requirement.toString();
+            tbBuildingDatas.Text += " Nombre de tours nécessaires : ";
+            tbBuildingDatas.Text += BuildingLoader.GetInstance().GetBuilding(currentBuilding.ID).TurnsLeft;
         }
 
         private void btnNewBuilding_Click(object sender, RoutedEventArgs e)
@@ -333,8 +337,9 @@ namespace Ift232UI
                 isDone = false;
             }
             if (tech.Count > 0)
-                TechnologyToDo.ItemsSource = tech.Select(n=>(Technology)n.Value);
-
+                TechnologyToDo.ItemsSource = tech.Select(n => (Technology)n.Value);
+            else
+                TechnologyToDo.ItemsSource = null;
             TechnologyDone.ItemsSource = Game.CurrentPlayer.ResearchedTech;
         }
 
@@ -347,31 +352,9 @@ namespace Ift232UI
                 return;
             }
             tbDescription.Text = technology.Description;
-            TechnologyButton.Content = "Rechercher";
             tbRequisite.Text = technology.Requirement.toString();
-            if(Game.CurrentPlayer.ResearchedTech.Any(x => !x.InConstruction && x.ID == technology.ID))
-            {
-                //Technology déjà faite
-                ApplyTechGrid.Visibility = Visibility.Visible;
-                var buildings = Game.CurrentPlayer.CurrentCity.Buildings
-                    .Where(building =>  building.CanBeAffected(technology))
-                    .GroupBy(x => x.ID)
-                    .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count()));
-
-                var soldiers = Game.CurrentPlayer.CurrentCity.Army.getUnits()
-                    .Where(soldier => technology.AffectedSoldiers.Any(x => soldier.ID == x))
-                    .GroupBy(x => x.ID)
-                    .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count()));
-
-                UpgradableEntityList.ItemsSource = buildings.Union(soldiers);
-                technologySelectedIsResearched = true;
-            }
-            else
-            {
-                technologySelectedIsResearched = false;
-                //Technology pas encore faite
-
-            }
+            TechnologyButton.Content = "Rechercher";
+            
 
         }
 
@@ -389,23 +372,25 @@ namespace Ift232UI
 
         private void TechnologyButton_Click(object sender, RoutedEventArgs e)
         {
-            var technology = (Technology)TechnologyToDo.SelectedItem;
-            if (technology == null)
-            {
-                return;
-            }
+            
             if(technologySelectedIsResearched)
             {
+                var technologyDone = (Technology)TechnologyDone.SelectedItem;
+                if (technologyDone == null)
+                    return;
                 var entity = (CountableListItem<UpgradableEntity>)UpgradableEntityList.SelectedItem;
                 if (entity != null)
                 {
-                    Game.CurrentPlayer.CurrentCity.UpgradeEntities(entity.Item, technology, (int)ApplyCountSlider.Value);
+                    Game.CurrentPlayer.CurrentCity.UpgradeEntities(entity.Item, technologyDone, (int)ApplyCountSlider.Value);
                 }
                 Update();
             }
             else
             {
-                if(Game.CurrentPlayer.ResearchTechnology(technology.ID))
+                var technologyToDo = (Technology)TechnologyToDo.SelectedItem;
+                if (technologyToDo == null)
+                    return;
+                if(Game.CurrentPlayer.ResearchTechnology(technologyToDo.ID))
                 {
                     Update();
                     MessageBox.Show("La recherche de la technologie à été lancée !");
@@ -415,8 +400,6 @@ namespace Ift232UI
                     MessageBox.Show("Vous n'avez pas les prérequis pour faire cette technologie !");
                 }
             }
-
-            TechnologyButton.Content = "Appliquer";
         }
 
         private void ApplyCountSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -426,27 +409,74 @@ namespace Ift232UI
 
         private void TechnologyDone_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var technology = (Technology)TechnologyToDo.SelectedItem;
+            var technology = (Technology)TechnologyDone.SelectedItem;
             if (technology == null)
             {
                 return;
             }
             tbDescription.Text = technology.Description;
+            tbRequisite.Text = technology.Requirement.toString();
+            if (technology.InConstruction)
+                tbRequisite.Text += " Nombre de tours restants :" + technology.TurnsLeft;
             TechnologyButton.Content = "Appliquer";
+
+            if (Game.CurrentPlayer.ResearchedTech.Any(x => !x.InConstruction && x.ID == technology.ID))
+            {
+                //Technology déjà faite
+                ApplyTechGrid.Visibility = Visibility.Visible;
+                var buildings = Game.CurrentPlayer.CurrentCity.Buildings
+                    .Where(building => building.CanBeAffected(technology))
+                    .GroupBy(x => x.ID)
+                    .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count()));
+
+                var soldiers = Game.CurrentPlayer.CurrentCity.Army.getUnits()
+                    .Where(soldier => technology.AffectedSoldiers.Any(x => soldier.ID == x))
+                    .GroupBy(x => x.ID)
+                    .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count()));
+
+                UpgradableEntityList.ItemsSource = buildings.Union(soldiers);
+                technologySelectedIsResearched = true;
+            }
+            else
+            {
+                technologySelectedIsResearched = false;
+                //Technology pas encore faite
+                MessageBox.Show("Hey");
+            }
         }
 
-        private void TechnologyDone_GotFocus(object sender, RoutedEventArgs e)
+        private void UnitBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            tbDescription.Text = ((Technology)TechnologyDone.SelectedItem).Description;
-            tbRequisite.Text = ((Technology)TechnologyDone.SelectedItem).Requirement.toString();
-            TechnologyButton.Content = "Appliquer";
+            ArmyRequirementUpdate();
         }
 
-        private void TechnologyToDo_GotFocus(object sender, RoutedEventArgs e)
+        private void ArmyRequirementUpdate()
         {
-            tbDescription.Text = ((Technology)TechnologyToDo.SelectedItem).Description;
-            tbRequisite.Text = ((Technology)TechnologyToDo.SelectedItem).Requirement.toString();
-            TechnologyButton.Content = "Rechercher";
+            var army = (ArmyUnit)UnitBox.SelectedItem;
+            if (army == null)
+                return;
+            try
+            {
+                int number = (int)SoldierQuantityBox.Value;
+                ArmyRequirement.Content = "";
+                ArmyRequirement.Content += "Or : " + army.Requirement.Resources.get("Gold") * number;
+                ArmyRequirement.Content += " / Viande : " + army.Requirement.Resources.get("Meat") * number;
+                ArmyRequirement.Content += " / Bois : " + army.Requirement.Resources.get("Wood") * number;
+                ArmyRequirement.Content += " / Roche : " + army.Requirement.Resources.get("Rock") * number;
+                ArmyRequirement.Content += " / Population : " + army.Requirement.Resources.get("Population") * number;
+            }
+            catch (InvalidOperationException)
+            {
+
+            }
         }
+
+        private void SoldierQuantityBox_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (SoldierQuantityBox.Value < 0)
+                SoldierQuantityBox.Value = 0;
+            ArmyRequirementUpdate();
+        }
+
     }
 }

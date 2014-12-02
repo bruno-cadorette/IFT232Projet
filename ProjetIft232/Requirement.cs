@@ -56,7 +56,7 @@ namespace ProjetIft232
         {
             string result="";
             result += "Or : " + Resources.get("Gold") + " Viande : " + Resources.get("Meat") + " Bois : " + Resources.get("Wood") + " Roche : " + Resources.get("Rock") + " Population : " + Resources.get("Population");
-            result += " / Batiments : ";
+            result += " Batiments : ";
             foreach (var each in Buildings)
             {
                 result += " " + BuildingLoader.GetInstance()._entities[each].Name + " ";

@@ -70,15 +70,16 @@
                         <ColumnDefinition Width="9*"/>
                         <ColumnDefinition Width="39*"/>
                         <ColumnDefinition Width="9*"/>
-                        <ColumnDefinition Width="111*"/>
+                        <ColumnDefinition Width="82*"/>
+                        <ColumnDefinition Width="29*"/>
                         <ColumnDefinition Width="17*"/>
                         <ColumnDefinition Width="371*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Name="btnNewCity" Content="Créer ville" Grid.Column="7" HorizontalAlignment="Left" Margin="124,48,0,0" VerticalAlignment="Top" Width="119" Height="29" Click="btnNewCity_Click"/>
-                    <Button Name="btnNewBuilding" Content="Créer bâtiment" HorizontalAlignment="Left" Margin="124,147,0,0" VerticalAlignment="Top" Width="132" Height="101" Grid.Column="7" Click="btnNewBuilding_Click"/>
-                    <TextBox Name="tbNewCity" HorizontalAlignment="Left" Height="23" Margin="0,51,0,0" TextWrapping="Wrap" Text="Nom future ville" VerticalAlignment="Top" Width="120" Grid.Column="6" Grid.ColumnSpan="2"/>
-                    <ComboBox Name="cbSelectBuilding" HorizontalAlignment="Left" Margin="0,104,0,0" VerticalAlignment="Top" Width="120" Grid.Column="6" Loaded="cbSelectBuilding_Loaded" SelectionChanged="cbSelectBuilding_SelectionChanged" Grid.ColumnSpan="2"/>
-                    <TextBox Name="tbBuildingDatas" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" Grid.ColumnSpan="8" HorizontalAlignment="Left" Height="101" Margin="10,147,0,0" Text="Données sur bâtiment" VerticalAlignment="Top" Width="326"/>
+                    <Button Name="btnNewCity" Content="Créer ville" Grid.Column="8" HorizontalAlignment="Left" Margin="124,48,0,0" VerticalAlignment="Top" Width="119" Height="29" Click="btnNewCity_Click"/>
+                    <Button Name="btnNewBuilding" Content="Créer bâtiment" HorizontalAlignment="Left" Margin="124,147,0,0" VerticalAlignment="Top" Width="132" Height="101" Grid.Column="8" Click="btnNewBuilding_Click"/>
+                    <TextBox Name="tbNewCity" HorizontalAlignment="Left" Height="23" Margin="0,51,0,0" TextWrapping="Wrap" Text="Nom future ville" VerticalAlignment="Top" Width="120" Grid.Column="7" Grid.ColumnSpan="2"/>
+                    <ComboBox Name="cbSelectBuilding" HorizontalAlignment="Left" Margin="0,104,0,0" VerticalAlignment="Top" Width="120" Grid.Column="7" Loaded="cbSelectBuilding_Loaded" SelectionChanged="cbSelectBuilding_SelectionChanged" Grid.ColumnSpan="2"/>
+                    <TextBox Name="tbBuildingDatas" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" Grid.ColumnSpan="9" HorizontalAlignment="Left" Height="101" Margin="10,147,0,0" Text="Données sur bâtiment" VerticalAlignment="Top" Width="326"/>
                     <Label Content="Sélectionnez un bâtiment :" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top" Width="175" Grid.ColumnSpan="6"/>
                     <Label Content="Nommez votre ville : " HorizontalAlignment="Left" Margin="10,48,0,0" VerticalAlignment="Top" Grid.ColumnSpan="6" Width="129"/>
                 </Grid>
@@ -97,12 +98,13 @@
                         <ColumnDefinition Width="35*"/>
                         <ColumnDefinition Width="353*"/>
                     </Grid.ColumnDefinitions>
-                    <ComboBox Name="UnitBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,17,0,0" Width="95"/>
+                    <ComboBox Name="UnitBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,17,0,0" Width="95" SelectionChanged="UnitBox_SelectionChanged"/>
                     <Button Content="Produire" Grid.Column="3" HorizontalAlignment="Left" Margin="250,18,0,0" VerticalAlignment="Top" Width="93" Click="ButtonBase_OnClick"/>
-                    <xctk:IntegerUpDown Name="SoldierQuantityBox" Grid.Column="3" HorizontalAlignment="Left" Height="23" Margin="62,17,0,0"  Watermark="Quantité à produire" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.507,0.203"/>
-                    <xctk:CheckListBox Name="CurrentUnit" Grid.ColumnSpan="4" Grid.Column="0" HorizontalAlignment="Left" Height="144" Margin="24,62,0,0" VerticalAlignment="Top" Width="473"/>
-                    <Button Content="Attaquer !!!" HorizontalAlignment="Left" Margin="24,211,0,0" VerticalAlignment="Top" Width="473" Grid.ColumnSpan="4"
+                    <xctk:IntegerUpDown Name="SoldierQuantityBox" Grid.Column="3" HorizontalAlignment="Left" Height="23" Margin="62,17,0,0"  Watermark="Quantité à produire" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.507,0.203" ValueChanged="SoldierQuantityBox_ValueChanged"/>
+                    <xctk:CheckListBox Name="CurrentUnit" Grid.ColumnSpan="4" Grid.Column="0" HorizontalAlignment="Left" Height="144" Margin="76,98,0,0" VerticalAlignment="Top" Width="473"/>
+                    <Button Content="Attaquer !!!" HorizontalAlignment="Left" Margin="76,242,0,0" VerticalAlignment="Top" Width="473" Grid.ColumnSpan="4"
                             Grid.Column="0" Height="39" Click="btnAttaquer"/>
+                    <Label Name="ArmyRequirement" Grid.ColumnSpan="4" Content=" " HorizontalAlignment="Center" Height="28" Margin="76,56,68.594,0" VerticalAlignment="Top" Width="473"/>
                 </Grid>
             </TabItem>
             <TabItem Name="TabTrade" Header="Marché" Height="22" VerticalAlignment="Top">
@@ -155,26 +157,28 @@
                 </TabItem.Background>
                 <Grid Background="#FFD0E6E5">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="18*"/>
-                        <ColumnDefinition Width="595*"/>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="13*"/>
+                        <ColumnDefinition Width="0*"/>
+                        <ColumnDefinition Width="599*"/>
                     </Grid.ColumnDefinitions>
-                    <ListBox x:Name="TechnologyToDo" HorizontalAlignment="Left" Height="97" Margin="10,54,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="TechnologyToDo_SelectionChanged" Grid.ColumnSpan="2" GotFocus="TechnologyToDo_GotFocus"/>
-                    <Grid x:Name="ApplyTechGrid" HorizontalAlignment="Left" Height="215" Margin="274.134,10,0,0" VerticalAlignment="Top" Width="315" Grid.Column="1">
+                    <ListBox x:Name="TechnologyToDo" HorizontalAlignment="Left" Height="97" Margin="5.06,54,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="TechnologyToDo_SelectionChanged" Grid.ColumnSpan="3" Grid.Column="1"/>
+                    <Grid x:Name="ApplyTechGrid" HorizontalAlignment="Left" Height="215" Margin="274,10,0,0" VerticalAlignment="Top" Width="315" Grid.Column="2" Grid.ColumnSpan="2">
                         <ListBox x:Name="UpgradableEntityList" HorizontalAlignment="Left" Height="90" Margin="166,47,0,0" VerticalAlignment="Top" Width="139" SelectionChanged="UpgradableEntityList_SelectionChanged"/>
                         <Slider x:Name="ApplyCountSlider" TickFrequency="1" IsSnapToTickEnabled="True" HorizontalAlignment="Left" Margin="166,170,0,0" VerticalAlignment="Top" Width="139" ValueChanged="ApplyCountSlider_ValueChanged"/>
                         <Label x:Name="UpgradableCost" HorizontalAlignment="Left" Margin="166,169,0,0" VerticalAlignment="Top"/>
                         <Label x:Name="SliderCount" Content="0" HorizontalAlignment="Left" Margin="225,197,0,-8" VerticalAlignment="Top" RenderTransformOrigin="0.553,0.192"/>
                     </Grid>
-                    <Button x:Name="TechnologyButton" Content="Ok" HorizontalAlignment="Left" Margin="435.134,265,0,0" VerticalAlignment="Top" Width="75" Click="TechnologyButton_Click" Grid.Column="1"/>
-                    <ListBox x:Name="TechnologyDone" Height="100" Margin="10,187,503,0" VerticalAlignment="Top" Width="100" Grid.ColumnSpan="2" SelectionChanged="TechnologyDone_SelectionChanged" GotFocus="TechnologyDone_GotFocus" />
-                    <TextBox Name="tbDescription" IsReadOnly="True" HorizontalAlignment="Left" Height="93" Margin="134.134,54,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="262" Grid.Column="1"/>
-                    <TextBox Name ="tbRequisite" IsReadOnly="True"  HorizontalAlignment="Left" Height="100" Margin="134,187,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="262" Grid.Column="1"/>
-                    <Label Name="labelresearch" Content="A rechercher" HorizontalAlignment="Left" Margin="10,28,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-                    <Label Name="labelapply" Content="Déja recherché" HorizontalAlignment="Left" Margin="10,156,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.415,-5.199" Grid.ColumnSpan="2"/>
-                    <Label x:Name="labelrequisite" Content="Prérequis" HorizontalAlignment="Left" Margin="134.134,156,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.415,-5.199" Grid.Column="1"/>
-                    <Label x:Name="labelDescription" Content="Description" HorizontalAlignment="Left" Margin="134.134,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.415,-5.199" Grid.Column="1"/>
-                    <Label x:Name="labelBuilding" Content="Appliquer sur" HorizontalAlignment="Left" Margin="440.134,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.415,-5.199" Grid.Column="1"/>
-                    <Label x:Name="labelnumber" Content="Nombre" HorizontalAlignment="Left" Margin="440.134,156,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.415,-5.199" Grid.Column="1"/>
+                    <Button x:Name="TechnologyButton" Content="Ok" HorizontalAlignment="Left" Margin="435,265,0,0" VerticalAlignment="Top" Width="75" Click="TechnologyButton_Click" Grid.Column="2" Grid.ColumnSpan="2"/>
+                    <ListBox x:Name="TechnologyDone" Height="100" Margin="7.06,187,505,0" VerticalAlignment="Top" Width="100" Grid.ColumnSpan="3" SelectionChanged="TechnologyDone_SelectionChanged" Grid.Column="1" />
+                    <TextBox Name="tbDescription" IsReadOnly="True" HorizontalAlignment="Left" Height="93" Margin="134,54,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="262" Grid.Column="2" Grid.ColumnSpan="2"/>
+                    <TextBox Name ="tbRequisite" IsReadOnly="True"  HorizontalAlignment="Left" Height="100" Margin="134,187,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="262" Grid.Column="2" Grid.ColumnSpan="2"/>
+                    <Label Name="labelresearch" Content="A rechercher" HorizontalAlignment="Left" Margin="5.06,28,0,0" VerticalAlignment="Top" Grid.ColumnSpan="3" Grid.Column="1"/>
+                    <Label Name="labelapply" Content="Déja recherché" HorizontalAlignment="Left" Margin="5.06,156,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.415,-5.199" Grid.ColumnSpan="3" Grid.Column="1"/>
+                    <Label x:Name="labelrequisite" Content="Prérequis" HorizontalAlignment="Left" Margin="134,156,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.415,-5.199" Grid.Column="2" Grid.ColumnSpan="2"/>
+                    <Label x:Name="labelDescription" Content="Description" HorizontalAlignment="Left" Margin="134,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.415,-5.199" Grid.Column="2" Grid.ColumnSpan="2"/>
+                    <Label x:Name="labelBuilding" Content="Appliquer sur" HorizontalAlignment="Left" Margin="440,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.415,-5.199" Grid.Column="2" Grid.ColumnSpan="2"/>
+                    <Label x:Name="labelnumber" Content="Nombre" HorizontalAlignment="Left" Margin="440,156,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.415,-5.199" Grid.Column="2" Grid.ColumnSpan="2"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Etat de la ville">
