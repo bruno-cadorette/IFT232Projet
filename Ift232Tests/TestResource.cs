@@ -56,10 +56,10 @@ namespace Ift232Tests
             Resources rs3 = res + res2;
 
             Resources rs4 = res - res2;
-            Assert.IsTrue(rs3.get("Gold") == 2);
-            Assert.IsTrue(rs4.get("Gold") == 0);
-            Assert.IsTrue( rs3.get("Meat") == 0 && rs3.get("Rock") == 0 && rs3.get("Population") == 0 && rs3.get("Wood") == 0);
-            Assert.IsTrue(rs4.get("Meat") == 0 && rs4.get("Rock") == 0 && rs4.get("Population") == 0 && rs4.get("Wood") == 0);
+            Assert.IsTrue(rs3[ResourcesType.Gold] == 2);
+            Assert.IsTrue(rs4[ResourcesType.Gold] == 0);
+            Assert.IsTrue( rs3[ResourcesType.Meat] == 0 && rs3[ResourcesType.Rock] == 0 && rs3[ResourcesType.Population] == 0 && rs3[ResourcesType.Wood] == 0);
+            Assert.IsTrue(rs4[ResourcesType.Meat] == 0 && rs4[ResourcesType.Rock] == 0 && rs4[ResourcesType.Population] == 0 && rs4[ResourcesType.Wood] == 0);
         }
 
         [TestMethod]
@@ -120,7 +120,7 @@ namespace Ift232Tests
             Dictionary<ResourcesType, int> rsc = new Dictionary<ResourcesType, int>();
             rsc.Add(ResourcesType.Gold, 1);
 
-            city.RemoveResources(new Resources(10000,10000,10000,10000,10000));
+            city.RemoveResources(new Resources { Wood = 10000, Gold = 10000, Meat = 10000, Rock = 10000, Population = 1000 });
 
             Resources res = new Resources(rsc);
             Dictionary<ResourcesType, int> rsc6 = new Dictionary<ResourcesType, int>();

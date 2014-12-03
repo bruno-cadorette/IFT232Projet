@@ -13,12 +13,6 @@ namespace ProjetIft232.Buildings
     {
         [DataMember]
         private Resources resources;
-        [DataMember]
-        public int RatioBois { get; private set; }
-        [DataMember]
-        public int RatioViande { get; private set; }
-        [DataMember]
-        public int RatioPierre{ get; private set; }
 
         public Market()
         {
@@ -28,10 +22,7 @@ namespace ProjetIft232.Buildings
         public Market(Building building,  Resources marketResources)
             : base(building)
         {
-            resources = new Resources(100000, 100000, 100000, 100000, 0);
-            this.RatioBois = 15;
-            this.RatioPierre = 12;
-            this.RatioViande = 8;
+            resources = new Resources { Wood = 10000, Gold = 10000, Meat = 10000, Rock = 10000 };
             
         }
 
@@ -49,22 +40,7 @@ namespace ProjetIft232.Buildings
 
         public int Conversion (int nb, ResourcesType type)
         {
-           
-            int ratio=0;
-            switch (type){
-                case ResourcesType.Wood:
-                    ratio = RatioBois;
-                    break;
-                case ResourcesType.Rock:
-                    ratio = RatioPierre;
-                    break;
-                case ResourcesType.Meat:
-                    ratio = RatioViande;
-                    break;
-                default:
-                    return 0;
-            }
-             return nb*ratio;
+             return (int) Math.Floor(nb*ResourcesValues[type]);
            
         }
 
@@ -77,8 +53,8 @@ namespace ProjetIft232.Buildings
         {
             { ResourcesType.Gold, 1},
             { ResourcesType.Meat, 8},
-            { ResourcesType.Rock, 15},
-            { ResourcesType.Wood, 12},
+            { ResourcesType.Rock, 12},
+            { ResourcesType.Wood, 15},
         };
 
         /// <summary>

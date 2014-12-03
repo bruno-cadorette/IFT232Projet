@@ -6,6 +6,7 @@ using ProjetIft232.Buildings;
 using ProjetIft232.Technologies;
 using System.Runtime.Serialization;
 using System.IO;
+using ProjetIft232.Utility;
 
 namespace ProjetIft232
 {
@@ -66,7 +67,6 @@ namespace ProjetIft232
         public string NextTurn()
         {
             string turnText = "";
-            int win = 0;
             do
             {      
                 turnText = NextTurnInternal();
@@ -79,17 +79,11 @@ namespace ProjetIft232
                 }
             }
             while (CurrentPlayer is PlayerAI);
-            win = ifWin();
-            if (win == 0)
-            {
-                win = ifLose();
-            }
-            if (win == 1)
+            if (HasWin())
             {
                 return "Vous avez gagné!";
             }
-
-            if (win == -1)
+            else if(HasLost())
             {
                 return "Vous avez perdu!  :'( ";
             }
@@ -101,7 +95,8 @@ namespace ProjetIft232
             string turnText = "";
             CurrentPlayer.Cities.ForEach(n => n.Update());
             CurrentPlayer.ResearchedTech.ToList().ForEach(n => n.Update());
-            Random hostylityAument = new Random();
+            Random hostylityAument = RandomGen.GetInstance();
+            
             Hostility += hostylityAument.Next(-1, 1 + TourIndex / 10);
             foreach (City city in CurrentPlayer.Cities)
             {
@@ -162,12 +157,12 @@ namespace ProjetIft232
             CurrentPlayer.NextCity();
         }
 
-        public bool Transfer(string nomville, int bois, int or, int viande, int rock, int pop)
+        public bool Transfer(string nomville, Resources resources)
         {
             City city = CurrentPlayer.Cities.FirstOrDefault(n => n.Name == nomville);
             if (city != null)
             {
-                return CurrentPlayer.CurrentCity.TransferResources(city, new Resources(bois, or, viande, rock, pop));
+                return CurrentPlayer.CurrentCity.TransferResources(city, resources);
             }
             else
             {
@@ -185,36 +180,17 @@ namespace ProjetIft232
 
         }
 
-        private int ifWin()
+        private Boolean HasWin()
         {
-            int population=0;
-            foreach (var city in CurrentPlayer.Cities){
-                population += city.Ressources.get("Population");
-            }
-            if (population >= 10000)
-            {
-                return 1;
-            }
-            return 0;
+            var population = CurrentPlayer.Cities.Sum(city => city.Ressources[ResourcesType.Population]);
+            return population >= 10000 ? true : false;
         }
 
-        private int ifLose()
+        private Boolean HasLost()
         {
-            int population=0;
-            foreach (var city in CurrentPlayer.Cities){
-                population += city.Ressources.get("Population");
-            }
-            if (population <= 0)
-            {
-                return -1;
-            }
-            if (Game.TourIndex >= 150)
-            {
-                return -1;
-            }
-            return 0;
+            var population= CurrentPlayer.Cities.Sum(city => city.Ressources[ResourcesType.Population]);
+            return population <= 0 || Game.TourIndex >= 150 ? true : false;
         }
-        
     }
 }
 

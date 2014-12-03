@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{4D3DF023-7A7A-4F62-8470-F236132D5BE1}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ProjetIft232</RootNamespace>
     <AssemblyName>ProjetIft232</AssemblyName>
@@ -31,6 +31,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -59,10 +62,8 @@
     <Compile Include="Loader.cs" />
     <Compile Include="Requirement.cs" />
     <Compile Include="Buildings\Market.cs" />
-    <Compile Include="ConsoleUi.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="City.cs" />
     <Compile Include="Resources.cs" />

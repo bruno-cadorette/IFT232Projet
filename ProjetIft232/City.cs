@@ -15,7 +15,7 @@ namespace ProjetIft232
     [DataContract]
     public class City
     {
-        public static Resources CostToCreate = new Resources(1000, 1000, 1000, 1000, 500);
+        public static Resources CostToCreate = new Resources { Wood = 10000, Gold = 10000, Meat = 10000, Rock = 10000, Population = 500 };
         private Resources BaseProduction()
         {
             return new Resources(new Dictionary<ResourcesType, int>() {
@@ -55,7 +55,7 @@ namespace ProjetIft232
         {
             ResearchedTechnologies = new List<Technology>();
             Name = name;
-            Ressources = new Resources(10000, 10000, 10000, 10000, 500);
+            Ressources = new Resources{Wood = 10000, Gold = 10000, Meat = 10000, Rock = 10000, Population = 500};
             Buildings = new List<Building>();
 
             recruitement = new List<ArmyUnit>();

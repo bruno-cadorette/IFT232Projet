@@ -44,29 +44,67 @@ namespace ProjetIft232
     [DataContract]
     public class Resources
     {
+        protected bool Equals(Resources other)
+        {
+            return this._resources.SequenceEqual(other._resources);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Resources) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (_resources != null ? _resources.GetHashCode() : 0);
+        }
+
         [DataMember]
-        private int[] resources;
+        private readonly int[] _resources;
 
         public Resources ()
         {
-            resources = new int[(int)ResourcesType.End];
+            _resources = new int[(int)ResourcesType.End];
         }
 
         public Resources(ResourcesType type, int qty)
             : this()
         {
-            resources = new int[(int)ResourcesType.End];
-            resources[(int) type] = qty;
+            _resources = new int[(int)ResourcesType.End];
+            _resources[(int) type] = qty;
         }
 
-        public Resources(int wood, int gold, int meat, int rock, int population) : this()
+        public int Gold
         {
-            resources[(int)ResourcesType.Wood] =  wood;
-            resources[(int)ResourcesType.Gold]=  gold;
-            resources[(int)ResourcesType.Meat] = meat;
-            resources[(int)ResourcesType.Rock] = rock;
-            resources[(int)ResourcesType.Population] = population;
-           
+            get { return _resources[(int) ResourcesType.Gold]; }
+            set { _resources[(int) ResourcesType.Gold] = value; }
+        }
+
+        public int Meat
+        {
+            get { return _resources[(int)ResourcesType.Meat]; }
+            set { _resources[(int)ResourcesType.Meat] = value; }
+        }
+
+        public int Rock
+        {
+            get { return _resources[(int)ResourcesType.Rock]; }
+            set { _resources[(int)ResourcesType.Rock] = value; }
+        }
+
+        public int Population
+        {
+            get { return _resources[(int)ResourcesType.Population]; }
+            set { _resources[(int)ResourcesType.Population] = value; }
+        }
+
+        public int Wood
+        {
+            get { return _resources[(int)ResourcesType.Wood]; }
+            set { _resources[(int)ResourcesType.Wood] = value; }
         }
 
 
@@ -74,7 +112,7 @@ namespace ProjetIft232
         {
             for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                resources[i] = a.resources[i];
+                _resources[i] = a._resources[i];
             }
         }
 
@@ -83,25 +121,20 @@ namespace ProjetIft232
         {
             foreach (var resource in resources)
             {
-                this.resources[(int)(resource.Key)] = resource.Value;
+                this._resources[(int)(resource.Key)] = resource.Value;
             }
         }
 
         public bool isEmpty()
         {
-            return(resources.Count() == 0);
-        }
-
-        public int get(string resource) {
-            ResourcesType r = Resource.Name.FirstOrDefault(x => x.Value == resource).Key;
-            return resources[(int) r];
+            return(_resources.Count() == 0);
         }
 
         
         public int this[ResourcesType i]
 {
-    get { return resources[(int)i]; }
-    set { resources[(int)i] = (int)value; }
+    get { return _resources[(int)i]; }
+    set { _resources[(int)i] = (int)value; }
 }
 
         public static Resources Zero()
@@ -114,7 +147,7 @@ namespace ProjetIft232
             Resources ress = Zero();
             for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                ress.resources[i] = debut.resources[i] + b.resources[i];
+                ress._resources[i] = debut._resources[i] + b._resources[i];
             }
             return ress;
         }
@@ -126,7 +159,7 @@ namespace ProjetIft232
             Resources ress = Zero();
             for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                ress.resources[i] = debut.resources[i] - b.resources[i];
+                ress._resources[i] = debut._resources[i] - b._resources[i];
             }
             return ress;
         }
@@ -135,7 +168,7 @@ namespace ProjetIft232
         {
             for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                if (a.resources[i] >= b.resources[i])
+                if (a._resources[i] >= b._resources[i])
                     return false;
 
             }
@@ -146,8 +179,8 @@ namespace ProjetIft232
         {
             for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                if (resources[i] < 0)
-                    resources[i] = 0;
+                if (_resources[i] < 0)
+                    _resources[i] = 0;
 
             }
         }
@@ -156,7 +189,7 @@ namespace ProjetIft232
         {
             for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                if (a.resources[i] > b.resources[i])
+                if (a._resources[i] > b._resources[i])
                     return false;
 
             }
@@ -167,7 +200,7 @@ namespace ProjetIft232
         {
             for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                if (a.resources[i] <= b.resources[i])
+                if (a._resources[i] <= b._resources[i])
                     return false;
 
             }
@@ -178,7 +211,7 @@ namespace ProjetIft232
         {
             for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                if (a.resources[i] < b.resources[i])
+                if (a._resources[i] < b._resources[i])
                     return false;
 
             }
@@ -187,17 +220,12 @@ namespace ProjetIft232
 
         public static bool operator ==(Resources a, Resources b)
         {
-            for (int i = 0; i < (int)ResourcesType.End; i++)
-            {
-                if (a.resources[i] != b.resources[i])
-                    return false;
-            }
-            return true;
+            return a.Equals(b);
         }
 
         public static bool operator !=(Resources a, Resources b)
         {
-            return !(a == b);
+            return !a.Equals(b);
         }
 
         public override string ToString()
@@ -205,7 +233,7 @@ namespace ProjetIft232
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                sb.Append(string.Format(" {0} : {1} ", (ResourcesType) i, resources[i]));
+                sb.Append(string.Format(" {0} : {1} ", (ResourcesType) i, _resources[i]));
             }
             return sb.ToString();
         }
@@ -214,19 +242,9 @@ namespace ProjetIft232
         {
             for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                resources[i] += a.resources[i];
+                _resources[i] += a._resources[i];
             }
         }
 
-
-        public override bool Equals(object obj)
-        {
-            if (obj == null)
-                return false;
-            if (!(obj is Resources))
-                return false;
-            Resources temp = obj as Resources;
-            return this == temp;
-        }
     }
 }

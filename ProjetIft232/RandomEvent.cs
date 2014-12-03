@@ -22,7 +22,7 @@ namespace ProjetIft232
         }
         public Effect(int nb, string desc)
         {
-            resource = new Resources(0, 0, 0, 0, 0);
+            resource = new Resources{};
             nbBuildDestroyed = nb;
             description = desc;
 
@@ -108,22 +108,22 @@ namespace ProjetIft232
             {"Baby Boom", Tuple.Create<Resources, Tuple<int, string>>(new Resources(0,0,1000,0,-600), Tuple.Create<int, string>(0,"Tout le monde a voulu imiter des lapins, c'est bien fait pour eux."))}
    */
         };
-
+                                                                            // wood   gold    meat   rock    population
         public RandomEvent()
         {
-            events.Add(new Event("Météorites", 0,new Effect(new Resources(1000, 200, 100, 0, 100),3,"C'est un oiseau ! Non ! C'est un avion ! Ah non, une meteorite..."), new Effect(1,"Waouh ! Sauvé par la maison ! :D")));
-            events.Add(new Event("Zombies", 5, new Effect(new Resources(0,0,1000,0,200),0, "Les zombies attaquent ! Coureeeeeeeez !"), new Effect(new Resources(0,0,200,0,10),0,"Grâce à la caserne, les villageois on pu se défendre !")));
-            events.Add(new Event("Ebola", 6, new Effect(new Resources(0,0,200,0,1000),1,"Un ebola sauvage apparait dans les hautes herbes ! Gotta catch'em all ! :D"),new Effect(new Resources(0,0,0,0,15),"L'hôpital nous a tous sauvé ! Gloire à l'hôpital ! ")));
-            events.Add(new Event("Extra-terrestres", new Effect(new Resources(100,0,0,200,200),1,"Une soucoupe est passee et a recupere quelques ressources...")));
-            events.Add(new Event("Chevres enragees", 1, new Effect(new Resources(0, 0, 0, 0, 500), 1, "On nous attaque ! Une troupe de chevres enragees met nos vies en danger !"),new Effect(new Resources(0,0,-500,0,0),"Elles ont trouvees dans la ferme la sedentarite qui leur manquait")));
-            events.Add(new Event("Singes malicieux",new Effect(new Resources(0,3000,0,0,0),"Ces singes etaient mignons... Mais ils nous ont vole notre or !")));
-            events.Add(new Event("Seisme",new Effect(new Resources(0,0,0,-1000,500),2,"Ca tremble ! Ca tremble ! ")));
-            events.Add(new Event("Godzilla",new Effect(new Resources(500,200,500,500,200),3,"J'ai cru voir un gros lezard se balader dans la ville...")));
-            events.Add(new Event("Mode des bijoux en or", 7, new Effect(new Resources(0, 1000, 0, 0, 0), 0, "Mon precieux..."), new Effect(new Resources(0, 0, 0, 0, 0), "Heureusement, le marché était là pour approvisionner la population avant qu'ils piochent dans les réserves...")));
-            events.Add(new Event("Pluie feconde", new Effect(new Resources(0, 0, -1000, 0, 0), 0, "Une pluie a amélioré les récoltes chef !")));
-            events.Add(new Event("Decouverte d'un leprechaun", new Effect(new Resources(0, -2000, 0, 0, 0), 0, "On a trouve un leprechaun ! Ce petit homme faisait une drole de tete quand on a requisitionne son or ! :D")));
-            events.Add(new Event("Incendie quantique", new Effect(new Resources(-1000, 0, 0, 0, 0),1,"J'aurai jure qu'il y avait un bâtiment ici... Pas une forêt.")));
-            events.Add(new Event("Baby Boom", new Effect(new Resources(0,0,1000,0,-600),0,"Tout le monde a voulu imiter des lapins, c'est bien fait pour eux.")));
+            events.Add(new Event("Météorites", 0,new Effect(new Resources{Wood = 1000 , Gold = 200, Meat = 100, Population = 100},3,"C'est un oiseau ! Non ! C'est un avion ! Ah non, une meteorite..."), new Effect(1,"Waouh ! Sauvé par la maison ! :D")));
+            events.Add(new Event("Zombies", 5, new Effect(new Resources{ Meat = 1000, Population = 200 },0, "Les zombies attaquent ! Coureeeeeeeez !"), new Effect(new Resources{Meat = 200,Population = 10},0,"Grâce à la caserne, les villageois on pu se défendre !")));
+            events.Add(new Event("Ebola", 6, new Effect(new Resources { Meat = 200, Population = 1000 }, 1, "Un ebola sauvage apparait dans les hautes herbes ! Gotta catch'em all ! :D"), new Effect(new Resources{Population = 15}, "L'hôpital nous a tous sauvé ! Gloire à l'hôpital ! ")));
+            events.Add(new Event("Extra-terrestres", new Effect(new Resources{Wood = 100, Rock = 200, Population = 200},1,"Une soucoupe est passee et a recupere quelques ressources...")));
+            events.Add(new Event("Chevres enragees", 1, new Effect(new Resources{Population =500}, 1, "On nous attaque ! Une troupe de chevres enragees met nos vies en danger !"),new Effect(new Resources{Meat = -500},"Elles ont trouvees dans la ferme la sedentarite qui leur manquait")));
+            events.Add(new Event("Singes malicieux",new Effect(new Resources{Gold = 3000},"Ces singes etaient mignons... Mais ils nous ont vole notre or !")));
+            events.Add(new Event("Seisme",new Effect(new Resources{Rock = -1000 , Population = 500},2,"Ca tremble ! Ca tremble ! ")));
+            events.Add(new Event("Godzilla", new Effect(new Resources {Wood = 500, Gold = 200,Rock = 200,Meat = 500, Population = 500 }, 3, "J'ai cru voir un gros lezard se balader dans la ville...")));
+            events.Add(new Event("Mode des bijoux en or", 7, new Effect(new Resources{Gold = 1000}, 0, "Mon precieux..."), new Effect(new Resources{}, "Heureusement, le marché était là pour approvisionner la population avant qu'ils piochent dans les réserves...")));
+            events.Add(new Event("Pluie feconde", new Effect(new Resources{Meat = -1000}, 0, "Une pluie a amélioré les récoltes chef !")));
+            events.Add(new Event("Decouverte d'un leprechaun", new Effect(new Resources{Gold = -2000}, 0, "On a trouve un leprechaun ! Ce petit homme faisait une drole de tete quand on a requisitionne son or ! :D")));
+            events.Add(new Event("Incendie quantique", new Effect(new Resources{Wood = -1000},1,"J'aurai jure qu'il y avait un bâtiment ici... Pas une forêt.")));
+            events.Add(new Event("Baby Boom", new Effect(new Resources{Meat = 1000,Population = -600},0,"Tout le monde a voulu imiter des lapins, c'est bien fait pour eux.")));
         }
         public  String Next(City city)
         {

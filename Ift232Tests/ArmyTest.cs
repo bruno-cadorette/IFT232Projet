@@ -22,7 +22,7 @@ namespace Ift232Tests
 
         private void SetUp()
         {
-            RandomGen.GetInstance().SetRandom(false);
+            RandomGen.SetToPredictable(5);
             city = new City("Toulouse");
             Building house = city.AddBuilding((int)BuildingType.House);
             house.FinishConstruction();
@@ -53,7 +53,7 @@ namespace Ift232Tests
         {
             SetUp();
             ArmyUnit unit = ArmyFactory.CreateArmyUnit(0, city);
-            var resource = new Resources(1000, 50000, 0, 10000, 100000);
+            var resource = new Resources{Wood = 1000, Gold = 50000, Rock = 10000, Population = 100000};
             var buildings = new Building[] { caserne, };
             Assert.IsFalse(unit.CanBeBuild(resource, buildings.ToList()));
         }
@@ -63,7 +63,7 @@ namespace Ift232Tests
         {
             SetUp();
             ArmyUnit unit = ArmyFactory.CreateArmyUnit(0, city);
-            var resource = new Resources(1000, 50000, 60000, 10000, 100000);
+            var resource = new Resources{Wood = 1000, Gold = 50000, Meat = 60000, Rock = 10000, Population = 100000};
             var buildings = new Building[] { caserne, };
             Assert.IsTrue(unit.CanBeBuild(resource, buildings));
         }

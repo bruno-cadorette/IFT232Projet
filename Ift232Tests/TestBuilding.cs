@@ -48,7 +48,7 @@ namespace Ift232Tests
         public void CantBeBuildDueResource()
         {
             var casern = new Building(BuildingLoader.GetInstance().GetBuilding((int)BuildingType.Casern));
-            var resource = new Resources(1000,50000,0,10000,100000);
+            var resource = new Resources { Wood = 1000,  Meat = 10000, Rock = 50000, Population = 100000 };
             var buildings = new Building[] { new Building(BuildingLoader.GetInstance().GetBuilding((int)BuildingType.House)), new Building(BuildingLoader.GetInstance().GetBuilding((int)BuildingType.Farm)) };
             Assert.IsFalse(casern.CanBeBuild(resource, buildings));
         }
@@ -57,7 +57,7 @@ namespace Ift232Tests
         public void CantBeBuildDueBuildings()
         {
             var casern = BuildingLoader.GetInstance().GetBuilding((int)BuildingType.Casern);
-            var resource = new Resources(1000, 50000, 1000000, 10000, 100000);
+            var resource = new Resources { Wood = 10000, Gold = 50000, Meat = 10000, Rock = 10000, Population = 10000 };
             var buildings = new Building[] { new Building(BuildingLoader.GetInstance().GetBuilding((int)BuildingType.House)), new Building(BuildingLoader.GetInstance().GetBuilding((int)BuildingType.Farm)) };
             Assert.IsFalse(casern.CanBeBuild(resource, buildings));
         }
@@ -79,7 +79,7 @@ namespace Ift232Tests
             farm.Update();
 
             var casern = new Building(BuildingLoader.GetInstance().GetBuilding((int)BuildingType.Casern));
-            var resource = new Resources(1000, 50000, 1000000, 10000, 100000);
+            var resource = new Resources { Wood = 10000, Gold = 50000, Meat = 10000, Rock = 10000, Population = 10000 };
             var buildings = new Building[] { house, farm };
             Assert.IsTrue(casern.CanBeBuild(resource, buildings));
         }

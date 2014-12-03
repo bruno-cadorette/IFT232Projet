@@ -15,7 +15,7 @@ namespace Ift232Tests
         {
             var casern = BuildingLoader.GetInstance().GetBuilding((int)BuildingType.Casern);
             var builds = new int[] { 0, 1 };
-            var requirements = new Requirement(builds, new Resources(500, 1000, 250, 1500, 10));
+            var requirements = new Requirement(builds, new Resources{Wood = 500, Gold = 1000, Meat = 250, Rock = 1500, Population = 10});
             Assert.AreEqual(requirements.Resources, casern.Requirement.Resources);
             var a1 = requirements.Buildings.ToArray();
             for (int i = 0; i < builds.Length; i++)

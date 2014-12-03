@@ -25,58 +25,52 @@ namespace Ift232Tests
         [TestMethod]
         public void TestAchatVille()
         {
-            int bois = city1.Ressources.get("Wood");
-            int bois2;
-            int viande2;
-            int rock = city1.Ressources.get("Rock");
-            int rock2;
-            int viande = city1.Ressources.get("Meat");
-            int gold = city1.Ressources.get("Gold");
-            int gold2;
-            // Assert.IsFalse(market.Achat(city1,ResourcesType.Wood, 20));
+            int bois = city1.Ressources[ResourcesType.Wood];
+            int rock = city1.Ressources[ResourcesType.Rock];
+            int viande = city1.Ressources[ResourcesType.Meat];
+            int gold = city1.Ressources[ResourcesType.Gold];
 
-           
 
-          //  market.Achat(city1, 20, TODO, ResourcesType.Wood);
-         //   market.Achat(city1, 20, TODO, ResourcesType.Rock);
-         //   market.Achat(city1, 20, TODO, ResourcesType.Meat);
-      //      bois2 = city1.Ressources.get("Wood");
-         //   viande2 = city1.Ressources.get("Meat");
-       //     rock2 = city1.Ressources.get("Rock");
-        //    gold2 = city1.Ressources.get("Gold");
-//
-        //    Assert.IsTrue((viande2 - viande )== (8 * 20));
-       //     Assert.IsTrue((bois2 - bois) == (15 * 20));
-        //    Assert.IsTrue((rock2 - rock) == (12 * 20));
-       //     Assert.IsTrue((gold - gold2 == 60));
+
+            market.Achat(city1, 20, ResourcesType.Gold, ResourcesType.Wood);
+            market.Achat(city1, 20, ResourcesType.Gold, ResourcesType.Rock);
+            market.Achat(city1, 20, ResourcesType.Gold, ResourcesType.Meat);
+            var bois2 = city1.Ressources[ResourcesType.Wood];
+            var viande2 = city1.Ressources[ResourcesType.Meat];
+            var rock2 = city1.Ressources[ResourcesType.Rock];
+            var gold2 = city1.Ressources[ResourcesType.Gold];
+
+            Assert.IsTrue((viande2 - viande) == (8 * 20));
+            Assert.IsTrue((bois2 - bois) == (15 * 20));
+            Assert.IsTrue((rock2 - rock) == (12 * 20));
+            Assert.IsTrue((gold - gold2 == 60));
              }
 
         public void TestAchatMarket()
         {
-            int bois = market.Resource.get("Wood");
+            int bois = market.Resource[ResourcesType.Wood];
             int bois2;
             int viande2;
-            int rock = market.Resource.get("Rock");
+            int rock = market.Resource[ResourcesType.Rock];
             int rock2;
-            int viande = market.Resource.get("Meat");
+            int viande = market.Resource[ResourcesType.Meat];
             int or2;
 
-            int or = market.Resource.get("Gold");
+            int or = market.Resource[ResourcesType.Gold];
 
-            /*
-            market.Achat(city1, 20, TODO, ResourcesType.Wood);
-            market.Achat(city1, 20, TODO, ResourcesType.Rock);
-            market.Achat(city1, 20, TODO, ResourcesType.Meat);
-            bois2 = market.Resource.get("Wood");
-            viande2 = market.Resource.get("Meat");
-            rock2 = market.Resource.get("Rock");
-            or2 = market.Resource.get("Gold");
+            market.Achat(city1, 20, ResourcesType.Gold, ResourcesType.Wood);
+            market.Achat(city1, 20, ResourcesType.Gold, ResourcesType.Rock);
+            market.Achat(city1, 20, ResourcesType.Gold, ResourcesType.Meat);
+            bois2 = market.Resource[ResourcesType.Wood];
+            viande2 = market.Resource[ResourcesType.Meat];
+            rock2 = market.Resource[ResourcesType.Rock];
+            or2 = market.Resource[ResourcesType.Gold];
 
             Assert.IsTrue((viande - viande2) == (8 * 20));
             Assert.IsTrue((bois - bois2) == (15 * 20));
             Assert.IsTrue((rock - rock2) == (12 * 20));
             Assert.IsTrue((or2 - or) == ( 3* 20));
-             */
+             
 
         }
 

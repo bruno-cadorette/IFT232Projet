@@ -61,7 +61,7 @@ namespace Ift232UI
 
         private void btnNewCity_Click(object sender, RoutedEventArgs e)
         {
-            if (Game.CurrentPlayer.CurrentCity.Ressources.get("Population")>500)
+            if (Game.CurrentPlayer.CurrentCity.Ressources[ResourcesType.Population]>500)
             {
                 Game.CreateCity(tbNewCity.Text);
                 MessageBox.Show("Ville créée !");
@@ -459,11 +459,11 @@ namespace Ift232UI
             {
                 int number = (int)SoldierQuantityBox.Value;
                 ArmyRequirement.Content = "";
-                ArmyRequirement.Content += "Or : " + army.Requirement.Resources.get("Gold") * number;
-                ArmyRequirement.Content += " / Viande : " + army.Requirement.Resources.get("Meat") * number;
-                ArmyRequirement.Content += " / Bois : " + army.Requirement.Resources.get("Wood") * number;
-                ArmyRequirement.Content += " / Roche : " + army.Requirement.Resources.get("Rock") * number;
-                ArmyRequirement.Content += " / Population : " + army.Requirement.Resources.get("Population") * number;
+                ArmyRequirement.Content += "Or : " + army.Requirement.Resources[ResourcesType.Gold] * number;
+                ArmyRequirement.Content += " / Viande : " + army.Requirement.Resources[ResourcesType.Meat] * number;
+                ArmyRequirement.Content += " / Bois : " + army.Requirement.Resources[ResourcesType.Wood] * number;
+                ArmyRequirement.Content += " / Roche : " + army.Requirement.Resources[ResourcesType.Rock] * number;
+                ArmyRequirement.Content += " / Population : " + army.Requirement.Resources[ResourcesType.Population] * number;
             }
             catch (InvalidOperationException)
             {

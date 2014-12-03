@@ -55,7 +55,7 @@ namespace ProjetIft232.Army
 
         public void LoseUnit(int n)
         {
-            int place;
+            int unitId;
             int number;
             int moral;
             int rand;
@@ -65,9 +65,9 @@ namespace ProjetIft232.Army
                 units.Clear();
             while (lost > 0 && units.Any())
             {
-                place = RandomGen.GetInstance().Next(0,units.Count);
-                number = RandomGen.GetInstance().Next(1, Math.Min(units[place].Size,lost));
-                tmp = units[place];
+                unitId = RandomGen.GetInstance().Next(0,units.Count);
+                number = RandomGen.GetInstance().Next(1, Math.Min(units[unitId].Size,lost));
+                tmp = units[unitId];
                 tmp.moral -= (number * 100 / tmp.Size) * 100 / tmp.moral;
                 moral = (number*100/size())*100;
 

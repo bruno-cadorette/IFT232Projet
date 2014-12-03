@@ -55,7 +55,7 @@ namespace ProjetIft232
         public string toString()
         {
             string result="";
-            result += "Or : " + Resources.get("Gold") + " Viande : " + Resources.get("Meat") + " Bois : " + Resources.get("Wood") + " Roche : " + Resources.get("Rock") + " Population : " + Resources.get("Population");
+            result += "Or : " + Resources[ResourcesType.Gold] + " Viande : " + Resources[ResourcesType.Meat] + " Bois : " + Resources[ResourcesType.Wood] + " Roche : " + Resources[ResourcesType.Rock] + " Population : " + Resources[ResourcesType.Population];
             result += " Batiments : ";
             foreach (var each in Buildings)
             {

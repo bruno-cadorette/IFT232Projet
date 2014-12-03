@@ -14,7 +14,7 @@ namespace ProjetIft232
         static BarbarianArmyGenerator()
         {
             barbarianCamp = new City("Barbarian Camp");
-            barbarianCamp.AddResources(new Resources(10000, 10000, 10000, 10000, 10000));
+            barbarianCamp.AddResources(new Resources { Wood = 10000, Gold = 10000, Meat = 10000, Rock = 10000, Population = 1000 });
         }
         public static  Armies CreateArmy(int tourIndex)
         {

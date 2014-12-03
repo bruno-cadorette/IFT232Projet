@@ -120,7 +120,7 @@ namespace ProjetIft232
                     }
                 }
             }
-            return new Resources(wood,gold,meat,rock,pop);
+            return new Resources{Wood = wood,Gold = gold,Meat = meat,Rock = rock,Population = pop};
         }
 
         protected string GetAttribute(XElement element, string att)

@@ -27,7 +27,7 @@ namespace Ift232Tests
 
             Technology technology = TechnologyFactory.CreateTechnology(0, city);
             house.Upgrade(technology);
-            Resources expected = new Resources(0, 0, 0, 0, 2);
+            Resources expected = new Resources{Population = 2};
             Assert.AreEqual(expected,house.Resource);
         }
 
