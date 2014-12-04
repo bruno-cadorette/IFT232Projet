@@ -160,7 +160,7 @@ namespace ProjetIft232
         {
             foreach (Building building in Buildings)
             {
-                if (building.ID == (int)bt)
+                if (building.ID == (int)bt && !building.InConstruction)
                     return true;
             }
             return false;

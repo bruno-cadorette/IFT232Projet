@@ -299,6 +299,7 @@ namespace Ift232UI
                         break;
                     }
                 }
+                Update();
             }
             
         }
@@ -363,7 +364,7 @@ namespace Ift232UI
             var selection = (CountableListItem<UpgradableEntity>)UpgradableEntityList.SelectedItem;
             if (selection != null)
             {
-                UpgradableEntityList.ItemsSource = Enumerable.Empty<UpgradableEntity>();
+                //UpgradableEntityList.ItemsSource = Enumerable.Empty<UpgradableEntity>();
                 ApplyCountSlider.IsEnabled = true;
                 ApplyCountSlider.Value = 0;
                 ApplyCountSlider.Maximum = selection.Count;
@@ -383,6 +384,9 @@ namespace Ift232UI
                 {
                     Game.CurrentPlayer.CurrentCity.UpgradeEntities(entity.Item, technologyDone, (int)ApplyCountSlider.Value);
                 }
+                technologySelectedIsResearched = false;
+                TechnologyDone.SelectedItem = null;
+                UpgradableEntityList.ItemsSource = Enumerable.Empty<UpgradableEntity>();
                 Update();
             }
             else
@@ -440,8 +444,6 @@ namespace Ift232UI
             else
             {
                 technologySelectedIsResearched = false;
-                //Technology pas encore faite
-                MessageBox.Show("Hey");
             }
         }
 
