@@ -16,6 +16,15 @@ namespace ProjetIft232
         [DataMember]
         public List<Player> Players { get; set; }
 
+
+        [DataMember]
+        private int Hostility { get; set; }
+        [DataMember]
+        private int Alea { get; set; }
+        [DataMember]
+        public int PlayerIndex { get; private set; }
+
+
         public Player CurrentPlayer
         {
             get
@@ -24,16 +33,11 @@ namespace ProjetIft232
             }
         }
 
-        private int _playerIndex = 0;
-        [DataMember]
-        private int Hostility { get; set; }
-        [DataMember]
-        private int Alea { get; set; }
-        [DataMember]
-        public int PlayerIndex { get; private set; }
-
         //Variable global, à changer 
-        public static int TourIndex { get; private set; }
+        [DataMember]
+        public int TourIndex { get; private set; }
+
+
 
         RandomEvent evt = new RandomEvent();
 
@@ -60,7 +64,9 @@ namespace ProjetIft232
             {
                 DataContractSerializer serializer = new DataContractSerializer(typeof(Game));
                 fileStream.Position = 0;
-                return serializer.ReadObject(fileStream) as Game;
+                Game g = serializer.ReadObject(fileStream) as Game;  
+                g.evt = new RandomEvent();
+                return g;
             }
         }
 
@@ -189,7 +195,7 @@ namespace ProjetIft232
         private Boolean HasLost()
         {
             var population= CurrentPlayer.Cities.Sum(city => city.Ressources[ResourcesType.Population]);
-            return population <= 0 || Game.TourIndex >= 150 ? true : false;
+            return population <= 0 || TourIndex >= 150 ? true : false;
         }
     }
 }

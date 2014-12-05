@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ProjetIft232;
+using Microsoft.Win32;
 
 namespace Ift232UI
 {
@@ -25,14 +26,9 @@ namespace Ift232UI
             InitializeComponent();
         }
 
-        public Inscription(Game gm)
-        {
-            InitializeComponent();
-            Game = gm;
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            Game = new Game();
             CreationJoueur j1;
             while (Game.Players.Count <= 0)
             {
@@ -45,9 +41,28 @@ namespace Ift232UI
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            Game = new Game();
             CreationMultijoueur mj1 = new CreationMultijoueur(Game);
             mj1.ShowDialog();
             this.Close();
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog window = new OpenFileDialog();
+            window.Filter = "save file|*.sav";
+            window.Title = "Séléctionnez le fichier de chargement.";
+            window.CheckFileExists = true;
+            if (true == window.ShowDialog())
+            {
+                Game=Game.Load(window.FileName);
+                this.Close();
+            }
+        }
+
+        public Game GetGame()
+        {
+            return Game;
         }
     }
 }

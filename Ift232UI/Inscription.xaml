@@ -7,9 +7,10 @@
             <ColumnDefinition Width="0*"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Button Content="Solitaire" HorizontalAlignment="Left" Margin="56,85,0,0" VerticalAlignment="Top" Width="179" Grid.ColumnSpan="2" Height="43" Click="Button_Click"/>
-        <Button Grid.ColumnSpan="2" Content="Multijoueur" HorizontalAlignment="Left" Margin="56,162,0,0" VerticalAlignment="Top" Width="179" Height="43" Click="Button_Click_1"/>
+        <Button Content="Solitaire" HorizontalAlignment="Left" Margin="56,82,0,0" VerticalAlignment="Top" Width="179" Grid.ColumnSpan="2" Height="43" Click="Button_Click"/>
+        <Button Grid.ColumnSpan="2" Content="Multijoueur" HorizontalAlignment="Left" Margin="56,130,0,0" VerticalAlignment="Top" Width="179" Height="43" Click="Button_Click_1"/>
         <Label Content="ProjetIft232" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="91,27,0,0" VerticalAlignment="Top" FontSize="20"/>
+        <Button Grid.ColumnSpan="2" Content="Charger une partie" HorizontalAlignment="Left" Height="43" Margin="56,178,0,0" VerticalAlignment="Top" Width="179" Click="Button_Click_2"/>
 
     </Grid>
 </Window>
