@@ -26,7 +26,7 @@
             </ComboBox>
             <DockPanel  Grid.Row="0" Grid.Column="2" Margin="0,0,75,0">
                 <Label>Tour:</Label>
-                <Label x:Name="Turns" Content="0" Width="94" Height="30" VerticalAlignment="Bottom" RenderTransformOrigin="0.316,0.5"/>
+                <Label x:Name="Turns" Content="" Width="94" Height="30" VerticalAlignment="Bottom" RenderTransformOrigin="0.316,0.5"/>
             </DockPanel>
             <Button Name="NextTurn" Content="Prochain Tour" Grid.Column="2" HorizontalAlignment="Left" Margin="121,0,0,0" VerticalAlignment="Top" Width="86" Height="30" Click="NextTurn_Click"/>
             <Label Name="Cities" Grid.Column="1" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" Width="146"/>
@@ -215,7 +215,18 @@
                         <ColumnDefinition Width="7*"/>
                         <ColumnDefinition Width="442*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Name="btnSave" Content="SAUVEGARDE" HorizontalAlignment="Left" Margin="33,71,0,0" VerticalAlignment="Top" Width="436" Grid.ColumnSpan="3" Height="128"/>
+                    <Button Name="btnSave" Content="SAUVEGARDE" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" Width="190" Grid.ColumnSpan="3" Height="68" RenderTransformOrigin="0.5,0.5" Click="btnSave_Click">
+                        <Button.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="0.186"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Button.RenderTransform>
+                    </Button>
+                    <Button Name ="BtnLoad" Content="CHARGER PARTIE" HorizontalAlignment="Left" Margin="10,121,0,0" VerticalAlignment="Top" Width="179" Grid.ColumnSpan="3" Height="36" Click="BtnLoad_Click"/>
+                    <Button Name ="BtnSaveNQuit" Content="SAUVEGARDER ET QUITTER" Grid.Column="2" HorizontalAlignment="Left" Margin="203,40,0,0" VerticalAlignment="Top" Width="244" Height="98" Click="Button_Click"/>
                 </Grid>
             </TabItem>
         </TabControl>

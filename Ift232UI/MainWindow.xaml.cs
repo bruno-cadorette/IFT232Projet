@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 using ProjetIft232.Army;
 using Xceed.Wpf.Toolkit;
 using ProjetIft232;
@@ -45,12 +46,13 @@ namespace Ift232UI
         {
             this.DataContext = this;
             InitializeComponent();
-            Game = new Game();
-            Inscription inscription = new Inscription(Game);
+            Inscription inscription = new Inscription();
             inscription.ShowDialog();
+            Game = inscription.GetGame();
             foreach(var player in Game.Players){
                 Players.Items.Add(player.playerName);
             }
+            Turns.Content=Game.TourIndex;
             Update();
             Players.SelectedIndex = Game.PlayerIndex;
             Cities.Content = Game.CurrentPlayer.CurrentCity;
@@ -478,6 +480,36 @@ namespace Ift232UI
             if (SoldierQuantityBox.Value < 0)
                 SoldierQuantityBox.Value = 0;
             ArmyRequirementUpdate();
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog window = new OpenFileDialog();
+            window.Filter = "save file|*.sav";
+            window.Title = "Séléctionnez le fichier de sauvegarde.";
+            window.CheckFileExists = false;
+            if (true == window.ShowDialog())
+            {
+                Game.Save(window.FileName);  
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            btnSave_Click(sender, e);
+            this.Close();
+        }
+
+        private void BtnLoad_Click(object sender, RoutedEventArgs e)
+        {
+              OpenFileDialog window = new OpenFileDialog();
+            window.Filter = "save file|*.sav";
+            window.Title = "Séléctionnez le fichier de chargement.";
+            window.CheckFileExists = true;
+            if (true == window.ShowDialog())
+            {
+                Game=Game.Load(window.FileName);
+            }
         }
 
     }

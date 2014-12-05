@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using ProjetIft232.Buildings;
@@ -119,6 +120,7 @@ namespace ProjetIft232
         }
     }
 
+
     public class Event
     {
         public string name {get; private set;}
@@ -154,23 +156,8 @@ namespace ProjetIft232
         //Exemple de tuple : 
         // {Meteores,((Ressources, (nombre de batiments détruits, description))}
         // {Meteores,(((Ressources, (( nombre de batiments détruits,description),(batiment requis, antidescription))))}
-        public static Dictionary<string, Event> cost = new Dictionary<string, Event>()
-        {
-   /*       {"Zombies", Tuple.Create<Resources, Tuple<int, string>>(new Resources(0,0,1000,0,200), Tuple.Create<int, string>(0,"Les zombies attaquent ! Coureeeeeeeez !"))},
-            {"Ebola", Tuple.Create<Resources, Tuple<int, string>>(new Resources(0,0,200,0,1000), Tuple.Create<int, string>(1,"Il fallait se laver les mains..."))},
-            {"Extra-terrestres", Tuple.Create<Resources, Tuple<int, string>>(new Resources(100,0,0,200,200), Tuple.Create<int, string>(1,"Une soucoupe est passee et a recupere quelques ressources..."))},
-            {"Chevres enragees", Tuple.Create<Resources, Tuple<int, string>>(new Resources(0,0,0,0,500), Tuple.Create<int, string>(1,"On nous attaque ! Une troupe de chevres enragees met nos vies en danger !"))},
-            {"Singes malicieux", Tuple.Create<Resources, Tuple<int, string>>(new Resources(0,3000,0,0,0), Tuple.Create<int, string>(0,"Ces singes etaient mignons... Mais ils nous ont vole notre or !"))},
-            {"Seisme", Tuple.Create<Resources, Tuple<int, string>>(new Resources(0,0,0,-1000,500), Tuple.Create<int, string>(2,"Ca tremble ! Ca tremble ! "))},
-            {"Godzilla", Tuple.Create<Resources, Tuple<int, string>>(new Resources(500,200,500,500,200), Tuple.Create<int, string>(3,"J'ai cru voir un gros lezard se balader dans la ville..."))},
-            {"Mode des bijoux en or", Tuple.Create<Resources, Tuple<int, string>>(new Resources(0,1000,0,0,0), Tuple.Create<int, string>(3,"Mon precieux..."))},
-            {"Pluie feconde", Tuple.Create<Resources, Tuple<int, string>>(new Resources(0,0,-1000,0,0), Tuple.Create<int, string>(0,"Une pluie ameliorant les recoltes."))},
-            {"Decouverte d'un leprechaun", Tuple.Create<Resources, Tuple<int, string>>(new Resources(0,-2000,0,0,0), Tuple.Create<int, string>(0,"On a trouve un leprechaun ! Ce petit homme faisait une drole de tete quand on a requisitionne son or ! :D"))},
-            {"Incendie quantique", Tuple.Create<Resources, Tuple<int, string>>(new Resources(-1000,0,0,0,0), Tuple.Create<int, string>(0,"J'aurai jure que tout brulait..."))},
-            {"Baby Boom", Tuple.Create<Resources, Tuple<int, string>>(new Resources(0,0,1000,0,-600), Tuple.Create<int, string>(0,"Tout le monde a voulu imiter des lapins, c'est bien fait pour eux."))}
-   */
-        };
-                                                                            // wood   gold    meat   rock    population
+
+                                                                    
         public RandomEvent()
         {
             events.Add(new Event("Météorites", 0, new CombinatedEffect(new Resources { Wood = 400, Gold = 600, Meat = 500 }, new Resources { Population = 22 }, 3, "C'est un oiseau ! Non ! C'est un avion ! Ah non, une meteorite..."), new BuildEffect(1, "Waouh ! Sauvé par la maison ! :D")), 2);
