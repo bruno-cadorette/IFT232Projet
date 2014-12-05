@@ -62,6 +62,7 @@
     <Compile Include="GameTest.cs" />
     <Compile Include="AITest.cs" />
     <Compile Include="LoaderTest.cs" />
+    <Compile Include="RandomGenTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProjetIft232\ProjetIft232.csproj">

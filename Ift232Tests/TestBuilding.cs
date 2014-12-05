@@ -83,5 +83,20 @@ namespace Ift232Tests
             var buildings = new Building[] { house, farm };
             Assert.IsTrue(casern.CanBeBuild(resource, buildings));
         }
+
+        [TestMethod]
+        public void NotCreated()
+        {
+            City city = new City("Toulouse!");
+            Building casern = BuildingFactory.CreateBuilding((int)BuildingType.Casern,city);
+            Assert.IsNull(casern);
+        }
+
+        [TestMethod]
+        public void NotEmptyLoad()
+        {
+            IEnumerable<Building> buildings = BuildingLoader.GetInstance().Buildings();
+            Assert.AreNotEqual(buildings, Enumerable.Empty<Building>());
+        }
     }
 }

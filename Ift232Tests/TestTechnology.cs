@@ -4,6 +4,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProjetIft232;
 using ProjetIft232.Buildings;
 using ProjetIft232.Technologies;
+using ProjetIft232.Army;
+using System.Linq;
 
 namespace Ift232Tests
 {
@@ -75,6 +77,77 @@ namespace Ift232Tests
             }
             Building house = BuildingFactory.CreateBuilding((int)BuildingType.House, city);
             Assert.IsTrue(house.TurnsLeft == 2);
+        }
+
+        [TestMethod]
+        public void CanAffectBuilding()
+        {
+            Building farm = city.AddBuilding((int)BuildingType.Farm);
+            farm.FinishConstruction();
+            city.ResearchedTechnologies.Add(TechnologyFactory.CreateTechnology(0, city));
+            Technology technology = city.ResearchedTechnologies.Find(n => n.ID == 0);
+            Building house = city.AddBuilding((int)BuildingType.House);
+            house.FinishConstruction();
+
+            Assert.IsTrue(technology.CanAffect(house));
+           
+        }
+        
+        [TestMethod]
+        public void CanAffectSoldier()
+        {
+            Building house = city.AddBuilding((int)BuildingType.House);
+            house.FinishConstruction();
+            Building farm = city.AddBuilding((int)BuildingType.Farm);
+            farm.FinishConstruction();
+            Building caserne = city.AddBuilding((int)BuildingType.Casern);
+            caserne.FinishConstruction();
+            city.ResearchedTechnologies.Add(TechnologyFactory.CreateTechnology(2, city));
+            Technology technology = city.ResearchedTechnologies.Find(n => n.ID == 2); 
+            ArmyUnit unit = ArmyFactory.CreateArmyUnit(0, city);
+            Assert.IsTrue(technology.CanAffect(unit));
+        }
+
+        [TestMethod]
+        public void CanAffectSoldierUpcast()
+        {
+            Building house = city.AddBuilding((int)BuildingType.House);
+            house.FinishConstruction();
+            Building farm = city.AddBuilding((int)BuildingType.Farm);
+            farm.FinishConstruction();
+            Building caserne = city.AddBuilding((int)BuildingType.Casern);
+            caserne.FinishConstruction();
+            city.ResearchedTechnologies.Add(TechnologyFactory.CreateTechnology(2, city));
+            Technology technology = city.ResearchedTechnologies.Find(n => n.ID == 2);
+            ArmyUnit unit = ArmyFactory.CreateArmyUnit(0, city);
+            Assert.IsTrue(technology.CanAffect((UpgradableEntity)unit));
+        }
+        [TestMethod]
+        public void TechnologyCopy()
+        {
+            Building farm = city.AddBuilding((int)BuildingType.Farm);
+            farm.FinishConstruction();
+            city.ResearchedTechnologies.Add(TechnologyFactory.CreateTechnology(0, city));
+            Technology technology = city.ResearchedTechnologies.Find(n => n.ID == 0);
+            Technology test = new Technology(technology);
+            Assert.IsNotNull(test.AffectedBuildings);
+            Assert.IsNotNull(test.AffectedSoldiers);
+            Assert.IsNotNull(test.ApplicationCost);
+            Assert.IsNotNull(test.Enhancements);
+        }
+
+        [TestMethod]
+        public void NotCreated()
+        {
+            Technology technology = TechnologyFactory.CreateTechnology(0, city);
+            Assert.IsNull(technology);
+        }
+
+        [TestMethod]
+        public void NotEmptyLoader()
+        {
+            IEnumerable<Technology> technologies = TechnologyLoader.GetInstance().Technologies();
+            Assert.AreNotEqual(technologies, Enumerable.Empty<Technology>());
         }
     }
 }

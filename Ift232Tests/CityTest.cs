@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProjetIft232;
+using ProjetIft232.Army;
 
 namespace Ift232Tests
 {
@@ -56,6 +57,19 @@ namespace Ift232Tests
         {
             city1.Ressources[ResourcesType.Gold] = 40;
             Assert.AreEqual(city1.Ressources[ResourcesType.Gold], 40);
+        }
+        [TestMethod]
+        public void TestAttack()
+        {
+            Resources old = new Resources(city1.Ressources);
+            Armies opponent = new Armies();
+
+            for (int i = 0; i < 10; i++)
+            {
+                opponent.addUnit(ArmyFactory.CreateBarbarian(0));
+            }
+            city1.Attack(opponent);
+            Assert.IsTrue(old != city1.Ressources);
         }
     }
 }
