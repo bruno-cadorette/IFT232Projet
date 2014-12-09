@@ -9,7 +9,8 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Button Name="CreatePlayers" Grid.ColumnSpan="2" Content="Confirmer" HorizontalAlignment="Left" Margin="56,162,0,0" VerticalAlignment="Top" Width="179" Height="43" Click="CreatePlayers_Click"/>
-        <Label Content="ProjetIft232" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="89,27,0,0" VerticalAlignment="Top" FontSize="20" Width="159"/>
-        <xctk:IntegerUpDown Name="FirstValue" Value="2" Minimum="2" Maximum="15" Margin="111,81,109,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="40" FontSize="24"/>
+        <Label Content="ProjetIft232" Grid.ColumnSpan="2" Grid.Column="0" HorizontalAlignment="Left" Margin="89,27,0,0" VerticalAlignment="Top" FontSize="20" Width="159"/>
+        <xctk:IntegerUpDown Name="FirstValue" Value="2" Minimum="2" Maximum="15" Margin="111,81,109,0" VerticalAlignment="Top" Grid.ColumnSpan="2"
+                            Grid.Column="0" Height="40" FontSize="24"/>
     </Grid>
 </Window>

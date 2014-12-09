@@ -1,23 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 using ProjetIft232.Buildings;
 using ProjetIft232.Technologies;
-using System.Runtime.Serialization;
 
 namespace ProjetIft232
 {
     [DataContract]
     public class Requirement
     {
-        [DataMember]
-        public IEnumerable<int> Buildings {get; private set;}
-        [DataMember]
-        private IEnumerable<int> _Technologies;
-        [DataMember]
-        public Resources Resources { get; set; }
+        [DataMember] private IEnumerable<int> _Technologies;
 
         public Requirement(IEnumerable<int> buildings, Resources resources)
         {
@@ -33,6 +25,12 @@ namespace ProjetIft232
             _Technologies = technologies;
         }
 
+        [DataMember]
+        public IEnumerable<int> Buildings { get; private set; }
+
+        [DataMember]
+        public Resources Resources { get; set; }
+
         public static Requirement Zero()
         {
             return new Requirement(new int[0], new int[0], Resources.Zero());
@@ -42,29 +40,34 @@ namespace ProjetIft232
         public bool IsValid(Resources actualResource, IEnumerable<Building> actualBuildings)
         {
             return actualResource >= Resources &&
-                Buildings.All(type =>
-                actualBuildings.Any(x => 
-                    x.ID == type && !x.InConstruction)
-                );
+                   Buildings.All(type =>
+                       actualBuildings.Any(x =>
+                           x.ID == type && !x.InConstruction)
+                       );
         }
-        public bool IsValid(Resources actualResource, IEnumerable<Building> actualBuildings, IEnumerable<Technology> actualTechnologies)
+
+        public bool IsValid(Resources actualResource, IEnumerable<Building> actualBuildings,
+            IEnumerable<Technology> actualTechnologies)
         {
-            return IsValid(actualResource, actualBuildings) && _Technologies.All(tech => actualTechnologies.Any(x => x.ID == tech && !x.InConstruction));
+            return IsValid(actualResource, actualBuildings) &&
+                   _Technologies.All(tech => actualTechnologies.Any(x => x.ID == tech && !x.InConstruction));
         }
 
         public string toString()
         {
-            string result="";
-            result += "Or : " + Resources[ResourcesType.Gold] + " Viande : " + Resources[ResourcesType.Meat] + " Bois : " + Resources[ResourcesType.Wood] + " Roche : " + Resources[ResourcesType.Rock] + " Population : " + Resources[ResourcesType.Population];
+            string result = "";
+            result += "Or : " + Resources[ResourcesType.Gold] + " Viande : " + Resources[ResourcesType.Meat] +
+                      " Bois : " + Resources[ResourcesType.Wood] + " Roche : " + Resources[ResourcesType.Rock] +
+                      " Population : " + Resources[ResourcesType.Population];
             result += " Batiments : ";
             foreach (var each in Buildings)
             {
-                result += " " + BuildingLoader.GetInstance()._entities[each].Name + " ";
+                result += " " + BuildingFactory.GetInstance()._entities[each].Name + " ";
             }
             result += " Technologies : ";
             foreach (var each in _Technologies)
             {
-                result += " " + TechnologyLoader.GetInstance()._entities[each].Name + " ";
+                result += " " + TechnologyFactory.GetInstance()._entities[each].Name + " ";
             }
             return result;
         }

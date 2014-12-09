@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ProjetIft232.Utility;
 
 namespace ProjetIft232.Army
 {
     public class Armies
     {
-
+        private readonly List<ArmyUnit> flees;
         private List<ArmyUnit> units;
-        private List<ArmyUnit> flees; 
 
         public Armies()
         {
@@ -39,12 +37,12 @@ namespace ProjetIft232.Army
 
         public int getDefense()
         {
-            return units.Sum(n => n.Attributes.Defence * n.Size);
+            return units.Sum(n => n.Attributes.Defence*n.Size);
         }
 
         public int getAttack()
         {
-            return units.Sum(n => n.Attributes.Attack * n.Size);
+            return units.Sum(n => n.Attributes.Attack*n.Size);
         }
 
         public int size()
@@ -65,28 +63,28 @@ namespace ProjetIft232.Army
                 units.Clear();
             while (lost > 0 && units.Any())
             {
-                unitId = RandomGen.GetInstance().Next(0,units.Count);
-                number = RandomGen.GetInstance().Next(1, Math.Min(units[unitId].Size,lost));
+                unitId = RandomGen.GetInstance().Next(0, units.Count);
+                number = RandomGen.GetInstance().Next(1, Math.Min(units[unitId].Size, lost));
                 tmp = units[unitId];
-                tmp.moral -= (number * 100 / tmp.Size) * 100 / tmp.moral;
+                tmp.moral -= (number*100/tmp.Size)*100/tmp.moral;
                 moral = (number*100/size())*100;
 
-                    foreach (var unit in units)
+                foreach (var unit in units)
+                {
+                    if (unit.moral > 0)
+                        unit.moral -= moral/unit.moral;
+                    if (unit.moral < 30)
                     {
-                        if(unit.moral > 0)
-                            unit.moral -= moral/unit.moral;
-                        if (unit.moral < 30)
+                        rand = RandomGen.GetInstance().Next(0, 100);
+                        if (unit.moral < rand)
                         {
-                            rand = RandomGen.GetInstance().Next(0, 100);
-                            if (unit.moral < rand)
-                            {
-                                flees.Add(unit);
-                                unit.moral = 0;
-                            }
+                            flees.Add(unit);
+                            unit.moral = 0;
                         }
                     }
-                
-                
+                }
+
+
                 tmp.Size -= number;
                 if (tmp.Size == 0)
                 {
@@ -99,8 +97,6 @@ namespace ProjetIft232.Army
 
         public bool Fight(Armies opponent)
         {
-            var rand = RandomGen.GetInstance();
-
             int ourDefense;
             int ourAttack;
 
@@ -124,8 +120,8 @@ namespace ProjetIft232.Army
                 theirDefense = opponent.getDefense();
                 theirAttack = opponent.getAttack();
 
-                ourDamage = Math.Max(size() * (1 + ourAttack / theirDefense) / 20, 1);
-                theirDamage = Math.Max(opponent.size() * (1 + theirAttack / ourDefense) / 20, 1);
+                ourDamage = Math.Max(size()*(1 + ourAttack/theirDefense)/20, 1);
+                theirDamage = Math.Max(opponent.size()*(1 + theirAttack/ourDefense)/20, 1);
 
                 LoseUnit(theirDamage);
 

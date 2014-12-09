@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProjetIft232;
 using ProjetIft232.Buildings;
@@ -13,9 +11,10 @@ namespace Ift232Tests
         [TestMethod]
         public void RequirementTest()
         {
-            var casern = BuildingLoader.GetInstance().GetBuilding((int)BuildingType.Casern);
-            var builds = new int[] { 0, 1 };
-            var requirements = new Requirement(builds, new Resources{Wood = 500, Gold = 1000, Meat = 250, Rock = 1500, Population = 10});
+            var casern = BuildingFactory.GetInstance().GetBuilding((int) BuildingType.Casern);
+            var builds = new[] {0, 1};
+            var requirements = new Requirement(builds,
+                new Resources {Wood = 500, Gold = 1000, Meat = 250, Rock = 1500, Population = 10});
             Assert.AreEqual(requirements.Resources, casern.Requirement.Resources);
             var a1 = requirements.Buildings.ToArray();
             for (int i = 0; i < builds.Length; i++)

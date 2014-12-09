@@ -11,7 +11,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="30" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Grid.Column="0">
@@ -22,8 +22,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <ComboBox Name="Players" Grid.Row="0" Grid.Column="0" IsReadOnly="True" SelectionChanged="Players_SelectionChanged">
-            </ComboBox>
+            <ComboBox Name="Players" Grid.Row="0" Grid.Column="0" IsReadOnly="True" SelectionChanged="Players_SelectionChanged" />
             <DockPanel  Grid.Row="0" Grid.Column="2" Margin="0,0,75,0">
                 <Label>Tour:</Label>
                 <Label x:Name="Turns" Content="" Width="94" Height="30" VerticalAlignment="Bottom" RenderTransformOrigin="0.316,0.5"/>
@@ -42,16 +41,16 @@
                 </LinearGradientBrush>
             </StackPanel.Background>
 
-            <Image Source="ResourcesIcon/gold.png"></Image>
-            <Label Name="lbResGold"></Label>
-            <Image Source="ResourcesIcon/meat.png"></Image>
-            <Label Name="lbResMeat"></Label>
-            <Image Source="ResourcesIcon/wood.png"></Image>
-            <Label Name="lbResWood"></Label>
-            <Image Source="ResourcesIcon/rock.png"></Image>
-            <Label Name="lbResRock"></Label>
-            <Image Source="ResourcesIcon/population.png"></Image>
-            <Label Name="lbResPop"></Label>
+            <Image Source="ResourcesIcon/gold.png" />
+            <Label Name="lbResGold" />
+            <Image Source="ResourcesIcon/meat.png" />
+            <Label Name="lbResMeat" />
+            <Image Source="ResourcesIcon/wood.png" />
+            <Label Name="lbResWood" />
+            <Image Source="ResourcesIcon/rock.png" />
+            <Label Name="lbResRock" />
+            <Image Source="ResourcesIcon/population.png" />
+            <Label Name="lbResPop" />
         </StackPanel>
         <!--<TextBox Name="Resourcesvilles" IsEnabled="False" HorizontalAlignment="Left" Height="28" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" Width="188" Loaded="Resourcesvilles_Loaded"/>-->
 
@@ -127,8 +126,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Button Name="ValidateTransaction" Content="Valider l'échange" HorizontalAlignment="Left" Margin="68,140,0,0" VerticalAlignment="Top" Width="437" Height="84" Grid.ColumnSpan="3" Grid.Column="3" Click="ValidateTransaction_Click"/>
-                    <ComboBox Name="SoldResources" HorizontalAlignment="Left" Margin="184,79,0,0" VerticalAlignment="Top" Width="90" Grid.Column="3" Grid.ColumnSpan="2" Loaded="SoldResources_Loaded" SelectionChanged="SoldResources_SelectionChanged">
-                    </ComboBox>
+                    <ComboBox Name="SoldResources" HorizontalAlignment="Left" Margin="184,79,0,0" VerticalAlignment="Top" Width="90" Grid.Column="3" Grid.ColumnSpan="2" Loaded="SoldResources_Loaded" SelectionChanged="SoldResources_SelectionChanged" />
                     <!--<ComboBox HorizontalAlignment="Left" Margin="347,79,0,0" VerticalAlignment="Top" Width="120">
                         <ComboBoxItem>Bois</ComboBoxItem>
                         <ComboBoxItem>Whatever</ComboBoxItem>
@@ -140,8 +138,7 @@
                         </TextBox>-->
                     <Label Content="Échanger " HorizontalAlignment="Left" Margin="3,75,0,0" VerticalAlignment="Top" Grid.ColumnSpan="3" Grid.Column="1"/>
                     <Label Content="contre " HorizontalAlignment="Left" Margin="40,75,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Grid.Column="4"/>
-                    <ComboBox Name="BoughtResources" HorizontalAlignment="Left" Margin="127,79,0,0" VerticalAlignment="Top" Width="120" Grid.Column="5" Loaded="BoughtResources_Loaded" SelectionChanged="BoughtResources_SelectionChanged">
-                    </ComboBox>
+                    <ComboBox Name="BoughtResources" HorizontalAlignment="Left" Margin="127,79,0,0" VerticalAlignment="Top" Width="120" Grid.Column="5" Loaded="BoughtResources_Loaded" SelectionChanged="BoughtResources_SelectionChanged" />
                     <TextBox Name="SecondValue" HorizontalAlignment="Left" Height="23" Margin="29,77,0,0" TextWrapping="Wrap" Text="5449" VerticalAlignment="Top" Width="80" IsEnabled="False" Grid.Column="5"/>
 
                 </Grid>
@@ -193,17 +190,17 @@
                 <Grid Background="#FFF5DBF5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="17*"/>
-                        <ColumnDefinition Width="152*"/>
-                        <ColumnDefinition Width="191*"/>
-                        <ColumnDefinition Width="129*"/>
-                        <ColumnDefinition Width="124*"/>
+                        <ColumnDefinition Width="153*"/>
+                        <ColumnDefinition Width="166*"/>
+                        <ColumnDefinition Width="26*"/>
+                        <ColumnDefinition Width="130*"/>
+                        <ColumnDefinition Width="125*"/>
                     </Grid.ColumnDefinitions>
-                    <ListBox Name="Listboxdereve" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="160" Height="200" Loaded="ListBox_Loaded" Grid.ColumnSpan="3" SelectionChanged="Listboxdereve_SelectionChanged"/>
-                    <Button Content="Button" HorizontalAlignment="Left" Margin="32.471,220,0,0" VerticalAlignment="Top" Width="104" Height="28" Grid.Column="3" Grid.ColumnSpan="2"/>
-                    <Label Name="Nbrcree" Content="Nombre de batiments créés" HorizontalAlignment="Center" Margin="31,38,123,241" VerticalAlignment="Center" Width="166" Height="30" Grid.Column="2" Grid.ColumnSpan="2"/>
-                    <TextBox Name="tnbrbat" IsEnabled="False" HorizontalAlignment="Left" Height="22" Margin="2,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="71" Grid.Column="4"/>
-                    <Label Name="NBProd" Content="Nombre de batiments en construction" HorizontalAlignment="Center" Margin="31,80,77,199" VerticalAlignment="Center" Width="212" Height="30" Grid.Column="2" Grid.ColumnSpan="2"/>
-                    <TextBox Name="NBProdTextBox" IsEnabled="False" HorizontalAlignment="Left" Height="24" Margin="0,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="71" Grid.Column="4"/>
+                    <ListBox Name="Listboxdereve" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="160" Height="200" Loaded="ListBox_Loaded" Grid.ColumnSpan="2" SelectionChanged="Listboxdereve_SelectionChanged"/>
+                    <Label Name="Nbrcree" Content="Nombre de batiments créés" HorizontalAlignment="Center" Margin="32,40,124,242" VerticalAlignment="Center" Width="166" Height="30" Grid.Column="2" Grid.ColumnSpan="3"/>
+                    <TextBox Name="tnbrbat" IsEnabled="False" HorizontalAlignment="Left" Height="22" Margin="2,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="71" Grid.Column="5"/>
+                    <Label Name="NBProd" Content="Nombre de batiments en construction" HorizontalAlignment="Center" Margin="32,82,78,200" VerticalAlignment="Center" Width="212" Height="30" Grid.Column="2" Grid.ColumnSpan="3"/>
+                    <TextBox Name="NBProdTextBox" IsEnabled="False" HorizontalAlignment="Left" Height="24" Margin="0,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="71" Grid.Column="5"/>
 
                 </Grid>
             </TabItem>
@@ -231,7 +228,7 @@
             </TabItem>
         </TabControl>
         <Popup Name="popup"  VerticalOffset="20"  PlacementRectangle="300,140,100,150" PopupAnimation="Fade"  AllowsTransparency="True" Margin="300,100,100,10" Placement="Mouse"  IsOpen="False">
-            <Label Name="labelPopup" Content="This is help!" Height="112"></Label>
+            <Label Name="labelPopup" Content="This is help!" Height="112" />
         </Popup>
     </Grid>
 </Window>

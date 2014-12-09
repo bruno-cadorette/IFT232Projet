@@ -1,36 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ProjetIft232.Technologies;
+﻿using System.Linq.Expressions;
 using System.Runtime.Serialization;
+using System.Security.AccessControl;
+using ProjetIft232.Technologies;
 
 namespace ProjetIft232.Buildings
 {
     [DataContract]
-    [KnownType(typeof(Market))]
-    [KnownType(typeof(Casern))]
+    [KnownType(typeof (Market))]
+    [KnownType(typeof (Casern))]
     public class Building : UpgradableEntity
     {
-        
-        [DataMember]
-        public Resources Resource { get;  set; }
-
-        
-
-        
-        //Retourne le nombre de ressources par batiment. Permet qu'un batiment actif (tel le marché) puisse générer de l'or 
-        protected virtual Resources UpdateBuilding()
-        {
-            return Resource;
-        }
-
-
         public Building()
         {
-
         }
-        public Building(int id, string name, string description, int turnsLeft, Resources resource, Requirement requirement)
+
+        public Building(int id, string name, string description, int turnsLeft, Resources resource,
+            Requirement requirement)
             : base(id, name, description, turnsLeft, requirement)
         {
             Resource = resource;
@@ -43,20 +28,29 @@ namespace ProjetIft232.Buildings
             Resource = build.Resource;
         }
 
+        [DataMember]
+        public Resources Resource { get; set; }
 
 
+        //Retourne le nombre de ressources par batiment. Permet qu'un batiment actif (tel le marché) puisse générer de l'or 
+        protected virtual Resources UpdateBuilding()
+        {
+            return Resource;
+        
+        
+        
+        
+        }
 
         public Resources Update()
         {
             if (InConstruction)
             {
-                Build();
-                return Resources.Zero();
+                return Build() 
+                    ? new Resources(ResourcesType.Population, Requirement.Resources.Population) 
+                    : Resources.Zero();
             }
-            else
-            {
-                return UpdateBuilding();
-            }
+            return UpdateBuilding();
         }
 
         protected override void UpgradeEntity(Technology technology)

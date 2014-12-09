@@ -1,14 +1,11 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProjetIft232;
-
-
 using ProjetIft232.Buildings;
 
 namespace Ift232Tests
 {
     [TestClass]
-    public class TestGame 
+    public class TestGame
     {
         public Game game { get; set; }
         public City city1 { get; set; }
@@ -26,7 +23,7 @@ namespace Ift232Tests
             game = new Game();
             player = new Player();
             game.Players.Add(player);
-            
+
             city1 = new City("Toulouse");
             player.Cities.Add(city1);
             city2 = new City("Lyon");
@@ -34,8 +31,8 @@ namespace Ift232Tests
             player.NextCity();
 
 
-            market = (Market)BuildingLoader.GetInstance().GetBuilding((int)BuildingType.Market);
-            market2 = (Market)BuildingLoader.GetInstance().GetBuilding((int)BuildingType.Market);
+            market = (Market) BuildingFactory.GetInstance().GetBuilding((int) BuildingType.Market);
+            market2 = (Market) BuildingFactory.GetInstance().GetBuilding((int) BuildingType.Market);
 
             player.CurrentCity.Buildings.Add(market);
             market.Update();
@@ -44,22 +41,21 @@ namespace Ift232Tests
             player.NextCity();
             player.CurrentCity.Buildings.Add(market2);
 
-           instancem1 = game.getMarket();
+            instancem1 = game.getMarket();
 
-           player.NextCity();
+            player.NextCity();
 
-           instancem1 = game.getMarket();
+            instancem1 = game.getMarket();
 
-           Assert.IsNotNull(instancem1);
-           Assert.IsTrue(instancem2 == null);
+            Assert.IsNotNull(instancem1);
+            Assert.IsTrue(instancem2 == null);
         }
 
         [TestMethod]
         public void LoadAndSave()
         {
-            Game game = new Game();
-            var player = new Player();
-            player.playerName = "blabla";
+            game = new Game();
+            player = new Player {playerName = "blabla"};
             player.CreateCity("Sherbrooke");
             player.CurrentCity.AddBuilding(0);
             game.Players.Add(player);
@@ -69,8 +65,8 @@ namespace Ift232Tests
 
             Assert.AreEqual(game.CurrentPlayer.playerName, newGame.CurrentPlayer.playerName);
             Assert.AreEqual(game.CurrentPlayer.CurrentCity.Name, newGame.CurrentPlayer.CurrentCity.Name);
-            Assert.AreEqual(game.CurrentPlayer.CurrentCity.Buildings[0].ID, newGame.CurrentPlayer.CurrentCity.Buildings[0].ID);
-
+            Assert.AreEqual(game.CurrentPlayer.CurrentCity.Buildings[0].ID,
+                newGame.CurrentPlayer.CurrentCity.Buildings[0].ID);
         }
     }
 }

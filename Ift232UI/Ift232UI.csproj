@@ -57,6 +57,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UiTools.cs" />
     <Compile Include="CountableListItem.cs" />
     <Compile Include="CreationJoueur.xaml.cs">
       <DependentUpon>CreationJoueur.xaml</DependentUpon>
@@ -93,7 +94,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ObservableString.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

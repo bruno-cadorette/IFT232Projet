@@ -1,20 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ProjetIft232.Technologies;
+using System.Xml.Linq;
 
 namespace ProjetIft232.Buildings
 {
-    public static class BuildingFactory
+    public class BuildingFactory : Factory
     {
+        private static BuildingFactory instance;
+
+        private static readonly object SyncRoot = new object();
+
+
+        public Building GetBuilding(int type)
+        {
+            return (Building) GetEntity(type);
+        }
+
+        public IEnumerable<Building> Buildings()
+        {
+            return _entities.Select(x => (Building) x.Value);
+        }
+
+        protected override BuildableEntity CreateEntity(XElement element, int id, string name, string description,
+            int turns, Requirement requirement)
+        {
+            Resources resources = GetResources(element);
+            string specialType = Special(element);
+            Building building = new Building(id, name, description, turns, resources, requirement);
+
+            switch (specialType)
+            {
+                case "Market":
+                    return new Market(building);
+                case "Casern":
+                    return new Casern(building);
+                default:
+                    return building;
+            }
+        }
+
+        protected override IEnumerable<XElement> GetChilds(XElement root)
+        {
+            return root.Element(XName.Get("Batiments")).Elements(XName.Get("Batiment"));
+        }
+
+        public static BuildingFactory GetInstance()
+        {
+            if (instance == null)
+            {
+                lock (SyncRoot)
+                {
+                    if (instance == null)
+                    {
+                        instance = new BuildingFactory();
+                    }
+                }
+            }
+            return instance;
+        }
+
+
         public static Building CreateBuilding(int type, City city)
         {
-            Building building = GetBuilding(type);
+            Building building = GetInstance().GetBuilding(type);
             if (building != null)
             {
-                foreach (var technology in city.ResearchedTechnologies.Where(n => n.AffectedBuildings.Any(m => m == building.ID) && !n.InConstruction))
+                foreach (
+                    var technology in
+                        city.ResearchedTechnologies.Where(
+                            n => n.AffectedBuildings.Any(m => m == building.ID) && !n.InConstruction))
                 {
                     building.Upgrade(technology);
                 }
@@ -24,11 +78,6 @@ namespace ProjetIft232.Buildings
                 }
             }
             return null;
-        }
-
-        private static Building GetBuilding(int type)
-        {
-            return BuildingLoader.GetInstance().GetBuilding(type);
         }
     }
 }

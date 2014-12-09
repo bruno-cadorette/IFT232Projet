@@ -1,30 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
-
 
 namespace ProjetIft232
 {
-    public abstract class Loader
+    public abstract class Factory
     {
-        private XDocument document { get; set; }
+        private static object _syncRoot = new object();
 
-        public Dictionary<int, BuildableEntity> _entities { get; set; } 
-        private static object SyncRoot = new object();
-        protected BuildableEntity GetEntity(int type)
-        {
-            return (_entities.ContainsKey(type)) ? DeepCopy(_entities[type]) : null;
-        }
-        protected Loader()
+        protected Factory()
         {
             _entities = new Dictionary<int, BuildableEntity>();
             document = XDocument.Load("Config.xml");
             LoadBuilding();
+        }
+
+        private XDocument document { get; set; }
+
+        public Dictionary<int, BuildableEntity> _entities { get; set; }
+
+        protected BuildableEntity GetEntity(int type)
+        {
+            return (_entities.ContainsKey(type)) ? DeepCopy(_entities[type]) : null;
         }
 
         private void LoadBuilding()
@@ -41,7 +40,8 @@ namespace ProjetIft232
             }
         }
 
-        protected abstract BuildableEntity CreateEntity(XElement element, int id, string name, string description, int turns, Requirement requirement);
+        protected abstract BuildableEntity CreateEntity(XElement element, int id, string name, string description,
+            int turns, Requirement requirement);
 
         protected abstract IEnumerable<XElement> GetChilds(XElement element);
 
@@ -63,10 +63,7 @@ namespace ProjetIft232
                     GetTechnologies(e),
                     GetResources(e));
             }
-            else
-            {
-                return Requirement.Zero();
-            }
+            return Requirement.Zero();
         }
 
 
@@ -75,7 +72,7 @@ namespace ProjetIft232
             var buildings = element.Element(XName.Get("Buildings"));
             if (buildings != null)
             {
-                return buildings.Elements(XName.Get("Building")).Select(att=>int.Parse(att.Value));
+                return buildings.Elements(XName.Get("Building")).Select(att => int.Parse(att.Value));
             }
             return Enumerable.Empty<int>();
         }
@@ -92,7 +89,7 @@ namespace ProjetIft232
 
         protected Resources GetResources(XElement element)
         {
-            int gold=0, meat=0, pop=0, wood =0, rock = 0;
+            int gold = 0, meat = 0, pop = 0, wood = 0, rock = 0;
             var ressources = element.Element(XName.Get("Resources"));
             if (ressources != null)
             {
@@ -116,11 +113,10 @@ namespace ProjetIft232
                         case "Meat":
                             meat = int.Parse(attribute.Value);
                             break;
-
                     }
                 }
             }
-            return new Resources{Wood = wood,Gold = gold,Meat = meat,Rock = rock,Population = pop};
+            return new Resources {Wood = wood, Gold = gold, Meat = meat, Rock = rock, Population = pop};
         }
 
         protected string GetAttribute(XElement element, string att)
@@ -132,17 +128,17 @@ namespace ProjetIft232
             }
             return "";
         }
+
         protected BuildableEntity DeepCopy(BuildableEntity entity)
         {
             using (MemoryStream stream = new MemoryStream())
             {
-                DataContractSerializer serializer = new DataContractSerializer(typeof(BuildableEntity));
+                DataContractSerializer serializer = new DataContractSerializer(typeof (BuildableEntity));
                 serializer.WriteObject(stream, entity);
                 stream.Position = 0;
                 BuildableEntity obj = serializer.ReadObject(stream) as BuildableEntity;
                 return obj;
             }
-            
         }
     }
 }

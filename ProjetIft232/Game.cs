@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using ProjetIft232.Buildings;
 using ProjetIft232.Technologies;
-using System.Runtime.Serialization;
-using System.IO;
 using ProjetIft232.Utility;
 
 namespace ProjetIft232
@@ -13,24 +13,33 @@ namespace ProjetIft232
     [DataContract]
     public class Game
     {
+        private RandomEvent evt = new RandomEvent();
+
+        public Game()
+        {
+            BuildingFactory.GetInstance();
+            Players = new List<Player>();
+            Hostility = 3;
+            Alea = 0;
+        }
+
         [DataMember]
         public List<Player> Players { get; set; }
 
 
         [DataMember]
         private int Hostility { get; set; }
+
         [DataMember]
         private int Alea { get; set; }
+
         [DataMember]
         public int PlayerIndex { get; private set; }
 
 
         public Player CurrentPlayer
         {
-            get
-            {
-                return Players[PlayerIndex];
-            }
+            get { return Players[PlayerIndex]; }
         }
 
         //Variable global, à changer 
@@ -38,62 +47,52 @@ namespace ProjetIft232
         public int TourIndex { get; private set; }
 
 
-
-        RandomEvent evt = new RandomEvent();
-
-        public Game()
-        {
-            BuildingLoader.GetInstance();
-            Players = new List<Player>();
-            Hostility = 3;
-            Alea = 0;
-        }
-
         public void Save(string fileName)
         {
             using (var fileStream = File.Create(fileName))
             {
-                DataContractSerializer serializer = new DataContractSerializer(typeof(Game));
+                DataContractSerializer serializer = new DataContractSerializer(typeof (Game));
                 serializer.WriteObject(fileStream, this);
             }
         }
 
         public static Game Load(string fileName)
         {
-            using (var fileStream = File.Open(fileName,FileMode.Open))
+            using (var fileStream = File.Open(fileName, FileMode.Open))
             {
-                DataContractSerializer serializer = new DataContractSerializer(typeof(Game));
+                DataContractSerializer serializer = new DataContractSerializer(typeof (Game));
                 fileStream.Position = 0;
-                Game g = serializer.ReadObject(fileStream) as Game;  
+                Game g = serializer.ReadObject(fileStream) as Game;
                 g.evt = new RandomEvent();
                 return g;
             }
         }
 
-        public string NextTurn()
+        public IEnumerable<string> NextTurn()
         {
-            string turnText = "";
+            List<string> turnText = new List<string>();
             do
-            {      
-                turnText = NextTurnInternal();
-                Console.WriteLine(turnText);
+            {
+                turnText.Add(NextTurnInternal());
+                //Console.WriteLine(turnText);
                 if (CurrentPlayer is PlayerAI)
                 {
                     Console.WriteLine("\nTour du joueur AI: {0}", CurrentPlayer.playerName);
-                    ((PlayerAI)CurrentPlayer).Play();
-
+                    ((PlayerAI) CurrentPlayer).Play();
                 }
-            }
-            while (CurrentPlayer is PlayerAI);
+            } while (CurrentPlayer is PlayerAI);
             if (HasWin())
             {
-                return "Vous avez gagné!";
+                turnText.Add("Vous avez gagné!");
             }
-            else if(HasLost())
+            if (HasLost())
             {
-                return "Vous avez perdu!  :'( ";
+                turnText.Add("Vous avez perdu!  :'( ");
             }
-            return turnText;
+            
+            
+            
+            return turnText.Where(t=>!string.IsNullOrEmpty(t));
         }
 
         private string NextTurnInternal()
@@ -102,22 +101,19 @@ namespace ProjetIft232
             CurrentPlayer.Cities.ForEach(n => n.Update());
             CurrentPlayer.ResearchedTech.ToList().ForEach(n => n.Update());
             Random hostylityAument = RandomGen.GetInstance();
-            
-            Hostility += hostylityAument.Next(-1, 1 + TourIndex / 10);
+
+            Hostility += hostylityAument.Next(-1, 1 + TourIndex/10);
             foreach (City city in CurrentPlayer.Cities)
             {
-
                 if (Hostility > hostylityAument.Next(0, 100))
                 {
                     turnText += city.Attack(BarbarianArmyGenerator.CreateArmy(TourIndex));
-
                 }
                 //On reutilise la variable hostilityAument pour generer les evenements aleatoires
                 Alea = hostylityAument.Next(0, 100);
                 if (Alea > 90)
                 {
                     turnText += evt.Next(CurrentPlayer.Cities.First());
-
                 }
             }
 
@@ -137,7 +133,6 @@ namespace ProjetIft232
         }
 
 
-
         public bool CreateCity(string name)
         {
             if (CurrentPlayer.CurrentCity.Ressources >= City.CostToCreate)
@@ -146,14 +141,11 @@ namespace ProjetIft232
                 CurrentPlayer.CreateCity(name);
                 return true;
             }
-            else
+            if (CurrentPlayer.Cities.Any(n => n.Ressources >= City.CostToCreate))
             {
-                if (CurrentPlayer.Cities.Any(n => n.Ressources >= City.CostToCreate))
-                {
-                    CurrentPlayer.Cities.First(n => n.Ressources >= City.CostToCreate).RemoveResources(City.CostToCreate);
-                    CurrentPlayer.CreateCity(name);
-                    return true;
-                }
+                CurrentPlayer.Cities.First(n => n.Ressources >= City.CostToCreate).RemoveResources(City.CostToCreate);
+                CurrentPlayer.CreateCity(name);
+                return true;
             }
             return false;
         }
@@ -170,10 +162,7 @@ namespace ProjetIft232
             {
                 return CurrentPlayer.CurrentCity.TransferResources(city, resources);
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         // Méthode getMarket pour récupérer une instance de Market (construit) si elle existe
@@ -183,20 +172,18 @@ namespace ProjetIft232
             Building m = CurrentPlayer.CurrentCity.FinishedBuildings.FirstOrDefault(n => n is Market);
 
             return m;
-
         }
 
-        private Boolean HasWin()
+        public Boolean HasWin()
         {
             var population = CurrentPlayer.Cities.Sum(city => city.Ressources[ResourcesType.Population]);
             return population >= 10000 ? true : false;
         }
 
-        private Boolean HasLost()
+        public Boolean HasLost()
         {
-            var population= CurrentPlayer.Cities.Sum(city => city.Ressources[ResourcesType.Population]);
+            var population = CurrentPlayer.Cities.Sum(city => city.Ressources[ResourcesType.Population]);
             return population <= 0 || TourIndex >= 150 ? true : false;
         }
     }
 }
-

@@ -1,37 +1,34 @@
-﻿using ProjetIft232.Army;
-using ProjetIft232.Buildings;
-using ProjetIft232.Technologies;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
+using ProjetIft232.Army;
+using ProjetIft232.Buildings;
+using ProjetIft232.Technologies;
 
 namespace ProjetIft232
 {
     [DataContract]
-    [KnownType(typeof(Building))]
-    [KnownType(typeof(ArmyUnit))]
+    [KnownType(typeof (Building))]
+    [KnownType(typeof (ArmyUnit))]
     public abstract class UpgradableEntity : BuildableEntity
     {
-        [DataMember]
-        private List<int> _CurrentTechnologies;
+        [DataMember] private List<int> _CurrentTechnologies;
 
         public UpgradableEntity()
         {
-
         }
 
         public UpgradableEntity(UpgradableEntity entity)
-            :this(entity.ID,entity.Name,entity.Description,entity.TurnsLeft,entity.Requirement)
+            : this(entity.ID, entity.Name, entity.Description, entity.TurnsLeft, entity.Requirement)
         {
         }
 
         public UpgradableEntity(int id, string name, string description, int turnsLeft, Requirement requirement)
-            :base(id,name,description,turnsLeft,requirement)
+            : base(id, name, description, turnsLeft, requirement)
         {
             _CurrentTechnologies = new List<int>();
         }
+
         public void Upgrade(Technology technology)
         {
             _CurrentTechnologies.Add(technology.ID);

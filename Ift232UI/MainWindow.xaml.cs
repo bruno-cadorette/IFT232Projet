@@ -1,25 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Win32;
-using ProjetIft232.Army;
-using Xceed.Wpf.Toolkit;
 using ProjetIft232;
+using ProjetIft232.Army;
 using ProjetIft232.Buildings;
 using ProjetIft232.Technologies;
 using MessageBox = Xceed.Wpf.Toolkit.MessageBox;
@@ -27,43 +15,52 @@ using MessageBox = Xceed.Wpf.Toolkit.MessageBox;
 namespace Ift232UI
 {
     /// <summary>
-    /// Logique d'interaction pour MainWindow.xaml
+    ///     Logique d'interaction pour MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        private void SetPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
         public Game Game;
-        private bool comboBoxBuildingIsLoaded = false;
-        private bool listBoxBuildingIsLoaded = false;
-        private bool soldResourcesIsLoaded = false;
-        private bool boughtResourcesIsLoaded = false;
-        private bool technologySelectedIsResearched = false;
+        private bool boughtResourcesIsLoaded;
+        private bool comboBoxBuildingIsLoaded;
+        private bool listBoxBuildingIsLoaded;
+        private bool soldResourcesIsLoaded;
+        private bool technologySelectedIsResearched;
+
         public MainWindow()
         {
-            this.DataContext = this;
+            DataContext = this;
             InitializeComponent();
             Inscription inscription = new Inscription();
             inscription.ShowDialog();
             Game = inscription.GetGame();
-            foreach(var player in Game.Players){
-                Players.Items.Add(player.playerName);
+            if (Game != null)
+            {
+                Update();
+                foreach (var player in Game.Players)
+                {
+                    Players.Items.Add(player.playerName);
+                }
+                Turns.Content = Game.TourIndex;
+                Update();
+                Players.SelectedIndex = Game.PlayerIndex;
+                Cities.Content = Game.CurrentPlayer.CurrentCity;
+                UnitBox.ItemsSource = ArmyFactory.GetInstance().Soldiers();
             }
-            Turns.Content=Game.TourIndex;
-            Update();
-            Players.SelectedIndex = Game.PlayerIndex;
-            Cities.Content = Game.CurrentPlayer.CurrentCity;
-            UnitBox.ItemsSource = ArmyLoader.GetInstance().Soldiers();
-           
+            else Close();
+        }
+    
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void SetPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
 
         private void btnNewCity_Click(object sender, RoutedEventArgs e)
         {
-            if (Game.CurrentPlayer.CurrentCity.Ressources[ResourcesType.Population]>500)
+            if (Game.CurrentPlayer.CurrentCity.Ressources[ResourcesType.Population] > 500)
             {
                 Game.CreateCity(tbNewCity.Text);
                 MessageBox.Show("Ville créée !");
@@ -82,31 +79,26 @@ namespace Ift232UI
 
         private void NextTurn_Click(object sender, RoutedEventArgs e)
         {
-            string turnText = "";
-            turnText = Game.NextTurn();
-            Turns.Content = Game.TourIndex;
+            var turnText = Game.NextTurn();
             Update();
-            if (turnText != "" && turnText != "Vous avez perdu!  :'( " && turnText != "Vous avez gagné!")
+
+            if (turnText.Any())
             {
-                MessageBox.Show(turnText);
+                MessageBox.Show(string.Join(Environment.NewLine, turnText));
             }
-            else if (turnText == "Vous avez perdu!  :'( ")
+
+            if(Game.HasWin() || Game.HasLost())
             {
-                MessageBox.Show(turnText + "le jeu va quitter de manière brutale");
-                Application.Current.Shutdown();
-            }
-            else if (turnText == "Vous avez gagné!")
-            {
-                MessageBox.Show(turnText + "le jeu va quitter de manière brutale");
                 Application.Current.Shutdown();
             }
         }
 
         private void Update()
         {
+            Turns.Content = Game.TourIndex;
             Players.SelectedIndex = Game.PlayerIndex;
             Cities.Content = Game.CurrentPlayer.CurrentCity;
-            UnitBox.ItemsSource = ArmyLoader.GetInstance().Soldiers();
+            UnitBox.ItemsSource = ArmyFactory.GetInstance().Soldiers();
             CurrentUnit.ItemsSource = Game.CurrentPlayer.CurrentCity.Army.getUnits().Where(n => !n.InConstruction);
             TabArmy.IsEnabled = Game.CurrentPlayer.CurrentCity.FinishedBuildings.Any(t => t is Casern);
             TabTrade.IsEnabled = Game.CurrentPlayer.CurrentCity.FinishedBuildings.Any(t => t is Market);
@@ -115,8 +107,12 @@ namespace Ift232UI
             if (Listboxdereve.IsLoaded && Listboxdereve.SelectedItem != null)
             {
                 var currentValue = Listboxdereve.SelectedItem.ToString();
-                tnbrbat.Text = Game.CurrentPlayer.CurrentCity.CountBuilding(currentValue, false).ToString();
-                NBProdTextBox.Text = Game.CurrentPlayer.CurrentCity.CountBuilding(currentValue, true).ToString();
+                tnbrbat.Text =
+                    Game.CurrentPlayer.CurrentCity.CountBuilding(currentValue, false)
+                        .ToString(CultureInfo.InvariantCulture);
+                NBProdTextBox.Text =
+                    Game.CurrentPlayer.CurrentCity.CountBuilding(currentValue, true)
+                        .ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -130,7 +126,7 @@ namespace Ift232UI
         {
             if (!comboBoxBuildingIsLoaded)
             {
-                var buildings = BuildingLoader.GetInstance().Buildings().ToArray();
+                var buildings = BuildingFactory.GetInstance().Buildings().ToArray();
                 foreach (var building in buildings)
                 {
                     cbSelectBuilding.Items.Add(building.Name);
@@ -144,35 +140,33 @@ namespace Ift232UI
 
         private void cbSelectBuilding_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var buildings = BuildingLoader.GetInstance().Buildings().ToArray();
+            var buildings = BuildingFactory.GetInstance().Buildings().ToArray();
             var currentValue = (sender as ComboBox).SelectedItem.ToString();
             Building currentBuilding = buildings.First(n => n.Name == currentValue);
             tbBuildingDatas.Text = currentBuilding.Description;
             tbBuildingDatas.Text += currentBuilding.Requirement.toString();
             tbBuildingDatas.Text += " Nombre de tours nécessaires : ";
-            tbBuildingDatas.Text += BuildingLoader.GetInstance().GetBuilding(currentBuilding.ID).TurnsLeft;
+            tbBuildingDatas.Text += BuildingFactory.GetInstance().GetBuilding(currentBuilding.ID).TurnsLeft;
         }
 
         private void btnNewBuilding_Click(object sender, RoutedEventArgs e)
         {
-            if (Game.CurrentPlayer.CurrentCity.AddBuilding(cbSelectBuilding.SelectedIndex)!=null)
+            if (Game.CurrentPlayer.CurrentCity.AddBuilding(cbSelectBuilding.SelectedIndex) != null)
             {
                 MessageBox.Show("Bâtiment créé !!!");
             }
-            else 
+            else
             {
-                MessageBox.Show( "Le bâtiment n'a pu être créé faute de ressources!");
-
+                MessageBox.Show("Le bâtiment n'a pu être créé faute de ressources!");
             }
             Update();
-
         }
 
         private void ListBox_Loaded(object sender, RoutedEventArgs e)
         {
             if (!listBoxBuildingIsLoaded)
             {
-                var buildings = BuildingLoader.GetInstance().Buildings().ToArray();
+                var buildings = BuildingFactory.GetInstance().Buildings().ToArray();
                 foreach (var building in buildings)
                 {
                     Listboxdereve.Items.Add(building.Name);
@@ -188,8 +182,12 @@ namespace Ift232UI
 
         private void SoldResources_Loaded(object sender, RoutedEventArgs e)
         {
-            ResourcesType[] listeEchange = { ResourcesType.Wood, ResourcesType.Gold,  ResourcesType.Meat, ResourcesType.Rock };
-            if(!soldResourcesIsLoaded)
+            ResourcesType[] listeEchange =
+            {
+                ResourcesType.Wood, ResourcesType.Gold, ResourcesType.Meat,
+                ResourcesType.Rock
+            };
+            if (!soldResourcesIsLoaded)
             {
                 foreach (var elmt in listeEchange)
                 {
@@ -202,7 +200,7 @@ namespace Ift232UI
 
         private void BoughtResources_Loaded(object sender, RoutedEventArgs e)
         {
-            ResourcesType[] listeEchange = { ResourcesType.Wood, ResourcesType.Meat, ResourcesType.Rock };
+            ResourcesType[] listeEchange = {ResourcesType.Wood, ResourcesType.Meat, ResourcesType.Rock};
             if (!boughtResourcesIsLoaded)
             {
                 foreach (var elmt in listeEchange)
@@ -228,10 +226,9 @@ namespace Ift232UI
             var soldType = Resource.Name.First(n => n.Value == SoldResources.SelectedItem.ToString());
 
             int val2 = m.Trade(val1, soldType.Key, boughtType.Key);
-            SecondValue.Text = val2.ToString();
+            SecondValue.Text = val2.ToString(CultureInfo.InvariantCulture);
 
             FirstValue.Maximum = Game.CurrentPlayer.CurrentCity.Ressources[soldType.Key];
-            
         }
 
         private void SoldResources_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -254,7 +251,8 @@ namespace Ift232UI
 
             int qty = FirstValue.Value.Value;
 
-            bool done = ((Market)Game.getMarket()).Achat(Game.CurrentPlayer.CurrentCity, qty, soldType.Key, boughtType.Key);
+            bool done = ((Market) Game.getMarket()).Achat(Game.CurrentPlayer.CurrentCity, qty, soldType.Key,
+                boughtType.Key);
             if (done)
             {
                 MessageBox.Show("Votre échange a bien eu lieu !!!");
@@ -263,11 +261,9 @@ namespace Ift232UI
             {
                 MessageBox.Show("Votre échange n'a pas eu lieu !!!");
             }
-          
-         
-            
-            Update();
 
+
+            Update();
         }
 
 
@@ -283,7 +279,6 @@ namespace Ift232UI
             lbResWood.Content = Game.CurrentPlayer.CurrentCity.Ressources[ResourcesType.Wood];
             lbResRock.Content = Game.CurrentPlayer.CurrentCity.Ressources[ResourcesType.Rock];
             lbResPop.Content = Game.CurrentPlayer.CurrentCity.Ressources[ResourcesType.Population];
-
         }
 
 
@@ -297,13 +292,13 @@ namespace Ift232UI
                 {
                     if (!Game.CurrentPlayer.CurrentCity.AddArmy(armyTypeId))
                     {
-                        MessageBox.Show("Pas assez de ressource pour en produire!", "Production échouée", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                        MessageBox.Show("Pas assez de ressource pour en produire!", "Production échouée",
+                            MessageBoxButton.OK, MessageBoxImage.Exclamation);
                         break;
                     }
                 }
                 Update();
             }
-            
         }
 
         private void btnAttaquer(object sender, RoutedEventArgs e)
@@ -324,7 +319,7 @@ namespace Ift232UI
             ApplyCountSlider.IsEnabled = false;
             Dictionary<int, Technology> tech = new Dictionary<int, Technology>();
             bool isDone = false;
-            foreach (var each in TechnologyLoader.GetInstance().Technologies())
+            foreach (var each in TechnologyFactory.GetInstance().Technologies())
             {
                 foreach (var each2 in Game.CurrentPlayer.ResearchedTech)
                 {
@@ -340,7 +335,7 @@ namespace Ift232UI
                 isDone = false;
             }
             if (tech.Count > 0)
-                TechnologyToDo.ItemsSource = tech.Select(n => (Technology)n.Value);
+                TechnologyToDo.ItemsSource = tech.Select(n => n.Value);
             else
                 TechnologyToDo.ItemsSource = null;
             TechnologyDone.ItemsSource = Game.CurrentPlayer.ResearchedTech;
@@ -349,7 +344,7 @@ namespace Ift232UI
 
         private void TechnologyToDo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var technology = (Technology)TechnologyToDo.SelectedItem;
+            var technology = (Technology) TechnologyToDo.SelectedItem;
             if (technology == null)
             {
                 return;
@@ -357,13 +352,11 @@ namespace Ift232UI
             tbDescription.Text = technology.Description;
             tbRequisite.Text = technology.Requirement.toString();
             TechnologyButton.Content = "Rechercher";
-            
-
         }
 
         private void UpgradableEntityList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selection = (CountableListItem<UpgradableEntity>)UpgradableEntityList.SelectedItem;
+            var selection = (CountableListItem<UpgradableEntity>) UpgradableEntityList.SelectedItem;
             if (selection != null)
             {
                 //UpgradableEntityList.ItemsSource = Enumerable.Empty<UpgradableEntity>();
@@ -375,16 +368,16 @@ namespace Ift232UI
 
         private void TechnologyButton_Click(object sender, RoutedEventArgs e)
         {
-            
-            if(technologySelectedIsResearched)
+            if (technologySelectedIsResearched)
             {
-                var technologyDone = (Technology)TechnologyDone.SelectedItem;
+                var technologyDone = (Technology) TechnologyDone.SelectedItem;
                 if (technologyDone == null)
                     return;
-                var entity = (CountableListItem<UpgradableEntity>)UpgradableEntityList.SelectedItem;
+                var entity = (CountableListItem<UpgradableEntity>) UpgradableEntityList.SelectedItem;
                 if (entity != null)
                 {
-                    Game.CurrentPlayer.CurrentCity.UpgradeEntities(entity.Item, technologyDone, (int)ApplyCountSlider.Value);
+                    Game.CurrentPlayer.CurrentCity.UpgradeEntities(entity.Item, technologyDone,
+                        (int) ApplyCountSlider.Value);
                 }
                 technologySelectedIsResearched = false;
                 TechnologyDone.SelectedItem = null;
@@ -393,10 +386,10 @@ namespace Ift232UI
             }
             else
             {
-                var technologyToDo = (Technology)TechnologyToDo.SelectedItem;
+                var technologyToDo = (Technology) TechnologyToDo.SelectedItem;
                 if (technologyToDo == null)
                     return;
-                if(Game.CurrentPlayer.ResearchTechnology(technologyToDo.ID))
+                if (Game.CurrentPlayer.ResearchTechnology(technologyToDo.ID))
                 {
                     Update();
                     MessageBox.Show("La recherche de la technologie à été lancée !");
@@ -410,12 +403,12 @@ namespace Ift232UI
 
         private void ApplyCountSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            SliderCount.Content = (int)ApplyCountSlider.Value;
+            SliderCount.Content = (int) ApplyCountSlider.Value;
         }
 
         private void TechnologyDone_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var technology = (Technology)TechnologyDone.SelectedItem;
+            var technology = (Technology) TechnologyDone.SelectedItem;
             if (technology == null)
             {
                 return;
@@ -456,22 +449,22 @@ namespace Ift232UI
 
         private void ArmyRequirementUpdate()
         {
-            var army = (ArmyUnit)UnitBox.SelectedItem;
+            var army = (ArmyUnit) UnitBox.SelectedItem;
             if (army == null)
                 return;
             try
             {
-                int number = (int)SoldierQuantityBox.Value;
+                int number = (int) SoldierQuantityBox.Value;
                 ArmyRequirement.Content = "";
-                ArmyRequirement.Content += "Or : " + army.Requirement.Resources[ResourcesType.Gold] * number;
-                ArmyRequirement.Content += " / Viande : " + army.Requirement.Resources[ResourcesType.Meat] * number;
-                ArmyRequirement.Content += " / Bois : " + army.Requirement.Resources[ResourcesType.Wood] * number;
-                ArmyRequirement.Content += " / Roche : " + army.Requirement.Resources[ResourcesType.Rock] * number;
-                ArmyRequirement.Content += " / Population : " + army.Requirement.Resources[ResourcesType.Population] * number;
+                ArmyRequirement.Content += "Or : " + army.Requirement.Resources[ResourcesType.Gold]*number;
+                ArmyRequirement.Content += " / Viande : " + army.Requirement.Resources[ResourcesType.Meat]*number;
+                ArmyRequirement.Content += " / Bois : " + army.Requirement.Resources[ResourcesType.Wood]*number;
+                ArmyRequirement.Content += " / Roche : " + army.Requirement.Resources[ResourcesType.Rock]*number;
+                ArmyRequirement.Content += " / Population : " +
+                                           army.Requirement.Resources[ResourcesType.Population]*number;
             }
             catch (InvalidOperationException)
             {
-
             }
         }
 
@@ -490,27 +483,20 @@ namespace Ift232UI
             window.CheckFileExists = false;
             if (true == window.ShowDialog())
             {
-                Game.Save(window.FileName);  
+                Game.Save(window.FileName);
             }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             btnSave_Click(sender, e);
-            this.Close();
+            Close();
         }
 
         private void BtnLoad_Click(object sender, RoutedEventArgs e)
         {
-              OpenFileDialog window = new OpenFileDialog();
-            window.Filter = "save file|*.sav";
-            window.Title = "Séléctionnez le fichier de chargement.";
-            window.CheckFileExists = true;
-            if (true == window.ShowDialog())
-            {
-                Game=Game.Load(window.FileName);
-            }
+            Game = UiTools.Load();
+            Update();
         }
-
     }
 }

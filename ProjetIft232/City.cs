@@ -1,31 +1,42 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
 using ProjetIft232.Army;
 using ProjetIft232.Buildings;
 using ProjetIft232.Technologies;
-using System.Collections.ObjectModel;
-using System.Runtime.Serialization;
 
 namespace ProjetIft232
 {
     [DataContract]
     public class City
     {
-        public static Resources CostToCreate = new Resources { Wood = 10000, Gold = 10000, Meat = 10000, Rock = 10000, Population = 500 };
-        private Resources BaseProduction()
+        public static Resources CostToCreate = new Resources
         {
-            return new Resources(new Dictionary<ResourcesType, int>() {
-            {ResourcesType.Wood, 0},
-            {ResourcesType.Gold, 0},
-            {ResourcesType.Meat, 0},
-            {ResourcesType.Rock, 0},
-            {ResourcesType.Population, 0 /*Convert.ToInt32(1 + _tourDepuisCreation * 0.1)*/}
-        });
+            Wood = 10000,
+            Gold = 10000,
+            Meat = 10000,
+            Rock = 10000,
+            Population = 500
+        };
+
+        [DataMember]
+        private int _turnsSinceCreation;
+
+        public City(string name)
+        {
+            ResearchedTechnologies = new List<Technology>();
+            Name = name;
+            Ressources = new Resources { Wood = 10000, Gold = 10000, Meat = 10000, Rock = 10000, Population = 500 };
+            Buildings = new List<Building>();
+
+            recruitement = new List<ArmyUnit>();
+            Army = new Armies();
+            _turnsSinceCreation = 0;
         }
+
         [DataMember]
         public List<Building> Buildings { get; private set; }
 
@@ -33,6 +44,7 @@ namespace ProjetIft232
         {
             get { return Buildings.Where(t => !t.InConstruction); }
         }
+
         [DataMember]
         public List<ArmyUnit> recruitement { get; private set; }
 
@@ -48,19 +60,16 @@ namespace ProjetIft232
         [DataMember]
         public string Name { get; private set; }
 
-        [DataMember]
-        private int _turnsSinceCreation;
-
-        public City(string name)
+        private Resources BaseProduction()
         {
-            ResearchedTechnologies = new List<Technology>();
-            Name = name;
-            Ressources = new Resources{Wood = 10000, Gold = 10000, Meat = 10000, Rock = 10000, Population = 500};
-            Buildings = new List<Building>();
-
-            recruitement = new List<ArmyUnit>();
-            Army = new Army.Armies();
-            _turnsSinceCreation = 0;
+            return new Resources(new Dictionary<ResourcesType, int>
+            {
+                {ResourcesType.Wood, 0},
+                {ResourcesType.Gold, 0},
+                {ResourcesType.Meat, 0},
+                {ResourcesType.Rock, 0},
+                {ResourcesType.Population, 0 /*Convert.ToInt32(1 + _tourDepuisCreation * 0.1)*/}
+            });
         }
 
         public override string ToString()
@@ -105,15 +114,14 @@ namespace ProjetIft232
                     RemoveResources(technology.ApplicationCost);
                     n++;
                 }
-
             }
         }
 
         public bool TransferResources(City city, Resources resource)
         {
-            if (this.Ressources >= resource)
+            if (Ressources >= resource)
             {
-                this.RemoveResources(resource);
+                RemoveResources(resource);
                 city.AddResources(resource);
                 return true;
             }
@@ -129,26 +137,16 @@ namespace ProjetIft232
                 Buildings.Add(building);
                 return building;
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         public void RemoveBuilding(int nb)
         {
-            int nbrCasern = 0;
             if (Buildings.Count <= nb) return;
             if (Buildings[nb] is Casern) // TODO: Fix this. We wont do it. KTHXBYE
             {
-                for (int i = 0; i < Buildings.Count; i++)
-                {
-                    if (Buildings[nb] is Casern)
-                    {
-                        nbrCasern++;
-                    }
-                }
-                if (nbrCasern == 1)
+                // Si toutes les casernes sont demolies, les recrues retournent a la maison !!
+                if (Buildings.Count(t => t is Casern) == 1)
                 {
                     recruitement.Clear();
                 }
@@ -160,7 +158,7 @@ namespace ProjetIft232
         {
             foreach (Building building in Buildings)
             {
-                if (building.ID == (int)bt && !building.InConstruction)
+                if (building.ID == bt && !building.InConstruction)
                     return true;
             }
             return false;
@@ -208,36 +206,38 @@ namespace ProjetIft232
                 recruitement.Add(armyUnit);
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
-        public string Attack(Armies BarbarianArmy)
+        public string Attack(Armies barbarianArmy)
         {
-            string Resume = string.Format("La ville est attaqué par des barbares, ils sont {0} ", BarbarianArmy.size());
+            string resume = string.Format("La ville est attaqué par des barbares, ils sont {0} ", barbarianArmy.size());
 
             int armySize = Army.size();
-            int BarbarianArmySize = BarbarianArmy.size();
+            int barbarianArmySize = barbarianArmy.size();
 
             if (Army.size() == 0)
             {
-                BarbarianArmy.getUnits().ForEach(n => RemoveResources(n.Transport));
-                return Resume += string.Format("Nous n'avions aucune defense, nous nous somme fait ecraser");
-            }
-            if (BarbarianArmy.Fight(Army))
-            {
-                BarbarianArmy.getUnits().ForEach(n => RemoveResources(n.Transport));
-                Resume += string.Format("Nous avons perdu... Les Barbars sont repartis avec ns ressources !");
+                barbarianArmy.getUnits().ForEach(n => RemoveResources(n.Transport));
+                resume += string.Format("Nous n'avions aucune defense, nous nous somme fait ecraser");
             }
             else
             {
-                Resume += string.Format("Nous avons gagné!        ");
-            }
-            Resume += string.Format("Dans la bataille nous avons perdu  {0} soldats et eux {1}", armySize - Army.size(), BarbarianArmySize - BarbarianArmy.size());
-            return Resume;
 
+                if (barbarianArmy.Fight(Army))
+                {
+                    barbarianArmy.getUnits().ForEach(n => RemoveResources(n.Transport));
+                    resume += string.Format("Nous avons perdu... Les Barbars sont repartis avec ns ressources !");
+                }
+                else
+                {
+                    resume += string.Format("Nous avons gagné!");
+                }
+
+                resume += string.Format("Dans la bataille nous avons perdu  {0} soldats et eux {1}", armySize - Army.size(),
+                 barbarianArmySize - barbarianArmy.size());
+            }
+            return resume;
         }
 
         public void TechChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -250,6 +250,5 @@ namespace ProjetIft232
                 }
             }
         }
-
     }
 }

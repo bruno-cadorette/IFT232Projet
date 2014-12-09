@@ -1,20 +1,21 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
-using System.Xml;
-using ProjetIft232.Technologies;
 using System.Runtime.Serialization;
+using ProjetIft232.Technologies;
 
 namespace ProjetIft232
 {
     [DataContract]
     public class Player
     {
+        public Player()
+        {
+            ResearchedTech = new ObservableCollection<Technology>();
+            Cities = new List<City>();
+            _indexCity = 0;
+        }
+
         [DataMember]
         public ObservableCollection<Technology> ResearchedTech { get; private set; }
 
@@ -24,19 +25,9 @@ namespace ProjetIft232
         [DataMember]
         public string playerName { get; set; }
 
-        public Player()
-        {
-            ResearchedTech = new ObservableCollection<Technology>();
-            Cities = new List<City>();
-            _indexCity = 0;
-        }
-
         public City CurrentCity
         {
-            get
-            {
-                return Cities[_indexCity];
-            }
+            get { return Cities[_indexCity]; }
         }
 
         [DataMember]
@@ -44,7 +35,7 @@ namespace ProjetIft232
 
         public void NextCity()
         {
-            _indexCity = (_indexCity + 1) % Cities.Count;
+            _indexCity = (_indexCity + 1)%Cities.Count;
         }
 
         public void CreateCity(string name)
@@ -62,24 +53,21 @@ namespace ProjetIft232
 
         public IEnumerable<Technology> GetTechnologies()
         {
-            return TechnologyLoader.GetInstance().Technologies()
+            return TechnologyFactory.GetInstance().Technologies()
                 .Where(n => ResearchedTech.All(m => n.ID != m.ID && !m.InConstruction));
-
         }
 
         public bool ResearchTechnology(int type)
         {
-            Technology technology = TechnologyFactory.CreateTechnology(type, CurrentCity.Ressources,  CurrentCity.Buildings, ResearchedTech);
+            Technology technology = TechnologyFactory.CreateTechnology(type, CurrentCity.Ressources,
+                CurrentCity.Buildings, ResearchedTech);
             if (technology == null)
             {
                 return false;
             }
-            else
-            {
-                ResearchedTech.Add(technology);
-                CurrentCity.RemoveResources(technology.Requirement.Resources);
-                return true;
-            }
+            ResearchedTech.Add(technology);
+            CurrentCity.RemoveResources(technology.Requirement.Resources);
+            return true;
         }
     }
 }

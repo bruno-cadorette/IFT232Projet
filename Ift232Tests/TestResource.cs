@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProjetIft232;
 
@@ -9,7 +7,6 @@ namespace Ift232Tests
     [TestClass]
     public class TestResource
     {
-
         [TestMethod]
         public void TestConstructeur()
         {
@@ -41,15 +38,15 @@ namespace Ift232Tests
 
             rsc.Add(ResourcesType.Population, 16);
             Resources res6 = new Resources(rsc);
-            Assert.IsTrue(res == new Resources() && res != res2 && res != res3 && res != res4 && res != res5 && res != res6);
+            Assert.IsTrue(res == new Resources() && res != res2 && res != res3 && res != res4 && res != res5 &&
+                          res != res6);
             Assert.AreEqual(res6, new Resources(rsc));
-
         }
 
         [TestMethod]
         public void TestAdd()
         {
-            Dictionary<ResourcesType,int> rsc = new Dictionary<ResourcesType, int>();
+            Dictionary<ResourcesType, int> rsc = new Dictionary<ResourcesType, int>();
             rsc.Add(ResourcesType.Gold, 1);
             Resources res = new Resources(rsc);
             Resources res2 = new Resources(rsc);
@@ -58,8 +55,10 @@ namespace Ift232Tests
             Resources rs4 = res - res2;
             Assert.IsTrue(rs3[ResourcesType.Gold] == 2);
             Assert.IsTrue(rs4[ResourcesType.Gold] == 0);
-            Assert.IsTrue( rs3[ResourcesType.Meat] == 0 && rs3[ResourcesType.Rock] == 0 && rs3[ResourcesType.Population] == 0 && rs3[ResourcesType.Wood] == 0);
-            Assert.IsTrue(rs4[ResourcesType.Meat] == 0 && rs4[ResourcesType.Rock] == 0 && rs4[ResourcesType.Population] == 0 && rs4[ResourcesType.Wood] == 0);
+            Assert.IsTrue(rs3[ResourcesType.Meat] == 0 && rs3[ResourcesType.Rock] == 0 &&
+                          rs3[ResourcesType.Population] == 0 && rs3[ResourcesType.Wood] == 0);
+            Assert.IsTrue(rs4[ResourcesType.Meat] == 0 && rs4[ResourcesType.Rock] == 0 &&
+                          rs4[ResourcesType.Population] == 0 && rs4[ResourcesType.Wood] == 0);
         }
 
         [TestMethod]
@@ -69,7 +68,7 @@ namespace Ift232Tests
             rsc.Add(ResourcesType.Gold, 1);
 
             Resources rsc2 = new Resources();
-            
+
             Resources res = new Resources(rsc);
 
             Assert.IsFalse(rsc2.Equals(null));
@@ -116,14 +115,20 @@ namespace Ift232Tests
         [TestMethod]
         public void TestUpdate()
         {
-            City city = new City("test");
-            Dictionary<ResourcesType, int> rsc = new Dictionary<ResourcesType, int>();
+            var city = new City("test");
+            var rsc = new Dictionary<ResourcesType, int>();
             rsc.Add(ResourcesType.Gold, 1);
 
-            city.RemoveResources(new Resources { Wood = 10000, Gold = 10000, Meat = 10000, Rock = 10000, Population = 1000 });
+            city.RemoveResources(new Resources
+            {
+                Wood = 10000,
+                Gold = 10000,
+                Meat = 10000,
+                Rock = 10000,
+                Population = 1000
+            });
 
-            Resources res = new Resources(rsc);
-            Dictionary<ResourcesType, int> rsc6 = new Dictionary<ResourcesType, int>();
+            var rsc6 = new Dictionary<ResourcesType, int>();
             rsc6.Add(ResourcesType.Gold, 0);
             rsc6.Add(ResourcesType.Meat, 0);
             rsc6.Add(ResourcesType.Wood, 0);

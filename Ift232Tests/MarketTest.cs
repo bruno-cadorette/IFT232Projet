@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProjetIft232;
 using ProjetIft232.Buildings;
 
@@ -12,16 +11,16 @@ namespace Ift232Tests
         public Market market { get; set; }
 
 
-
-        [TestInitialize()]
+        [TestInitialize]
         public void Init()
         {
             city1 = new City("Toulouse");
-            market = (Market)BuildingLoader.GetInstance().GetBuilding((int)BuildingType.Market);
+            market = (Market) BuildingFactory.GetInstance().GetBuilding((int) BuildingType.Market);
             market.Update();
             market.Update();
             market.Update();
         }
+
         [TestMethod]
         public void TestAchatVille()
         {
@@ -29,7 +28,6 @@ namespace Ift232Tests
             int rock = city1.Ressources[ResourcesType.Rock];
             int viande = city1.Ressources[ResourcesType.Meat];
             int gold = city1.Ressources[ResourcesType.Gold];
-
 
 
             market.Achat(city1, 20, ResourcesType.Gold, ResourcesType.Wood);
@@ -40,16 +38,16 @@ namespace Ift232Tests
             var rock2 = city1.Ressources[ResourcesType.Rock];
             var gold2 = city1.Ressources[ResourcesType.Gold];
 
-            Assert.IsTrue((viande2 - viande) == (8 * 20));
-            Assert.IsTrue((bois2 - bois) == (15 * 20));
-            Assert.IsTrue((rock2 - rock) == (12 * 20));
+            Assert.IsTrue((viande2 - viande) == (8*20));
+            Assert.IsTrue((bois2 - bois) == (15*20));
+            Assert.IsTrue((rock2 - rock) == (12*20));
             Assert.IsTrue((gold - gold2 == 60));
-             }
+        }
 
         [TestMethod]
         public void TestConversionMarket()
         {
-            int boispropose= 145 ; 
+            int boispropose = 145;
             int boisconverti;
             int viandepropose = 9;
             int viandeconverti;
@@ -75,9 +73,9 @@ namespace Ift232Tests
             int rockconvertie;
 
             viandeconvertie = market.Trade(boispropose, ResourcesType.Wood, ResourcesType.Meat);
-            boisconverti = market.Trade(viandepropose, ResourcesType.Meat,ResourcesType.Wood );           
+            boisconverti = market.Trade(viandepropose, ResourcesType.Meat, ResourcesType.Wood);
             rockconvertie = market.Trade(boispropose, ResourcesType.Wood, ResourcesType.Rock);
-            
+
             Assert.AreEqual(viandeconvertie, 53);
             Assert.AreEqual(boisconverti, 75);
             Assert.AreEqual(rockconvertie, 80);

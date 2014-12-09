@@ -1,23 +1,22 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProjetIft232;
 
 namespace Ift232Tests
 {
     [TestClass]
-    public class AITest
+    public class AiTest
     {
-        public PlayerAI player { get; set; }
+        public PlayerAI Player { get; set; }
 
         [TestMethod]
-        public void CreateAI()
+        public void CreateAi()
         {
-            player = new PlayerAI();
+            Player = new PlayerAI();
 
-            Assert.IsNotNull(player.playerName);
-            Assert.AreEqual(player.Cities.Count, 1);
-            Assert.IsNotNull(player.CurrentCity);
-            Assert.IsNotNull(player.CurrentCity.Name);
+            Assert.IsNotNull(Player.playerName);
+            Assert.AreEqual(Player.Cities.Count, 1);
+            Assert.IsNotNull(Player.CurrentCity);
+            Assert.IsNotNull(Player.CurrentCity.Name);
         }
     }
 }

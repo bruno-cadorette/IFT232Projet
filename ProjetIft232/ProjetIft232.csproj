@@ -47,19 +47,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Army\ArmyFactory.cs" />
-    <Compile Include="Army\ArmyLoader.cs" />
     <Compile Include="Army\ArmyUnit.cs" />
     <Compile Include="Army\Armies.cs" />
     <Compile Include="Army\SoldierAttributes.cs" />
     <Compile Include="BuildableEntity.cs" />
-    <Compile Include="Buildings\BuildingLoader.cs" />
+    <Compile Include="Buildings\BuildingFactory.cs" />
     <Compile Include="Buildings\Casern.cs" />
     <Compile Include="PlayerAI.cs" />
     <Compile Include="RandomEvent.cs" />
     <Compile Include="BarbarianArmyGenerator.cs" />
     <Compile Include="Buildings\Building.cs" />
-    <Compile Include="Buildings\BuildingFactory.cs" />
-    <Compile Include="Loader.cs" />
+    <Compile Include="Factory.cs" />
     <Compile Include="Requirement.cs" />
     <Compile Include="Buildings\Market.cs" />
     <Compile Include="Player.cs" />
@@ -70,7 +68,6 @@
     <Compile Include="Technologies\Enhancement.cs" />
     <Compile Include="Technologies\Technology.cs" />
     <Compile Include="Technologies\TechnologyFactory.cs" />
-    <Compile Include="Technologies\TechnologyLoader.cs" />
     <Compile Include="UpgradableEntity.cs" />
     <Compile Include="Utility\RandomGen.cs" />
   </ItemGroup>

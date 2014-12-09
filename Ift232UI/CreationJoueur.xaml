@@ -9,9 +9,11 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Button Grid.ColumnSpan="2" Content="Créer !" HorizontalAlignment="Left" Margin="56,186,0,0" VerticalAlignment="Top" Width="179" Height="43" Click="Button_Click"/>
-        <Label Content="ProjetIft232" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="91,27,0,0" VerticalAlignment="Top" FontSize="20"/>
-        <xctk:WatermarkTextBox Name="tbPlayer" Watermark="Nom personnage" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="30" Margin="56,85,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179"/>
-        <xctk:WatermarkTextBox  Name="tbCity" Watermark="Nom de la ville" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="30" Margin="56,133,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="179"/>
+        <Label Content="ProjetIft232" Grid.ColumnSpan="2" Grid.Column="0" HorizontalAlignment="Left" Margin="91,27,0,0" VerticalAlignment="Top" FontSize="20"/>
+        <xctk:WatermarkTextBox Name="tbPlayer" Watermark="Nom personnage" Grid.ColumnSpan="2" Grid.Column="0"
+                               HorizontalAlignment="Left" Height="30" Margin="56,85,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179"/>
+        <xctk:WatermarkTextBox  Name="tbCity" Watermark="Nom de la ville" Grid.ColumnSpan="2" Grid.Column="0"
+                                HorizontalAlignment="Left" Height="30" Margin="56,133,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="179"/>
 
     </Grid>
 </Window>

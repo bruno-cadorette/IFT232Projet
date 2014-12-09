@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProjetIft232;
 using ProjetIft232.Army;
 
@@ -8,15 +7,13 @@ namespace Ift232Tests
     [TestClass]
     public class CityTest
     {
-
-
         public City city1 { get; set; }
         public City city2 { get; set; }
 
         public Player player { get; set; }
 
 
-        [TestInitialize()]
+        [TestInitialize]
         public void Init()
         {
             player = new Player();
@@ -26,6 +23,7 @@ namespace Ift232Tests
             player.Cities.Add(city2);
             player.NextCity();
         }
+
         [TestMethod]
         public void TestAddCity()
         {
@@ -34,21 +32,22 @@ namespace Ift232Tests
             City citeTest = player.CurrentCity;
             player.NextCity();
             Assert.IsTrue(citeTest != player.CurrentCity);
-
         }
 
 
         [TestMethod]
         public void TestEchangeWorkCity()
         {
-            city1.TransferResources(city2, new Resources { Wood = 100, Gold = 1000, Meat = 100, Rock = 100, Population = 100 });
+            city1.TransferResources(city2,
+                new Resources {Wood = 100, Gold = 1000, Meat = 100, Rock = 100, Population = 100});
             Assert.IsTrue(city1.Ressources < city2.Ressources);
         }
 
         [TestMethod]
         public void TestEchangeNopeCity()
         {
-            city1.TransferResources(city2, new Resources { Wood = 1000000, Gold = 1000000, Meat = 1000000, Rock = 1000000, Population = 1000000 });
+            city1.TransferResources(city2,
+                new Resources {Wood = 1000000, Gold = 1000000, Meat = 1000000, Rock = 1000000, Population = 1000000});
             Assert.IsFalse(city1.Ressources < city2.Ressources);
         }
 
@@ -58,6 +57,7 @@ namespace Ift232Tests
             city1.Ressources[ResourcesType.Gold] = 40;
             Assert.AreEqual(city1.Ressources[ResourcesType.Gold], 40);
         }
+
         [TestMethod]
         public void TestAttack()
         {
