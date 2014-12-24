@@ -3,7 +3,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace ProjetIft232
+namespace Core
 {
     //TODO: Changer pour une classe
     public enum ResourcesType

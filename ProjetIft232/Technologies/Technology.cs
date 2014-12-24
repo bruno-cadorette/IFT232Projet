@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using ProjetIft232.Army;
-using ProjetIft232.Buildings;
+using Core.Army;
+using Core.Buildings;
 
-namespace ProjetIft232.Technologies
+namespace Core.Technologies
 {
     [DataContract]
     public class Technology : BuildableEntity
@@ -34,17 +34,20 @@ namespace ProjetIft232.Technologies
             Enhancement enhancements)
             : base(id, name, description, turnsLeft, requirement)
         {
-            AffectedBuildings = affectedBuildings;
-            AffectedSoldiers = affectedSoldiers;
+            AffectedBuildings = new HashSet<int>(affectedBuildings);
+            AffectedSoldiers = new HashSet<int>(affectedSoldiers);
             ApplicationCost = applicationCost;
             Enhancements = enhancements;
         }
 
         [DataMember]
-        public IEnumerable<int> AffectedBuildings { get; private set; }
+        public HashSet<int> AffectedBuildings { get; private set; }
 
         [DataMember]
-        public IEnumerable<int> AffectedSoldiers { get; private set; }
+        public HashSet<int> AffectedSoldiers { get; private set; }
+
+        //Utiliser quand nous allons avoir des ID unique
+        public HashSet<int> AffectedEntities { get; private set; }
 
         [DataMember]
         public Resources ApplicationCost { get; private set; }
@@ -57,20 +60,17 @@ namespace ProjetIft232.Technologies
         {
             if (entity is Building)
             {
-                return AffectedBuildings.Any(x => x == entity.ID);
+                return AffectedBuildings.Contains(entity.ID);
             }
-            if (entity is ArmyUnit)
+            else if (entity is ArmyUnit)
             {
-                return AffectedSoldiers.Any(x => x == entity.ID);
+                return AffectedSoldiers.Contains(entity.ID);
             }
-            throw new NotImplementedException("Vous n'avez pas prévu de cas pour cette upgradable entity!");
+            else
+            {
+                return AffectedEntities.Contains(entity.ID);
+            }
         }
-
-        public bool CanAffect(ArmyUnit soldier)
-        {
-            return AffectedSoldiers.Any(x => x == soldier.ID);
-        }
-
         public void Update()
         {
             if (InConstruction)

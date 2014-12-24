@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Serialization;
-using ProjetIft232.Army;
+using Core.Army;
 
-namespace ProjetIft232.Technologies
+namespace Core.Technologies
 {
     [DataContract]
     public sealed class Enhancement

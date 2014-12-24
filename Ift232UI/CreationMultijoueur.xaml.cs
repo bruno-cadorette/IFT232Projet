@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using ProjetIft232;
+using Core;
 
 namespace Ift232UI
 {
@@ -15,10 +15,10 @@ namespace Ift232UI
             InitializeComponent();
         }
 
-        public CreationMultijoueur(Game gm)
+        public CreationMultijoueur(Game game)
         {
             InitializeComponent();
-            Game = gm;
+            Game = game;
         }
 
         private void CreatePlayers_Click(object sender, RoutedEventArgs e)

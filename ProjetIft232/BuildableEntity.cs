@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using ProjetIft232.Buildings;
-using ProjetIft232.Technologies;
+using Core.Buildings;
+using Core.Technologies;
 
-namespace ProjetIft232
+namespace Core
 {
     [DataContract]
     [KnownType(typeof (Technology))]

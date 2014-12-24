@@ -1,18 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using Core.Army;
+using Core.Buildings;
+using Core.Technologies;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using ProjetIft232.Army;
-using ProjetIft232.Buildings;
-using ProjetIft232.Technologies;
 
-namespace ProjetIft232
+namespace Core
 {
     [DataContract]
     [KnownType(typeof (Building))]
     [KnownType(typeof (ArmyUnit))]
     public abstract class UpgradableEntity : BuildableEntity
     {
-        [DataMember] private List<int> _CurrentTechnologies;
+        [DataMember] 
+        private List<int> _CurrentTechnologies;
 
         public UpgradableEntity()
         {
@@ -36,9 +38,17 @@ namespace ProjetIft232
             UpgradeEntity(technology);
         }
 
+        public void Upgrade(IEnumerable<Technology> technologies)
+        {
+            foreach (var technology in technologies.Where(x => x.CanAffect(this)))
+            {
+                Upgrade(technology);
+            }
+        }
+
         private void ReduceTurnLeft(int minus)
         {
-            TurnsLeft = ((TurnsLeft - minus) < 0) ? 0 : TurnsLeft - minus;
+            TurnsLeft = Math.Max(TurnsLeft - minus, 0);
         }
 
         protected abstract void UpgradeEntity(Technology technology);

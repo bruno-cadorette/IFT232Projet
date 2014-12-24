@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ProjetIft232;
-using ProjetIft232.Buildings;
+using Core;
+using Core.Buildings;
 
 namespace Ift232Tests
 {
@@ -41,11 +41,11 @@ namespace Ift232Tests
             player.NextCity();
             player.CurrentCity.Buildings.Add(market2);
 
-            instancem1 = game.getMarket();
+            instancem1 = game.GetMarket();
 
             player.NextCity();
 
-            instancem1 = game.getMarket();
+            instancem1 = game.GetMarket();
 
             Assert.IsNotNull(instancem1);
             Assert.IsTrue(instancem2 == null);

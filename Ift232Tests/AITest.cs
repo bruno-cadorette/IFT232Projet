@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ProjetIft232;
+using Core;
 
 namespace Ift232Tests
 {

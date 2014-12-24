@@ -4,11 +4,11 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.Serialization;
-using ProjetIft232.Army;
-using ProjetIft232.Buildings;
-using ProjetIft232.Technologies;
+using Core.Army;
+using Core.Buildings;
+using Core.Technologies;
 
-namespace ProjetIft232
+namespace Core
 {
     [DataContract]
     public class City
@@ -102,7 +102,7 @@ namespace ProjetIft232
             }
             else if (entity is ArmyUnit)
             {
-                entities = Army.getUnits();
+                entities = Army;
             }
 
             int n = 0;
@@ -131,6 +131,7 @@ namespace ProjetIft232
         public Building AddBuilding(int type)
         {
             var building = BuildingFactory.CreateBuilding(type, this);
+            
             if (building != null)
             {
                 RemoveResources(building.Requirement.Resources);
@@ -154,14 +155,9 @@ namespace ProjetIft232
             Buildings.Remove(Buildings[nb]);
         }
 
-        public bool IsBuilt(int bt)
+        public bool IsBuilt(int id)
         {
-            foreach (Building building in Buildings)
-            {
-                if (building.ID == bt && !building.InConstruction)
-                    return true;
-            }
-            return false;
+            return Buildings.Any(x => x.ID == id && !x.InConstruction);
         }
 
         public void Update()
@@ -179,7 +175,7 @@ namespace ProjetIft232
                 unit.Update();
                 if (unit.InConstruction == false)
                 {
-                    Army.addUnit(unit);
+                    Army.Add(unit);
                     finished.Add(unit);
                 }
             }
@@ -188,11 +184,7 @@ namespace ProjetIft232
                 recruitement.Remove(unit);
             }
 
-            Resources rsc = new Resources();
-            foreach (Building building in Buildings)
-            {
-                rsc = rsc + building.Update();
-            }
+            Resources rsc = Buildings.Aggregate(new Resources(),(acc, x) => acc + x.Update());
             rsc += BaseProduction();
             Ressources.Update(rsc);
         }
@@ -211,14 +203,17 @@ namespace ProjetIft232
 
         public string Attack(Armies barbarianArmy)
         {
-            string resume = string.Format("La ville est attaqué par des barbares, ils sont {0} ", barbarianArmy.size());
+            string resume = string.Format("La ville est attaqué par des barbares, ils sont {0} ", barbarianArmy.Count());
 
-            int armySize = Army.size();
-            int barbarianArmySize = barbarianArmy.size();
+            int armySize = Army.Count;
+            int barbarianArmySize = barbarianArmy.Count;
 
-            if (Army.size() == 0)
+            if (Army.Count == 0)
             {
-                barbarianArmy.getUnits().ForEach(n => RemoveResources(n.Transport));
+                foreach (var unit in barbarianArmy)
+                {
+                    RemoveResources(unit.Transport);
+                }
                 resume += string.Format("Nous n'avions aucune defense, nous nous somme fait ecraser");
             }
             else
@@ -226,7 +221,10 @@ namespace ProjetIft232
 
                 if (barbarianArmy.Fight(Army))
                 {
-                    barbarianArmy.getUnits().ForEach(n => RemoveResources(n.Transport));
+                    foreach (var unit in barbarianArmy)
+                    {
+                        RemoveResources(unit.Transport);
+                    }
                     resume += string.Format("Nous avons perdu... Les Barbars sont repartis avec ns ressources !");
                 }
                 else
@@ -234,8 +232,8 @@ namespace ProjetIft232
                     resume += string.Format("Nous avons gagné!");
                 }
 
-                resume += string.Format("Dans la bataille nous avons perdu  {0} soldats et eux {1}", armySize - Army.size(),
-                 barbarianArmySize - barbarianArmy.size());
+                resume += string.Format("Dans la bataille nous avons perdu  {0} soldats et eux {1}", armySize - Army.Count(),
+                 barbarianArmySize - barbarianArmy.Count);
             }
             return resume;
         }

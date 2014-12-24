@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using ProjetIft232.Army;
-using ProjetIft232.Buildings;
+using Core.Army;
+using Core.Buildings;
 
-namespace ProjetIft232.Technologies
+namespace Core.Technologies
 {
-    public class TechnologyFactory : Factory
+    public class TechnologyFactory : BuildableEntityFactory
     {
         private static TechnologyFactory instance;
 

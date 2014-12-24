@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using ProjetIft232.Buildings;
-using ProjetIft232.Technologies;
+using Core.Buildings;
+using Core.Technologies;
 
-namespace ProjetIft232
+namespace Core
 {
     [DataContract]
     public class Requirement
     {
-        [DataMember] private IEnumerable<int> _Technologies;
+        [DataMember] 
+        private IEnumerable<int> _Technologies;
 
         public Requirement(IEnumerable<int> buildings, Resources resources)
         {
@@ -29,7 +30,7 @@ namespace ProjetIft232
         public IEnumerable<int> Buildings { get; private set; }
 
         [DataMember]
-        public Resources Resources { get; set; }
+        public Resources Resources { get; private set; }
 
         public static Requirement Zero()
         {

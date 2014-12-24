@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace ProjetIft232
+namespace Core
 {
     public abstract class Effect
     {
@@ -209,17 +210,7 @@ namespace ProjetIft232
         public String Next(City city)
         {
             Random random = new Random();
-            Event ev = null;
-
-            foreach (Event e in events.Keys)
-            {
-                int nombre = random.Next(0, 99);
-                if (nombre < events[e])
-                {
-                    ev = e;
-                    break;
-                }
-            }
+            Event ev = events.Keys.FirstOrDefault(e => random.Next(0, 99) < events[e]); 
             if (ev != null)
             {
                 string result = "Votre ville a subi : " + ev.name + "\n";

@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Xml.Linq;
 
-namespace ProjetIft232.Army
+namespace Core.Army
 {
-    public class ArmyFactory : Factory
+    public class ArmyFactory : BuildableEntityFactory
     {
         private static ArmyFactory instance;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ProjetIft232.Utility
+namespace Core.Utility
 {
     public class RandomGen
     {

@@ -1,7 +1,7 @@
 ﻿using System;
-using ProjetIft232.Army;
+using Core.Army;
 
-namespace ProjetIft232
+namespace Core
 {
     public class BarbarianArmyGenerator
     {
@@ -26,7 +26,7 @@ namespace ProjetIft232
             int nombre = random.Next(1, tourIndex + 1);
             for (int i = 0; i < nombre; i++)
             {
-                res.addUnit(ArmyFactory.CreateBarbarian(0));
+                res.Add(ArmyFactory.CreateBarbarian(0));
             }
             return res;
         }

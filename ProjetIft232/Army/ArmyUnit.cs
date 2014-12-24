@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Serialization;
-using ProjetIft232.Technologies;
+using Core.Technologies;
 
-namespace ProjetIft232.Army
+namespace Core.Army
 {
     [DataContract]
     public class ArmyUnit : UpgradableEntity

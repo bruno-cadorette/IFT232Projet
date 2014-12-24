@@ -1,16 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using Core.Buildings;
+using Core.Technologies;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml.Linq;
 
-namespace ProjetIft232
+namespace Core
 {
-    public abstract class Factory
+    public abstract class BuildableEntityFactory
     {
         private static object _syncRoot = new object();
+        protected static BuildableEntityFactory factory;
 
-        protected Factory()
+        protected BuildableEntityFactory()
         {
             _entities = new Dictionary<int, BuildableEntity>();
             document = XDocument.Load("Config.xml");
@@ -116,7 +119,7 @@ namespace ProjetIft232
                     }
                 }
             }
-            return new Resources {Wood = wood, Gold = gold, Meat = meat, Rock = rock, Population = pop};
+            return new Resources { Wood = wood, Gold = gold, Meat = meat, Rock = rock, Population = pop };
         }
 
         protected string GetAttribute(XElement element, string att)
@@ -133,12 +136,21 @@ namespace ProjetIft232
         {
             using (MemoryStream stream = new MemoryStream())
             {
-                DataContractSerializer serializer = new DataContractSerializer(typeof (BuildableEntity));
+                DataContractSerializer serializer = new DataContractSerializer(typeof(BuildableEntity));
                 serializer.WriteObject(stream, entity);
                 stream.Position = 0;
-                BuildableEntity obj = serializer.ReadObject(stream) as BuildableEntity;
-                return obj;
+                return serializer.ReadObject(stream) as BuildableEntity;
             }
+        }
+
+        public BuildableEntity CreateEntity(int type, Resources resources, IEnumerable<Building> buildings, IEnumerable<Technology> technologies)
+        {
+            var entity = GetEntity(type);
+            if (entity is UpgradableEntity)
+            {
+                (entity as UpgradableEntity).Upgrade(technologies);
+            }
+            return (entity.CanBeBuild(resources, buildings, technologies)) ? entity : null;
         }
     }
 }

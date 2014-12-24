@@ -1,4 +1,4 @@
-﻿namespace ProjetIft232.Buildings
+﻿namespace Core.Buildings
 {
     internal enum BuildingType
     {

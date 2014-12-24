@@ -4,11 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using ProjetIft232.Buildings;
-using ProjetIft232.Technologies;
-using ProjetIft232.Utility;
+using Core.Buildings;
+using Core.Technologies;
+using Core.Utility;
 
-namespace ProjetIft232
+namespace Core
 {
     [DataContract]
     public class Game
@@ -42,9 +42,9 @@ namespace ProjetIft232
             get { return Players[PlayerIndex]; }
         }
 
-        //Variable global, à changer 
+         
         [DataMember]
-        public int TourIndex { get; private set; }
+        public int TurnIndex { get; private set; }
 
 
         public void Save(string fileName)
@@ -102,12 +102,12 @@ namespace ProjetIft232
             CurrentPlayer.ResearchedTech.ToList().ForEach(n => n.Update());
             Random hostylityAument = RandomGen.GetInstance();
 
-            Hostility += hostylityAument.Next(-1, 1 + TourIndex/10);
+            Hostility += hostylityAument.Next(-1, 1 + TurnIndex/10);
             foreach (City city in CurrentPlayer.Cities)
             {
                 if (Hostility > hostylityAument.Next(0, 100))
                 {
-                    turnText += city.Attack(BarbarianArmyGenerator.CreateArmy(TourIndex));
+                    turnText += city.Attack(BarbarianArmyGenerator.CreateArmy(TurnIndex));
                 }
                 //On reutilise la variable hostilityAument pour generer les evenements aleatoires
                 Alea = hostylityAument.Next(0, 100);
@@ -121,7 +121,7 @@ namespace ProjetIft232
             if (PlayerIndex >= Players.Count)
             {
                 PlayerIndex -= Players.Count;
-                TourIndex++;
+                TurnIndex++;
             }
             return turnText;
         }
@@ -167,23 +167,24 @@ namespace ProjetIft232
 
         // Méthode getMarket pour récupérer une instance de Market (construit) si elle existe
 
-        public Building getMarket()
+        public Building GetMarket()
         {
-            Building m = CurrentPlayer.CurrentCity.FinishedBuildings.FirstOrDefault(n => n is Market);
-
-            return m;
+            return CurrentPlayer.CurrentCity.FinishedBuildings.FirstOrDefault(n => n is Market);
         }
 
         public Boolean HasWin()
         {
             var population = CurrentPlayer.Cities.Sum(city => city.Ressources[ResourcesType.Population]);
-            return population >= 10000 ? true : false;
+            
+            
+            
+            return population >= 10000;
         }
 
         public Boolean HasLost()
         {
             var population = CurrentPlayer.Cities.Sum(city => city.Ressources[ResourcesType.Population]);
-            return population <= 0 || TourIndex >= 150 ? true : false;
+            return population <= 0 || TurnIndex >= 150;
         }
     }
 }

@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="GameBuilder.BuilderControl.RequirementControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" Height="136.667" Width="136.999" x:Name="uc">
+    <Grid>
+
+        <GroupBox x:Name="RequirementGroupBox" Header="Requirement" HorizontalAlignment="Left" Margin="-7,0,0,0" VerticalAlignment="Top" Height="134" Width="134">
+            <Grid>
+                <ComboBox ItemsSource="{Binding SelectorItemSource, ElementName=uc}" x:Name="RequirementComboBox"  HorizontalAlignment="Left" Margin="1,0,0,0" VerticalAlignment="Top" Width="81"/>
+                <ListBox ItemsSource="{Binding ListItemSource, ElementName=uc}" HorizontalAlignment="Left" Height="84" Margin="1,27,0,0" VerticalAlignment="Top" Width="120"/>
+                <Button Command="{Binding AddCommand, ElementName=uc}" CommandParameter="{Binding SelectedItem, ElementName=RequirementComboBox}" Content="Add" HorizontalAlignment="Left" Margin="87,0,0,0" VerticalAlignment="Top" Width="34" Height="22"/>
+            </Grid>
+        </GroupBox>
+
+    </Grid>
+</UserControl>

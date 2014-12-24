@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using ProjetIft232.Army;
-using ProjetIft232.Buildings;
+using Core.Army;
+using Core.Buildings;
 
-namespace ProjetIft232
+namespace Core
 {
     public class PlayerAI : Player
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ProjetIft232;
-using ProjetIft232.Buildings;
+using Core;
+using Core.Buildings;
 
 namespace Ift232Tests
 {

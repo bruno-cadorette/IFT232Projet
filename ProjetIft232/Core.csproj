@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -53,17 +54,20 @@
     <Compile Include="BuildableEntity.cs" />
     <Compile Include="Buildings\BuildingFactory.cs" />
     <Compile Include="Buildings\Casern.cs" />
+    <Compile Include="Player.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PlayerAI.cs" />
     <Compile Include="RandomEvent.cs" />
     <Compile Include="BarbarianArmyGenerator.cs" />
     <Compile Include="Buildings\Building.cs" />
-    <Compile Include="Factory.cs" />
+    <Compile Include="BuildableEntityFactory.cs" />
     <Compile Include="Requirement.cs" />
     <Compile Include="Buildings\Market.cs" />
-    <Compile Include="Player.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="City.cs" />
+    <Compile Include="RequirementGraph.cs" />
     <Compile Include="Resources.cs" />
     <Compile Include="Technologies\Enhancement.cs" />
     <Compile Include="Technologies\Technology.cs" />
@@ -73,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Buildable.cd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config.xml">

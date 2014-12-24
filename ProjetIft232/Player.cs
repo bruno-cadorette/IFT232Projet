@@ -2,9 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
-using ProjetIft232.Technologies;
+using Core.Technologies;
 
-namespace ProjetIft232
+namespace Core
 {
     [DataContract]
     public class Player
@@ -41,7 +41,7 @@ namespace ProjetIft232
         public void CreateCity(string name)
         {
             City city = new City(name);
-            city.ResearchedTechnologies.AddRange(ResearchedTech.ToList());
+            city.ResearchedTechnologies.AddRange(ResearchedTech);
             ResearchedTech.CollectionChanged += city.TechChanged;
             Cities.Add(city);
         }

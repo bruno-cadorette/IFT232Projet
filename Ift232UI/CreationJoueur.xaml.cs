@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using ProjetIft232;
+using Core;
 
 namespace Ift232UI
 {

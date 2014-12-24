@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ProjetIft232;
-using ProjetIft232.Army;
-using ProjetIft232.Buildings;
-using ProjetIft232.Technologies;
+using Core;
+using Core.Army;
+using Core.Buildings;
+using Core.Technologies;
 
 namespace Ift232Tests
 {

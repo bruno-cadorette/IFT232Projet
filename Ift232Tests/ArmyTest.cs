@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ProjetIft232;
-using ProjetIft232.Army;
-using ProjetIft232.Buildings;
-using ProjetIft232.Utility;
+using Core;
+using Core.Army;
+using Core.Buildings;
+using Core.Utility;
 
 namespace Ift232Tests
 {
@@ -77,7 +77,7 @@ namespace Ift232Tests
             Resources old = new Resources(city.Ressources);
             city.Attack(BarbarianArmyGenerator.CreateArmy(1));
             Assert.IsTrue(old == city.Ressources);
-            Assert.IsTrue(city.Army.size() == 19);
+            Assert.IsTrue(city.Army.Count == 19);
         }
 
         [TestMethod]
@@ -93,7 +93,7 @@ namespace Ift232Tests
 
             for (int i = 0; i < 10; i++)
             {
-                opponent.addUnit(ArmyFactory.CreateBarbarian(0));
+                opponent.Add(ArmyFactory.CreateBarbarian(0));
             }
             city.Attack(opponent);
             Assert.IsTrue(old != city.Ressources);

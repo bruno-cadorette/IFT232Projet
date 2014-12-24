@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Xml.Linq;
 
-namespace ProjetIft232.Buildings
+namespace Core.Buildings
 {
-    public class BuildingFactory : Factory
+    public class BuildingFactory : BuildableEntityFactory
     {
         private static BuildingFactory instance;
 
@@ -68,7 +68,7 @@ namespace ProjetIft232.Buildings
                 foreach (
                     var technology in
                         city.ResearchedTechnologies.Where(
-                            n => n.AffectedBuildings.Any(m => m == building.ID) && !n.InConstruction))
+                            n => n.AffectedBuildings.Contains(building.ID) && !n.InConstruction))
                 {
                     building.Upgrade(technology);
                 }

@@ -6,10 +6,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
-using ProjetIft232;
-using ProjetIft232.Army;
-using ProjetIft232.Buildings;
-using ProjetIft232.Technologies;
+using Core;
+using Core.Army;
+using Core.Buildings;
+using Core.Technologies;
 using MessageBox = Xceed.Wpf.Toolkit.MessageBox;
 
 namespace Ift232UI
@@ -40,7 +40,7 @@ namespace Ift232UI
                 {
                     Players.Items.Add(player.playerName);
                 }
-                Turns.Content = Game.TourIndex;
+                Turns.Content = Game.TurnIndex;
                 Update();
                 Players.SelectedIndex = Game.PlayerIndex;
                 Cities.Content = Game.CurrentPlayer.CurrentCity;
@@ -95,11 +95,11 @@ namespace Ift232UI
 
         private void Update()
         {
-            Turns.Content = Game.TourIndex;
+            Turns.Content = Game.TurnIndex;
             Players.SelectedIndex = Game.PlayerIndex;
             Cities.Content = Game.CurrentPlayer.CurrentCity;
             UnitBox.ItemsSource = ArmyFactory.GetInstance().Soldiers();
-            CurrentUnit.ItemsSource = Game.CurrentPlayer.CurrentCity.Army.getUnits().Where(n => !n.InConstruction);
+            CurrentUnit.ItemsSource = Game.CurrentPlayer.CurrentCity.Army.Where(n => !n.InConstruction);
             TabArmy.IsEnabled = Game.CurrentPlayer.CurrentCity.FinishedBuildings.Any(t => t is Casern);
             TabTrade.IsEnabled = Game.CurrentPlayer.CurrentCity.FinishedBuildings.Any(t => t is Market);
             UpdateRessource();
@@ -218,7 +218,7 @@ namespace Ift232UI
                 return;
             int val1 = FirstValue.Value.HasValue ? FirstValue.Value.Value : 0;
             String currentValue = SoldResources.SelectedItem.ToString();
-            Market m = (Market) Game.getMarket();
+            Market m = (Market) Game.GetMarket();
             if (m == null)
                 return;
             var boughtType = Resource.Name.First(n => n.Value == BoughtResources.SelectedItem.ToString());
@@ -251,7 +251,7 @@ namespace Ift232UI
 
             int qty = FirstValue.Value.Value;
 
-            bool done = ((Market) Game.getMarket()).Achat(Game.CurrentPlayer.CurrentCity, qty, soldType.Key,
+            bool done = ((Market) Game.GetMarket()).Achat(Game.CurrentPlayer.CurrentCity, qty, soldType.Key,
                 boughtType.Key);
             if (done)
             {
@@ -428,12 +428,18 @@ namespace Ift232UI
                     .GroupBy(x => x.ID)
                     .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count()));
 
-                var soldiers = Game.CurrentPlayer.CurrentCity.Army.getUnits()
-                    .Where(soldier => technology.AffectedSoldiers.Any(x => soldier.ID == x))
+                var soldiers = Game.CurrentPlayer.CurrentCity.Army
+                    .Where(soldier => soldier.CanBeAffected(technology))
                     .GroupBy(x => x.ID)
                     .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count()));
+                //Quand les ID vont être unique
+                var entities = Game.CurrentPlayer.CurrentCity.Buildings.Cast<UpgradableEntity>()
+                    .Concat(Game.CurrentPlayer.CurrentCity.Army)
+                    .Where(entity => entity.CanBeAffected(technology))
+                    .GroupBy(x => x.ID)
+                    .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count())); 
 
-                UpgradableEntityList.ItemsSource = buildings.Union(soldiers);
+                UpgradableEntityList.ItemsSource = buildings.Concat(soldiers);
                 technologySelectedIsResearched = true;
             }
             else

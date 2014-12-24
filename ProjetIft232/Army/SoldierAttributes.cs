@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace ProjetIft232.Army
+namespace Core.Army
 {
     [DataContract]
     public class SoldierAttributes

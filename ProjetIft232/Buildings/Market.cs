@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace ProjetIft232.Buildings
+namespace Core.Buildings
 {
     [DataContract]
     public class Market : Building

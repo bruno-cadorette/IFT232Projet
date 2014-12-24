@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ProjetIft232;
-using ProjetIft232.Army;
+using Core;
+using Core.Army;
 
 namespace Ift232Tests
 {
@@ -66,7 +66,7 @@ namespace Ift232Tests
 
             for (int i = 0; i < 10; i++)
             {
-                opponent.addUnit(ArmyFactory.CreateBarbarian(0));
+                opponent.Add(ArmyFactory.CreateBarbarian(0));
             }
             city1.Attack(opponent);
             Assert.IsTrue(old != city1.Ressources);

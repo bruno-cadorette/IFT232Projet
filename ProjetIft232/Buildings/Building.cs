@@ -1,9 +1,10 @@
-﻿using System.Linq.Expressions;
+﻿using Core.Technologies;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.AccessControl;
-using ProjetIft232.Technologies;
 
-namespace ProjetIft232.Buildings
+namespace Core.Buildings
 {
     [DataContract]
     [KnownType(typeof (Market))]
@@ -30,16 +31,13 @@ namespace ProjetIft232.Buildings
 
         [DataMember]
         public Resources Resource { get; set; }
+        public HashSet<int> CreatableUnit { get; private set; }
 
 
         //Retourne le nombre de ressources par batiment. Permet qu'un batiment actif (tel le marché) puisse générer de l'or 
         protected virtual Resources UpdateBuilding()
         {
             return Resource;
-        
-        
-        
-        
         }
 
         public Resources Update()
@@ -51,6 +49,11 @@ namespace ProjetIft232.Buildings
                     : Resources.Zero();
             }
             return UpdateBuilding();
+        }
+
+        public bool CanCreate(int type)
+        {
+            return CreatableUnit.Contains(type);
         }
 
         protected override void UpgradeEntity(Technology technology)
