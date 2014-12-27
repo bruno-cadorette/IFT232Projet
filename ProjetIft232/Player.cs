@@ -15,6 +15,7 @@ namespace Core
             Cities = new List<City>();
             _indexCity = 0;
         }
+        public int ID { get; set; }
 
         [DataMember]
         public ObservableCollection<Technology> ResearchedTech { get; private set; }
@@ -27,7 +28,7 @@ namespace Core
 
         public City CurrentCity
         {
-            get { return Cities[_indexCity]; }
+            get { return Cities.ElementAtOrDefault(_indexCity); }
         }
 
         [DataMember]
@@ -38,12 +39,14 @@ namespace Core
             _indexCity = (_indexCity + 1)%Cities.Count;
         }
 
-        public void CreateCity(string name)
+        public City CreateCity(string name)
         {
             City city = new City(name);
+            city.PlayerId = ID;
             city.ResearchedTechnologies.AddRange(ResearchedTech);
             ResearchedTech.CollectionChanged += city.TechChanged;
             Cities.Add(city);
+            return city;
         }
 
         public override string ToString()
@@ -68,6 +71,10 @@ namespace Core
             ResearchedTech.Add(technology);
             CurrentCity.RemoveResources(technology.Requirement.Resources);
             return true;
+        }
+        public bool HasLost()
+        {
+            return Cities.Count == 0;
         }
     }
 }

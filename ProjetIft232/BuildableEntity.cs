@@ -77,5 +77,34 @@ namespace Core
         {
             return Name;
         }
+        public override bool Equals(object obj)
+        {
+            var b = obj as BuildableEntity;
+            if ((object)b == null)
+            {
+                return false;
+            }
+            else
+            {
+                return ID == b.ID && InConstruction == b.InConstruction && TurnsLeft == b.TurnsLeft;
+            }
+        }
+        public static bool operator ==(BuildableEntity a, BuildableEntity b)
+        {
+            if ((object)a == null)
+            {
+                return (object)b == null;
+            }
+
+            return a.Equals(b);
+        }
+        public static bool operator !=(BuildableEntity a, BuildableEntity b)
+        {
+            return !(a == b);
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

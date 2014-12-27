@@ -39,11 +39,7 @@ namespace Ift232UI
             }
             else
             {
-                Player player = new Player();
-                player.playerName = tbPlayer.Text;
-                player.Cities.Add(new City(tbCity.Text));
-                player.NextCity();
-                Game.Players.Add(player);
+                Game.CreatePlayer(tbPlayer.Text, tbCity.Text);
                 Close();
             }
         }

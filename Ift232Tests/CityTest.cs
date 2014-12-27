@@ -66,9 +66,9 @@ namespace Ift232Tests
 
             for (int i = 0; i < 10; i++)
             {
-                opponent.Add(ArmyFactory.CreateBarbarian(0));
+                opponent.Add(ArmyFactory.CreateBarbarian());
             }
-            city1.Attack(opponent);
+            city1.Defend(opponent);
             Assert.IsTrue(old != city1.Ressources);
         }
     }

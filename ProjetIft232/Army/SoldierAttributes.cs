@@ -9,21 +9,29 @@ namespace Core.Army
         {
         }
 
-        public SoldierAttributes(int attack, int defence)
+        public SoldierAttributes(int attack, int defence, int health)
         {
             Attack = attack;
             Defence = defence;
+            Health = health;
         }
 
         [DataMember]
-        public int Attack { get; set; }
+        public int Attack { get; private set; }
 
         [DataMember]
-        public int Defence { get; set; }
+        public int Defence { get; private set; }
+
+        [DataMember]
+        public int Health { get; private set; }
 
         public static SoldierAttributes operator +(SoldierAttributes a, SoldierAttributes b)
         {
-            return new SoldierAttributes(a.Attack + b.Attack, a.Defence + b.Defence);
+            return new SoldierAttributes(a.Attack + b.Attack, a.Defence + b.Defence, a.Health + b.Health);
+        }
+        public static SoldierAttributes operator *(SoldierAttributes a, int n)
+        {
+            return new SoldierAttributes(a.Attack * n, a.Defence * n, a.Health * n);
         }
     }
 }

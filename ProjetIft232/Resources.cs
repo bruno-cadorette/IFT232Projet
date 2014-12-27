@@ -41,23 +41,25 @@ namespace Core
     [DataContract]
     public class Resources
     {
-        [DataMember] private readonly int[] _resources;
+        [DataMember]
+        private readonly int[] _resources;
 
         public Resources()
         {
-            _resources = new int[(int) ResourcesType.End];
+            _resources = new int[(int)ResourcesType.End];
         }
 
         public Resources(ResourcesType type, int qty)
             : this()
         {
-            _resources = new int[(int) ResourcesType.End];
-            _resources[(int) type] = qty;
+            _resources = new int[(int)ResourcesType.End];
+            _resources[(int)type] = qty;
         }
 
-        public Resources(Resources a) : this()
+        public Resources(Resources a)
+            : this()
         {
-            for (int i = 0; i < (int) ResourcesType.End; i++)
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
                 _resources[i] = a._resources[i];
             }
@@ -68,45 +70,45 @@ namespace Core
         {
             foreach (var resource in resources)
             {
-                _resources[(int) (resource.Key)] = resource.Value;
+                _resources[(int)(resource.Key)] = resource.Value;
             }
         }
 
         public int Gold
         {
-            get { return _resources[(int) ResourcesType.Gold]; }
-            set { _resources[(int) ResourcesType.Gold] = value; }
+            get { return _resources[(int)ResourcesType.Gold]; }
+            set { _resources[(int)ResourcesType.Gold] = value; }
         }
 
         public int Meat
         {
-            get { return _resources[(int) ResourcesType.Meat]; }
-            set { _resources[(int) ResourcesType.Meat] = value; }
+            get { return _resources[(int)ResourcesType.Meat]; }
+            set { _resources[(int)ResourcesType.Meat] = value; }
         }
 
         public int Rock
         {
-            get { return _resources[(int) ResourcesType.Rock]; }
-            set { _resources[(int) ResourcesType.Rock] = value; }
+            get { return _resources[(int)ResourcesType.Rock]; }
+            set { _resources[(int)ResourcesType.Rock] = value; }
         }
 
         public int Population
         {
-            get { return _resources[(int) ResourcesType.Population]; }
-            set { _resources[(int) ResourcesType.Population] = value; }
+            get { return _resources[(int)ResourcesType.Population]; }
+            set { _resources[(int)ResourcesType.Population] = value; }
         }
 
         public int Wood
         {
-            get { return _resources[(int) ResourcesType.Wood]; }
-            set { _resources[(int) ResourcesType.Wood] = value; }
+            get { return _resources[(int)ResourcesType.Wood]; }
+            set { _resources[(int)ResourcesType.Wood] = value; }
         }
 
 
         public int this[ResourcesType i]
         {
-            get { return _resources[(int) i]; }
-            set { _resources[(int) i] = value; }
+            get { return _resources[(int)i]; }
+            set { _resources[(int)i] = value; }
         }
 
         protected bool Equals(Resources other)
@@ -119,7 +121,7 @@ namespace Core
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((Resources) obj);
+            return Equals((Resources)obj);
         }
 
         public override int GetHashCode()
@@ -140,7 +142,7 @@ namespace Core
         public static Resources operator +(Resources debut, Resources b)
         {
             Resources ress = Zero();
-            for (int i = 0; i < (int) ResourcesType.End; i++)
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
                 ress._resources[i] = debut._resources[i] + b._resources[i];
             }
@@ -151,7 +153,7 @@ namespace Core
         public static Resources operator -(Resources debut, Resources b)
         {
             Resources ress = Zero();
-            for (int i = 0; i < (int) ResourcesType.End; i++)
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
                 ress._resources[i] = debut._resources[i] - b._resources[i];
             }
@@ -160,7 +162,7 @@ namespace Core
 
         public static bool operator <(Resources a, Resources b)
         {
-            for (int i = 0; i < (int) ResourcesType.End; i++)
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
                 if (a._resources[i] >= b._resources[i])
                     return false;
@@ -170,7 +172,7 @@ namespace Core
 
         public void Abs()
         {
-            for (int i = 0; i < (int) ResourcesType.End; i++)
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
                 if (_resources[i] < 0)
                     _resources[i] = 0;
@@ -179,7 +181,7 @@ namespace Core
 
         public static bool operator <=(Resources a, Resources b)
         {
-            for (int i = 0; i < (int) ResourcesType.End; i++)
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
                 if (a._resources[i] > b._resources[i])
                     return false;
@@ -189,7 +191,7 @@ namespace Core
 
         public static bool operator >(Resources a, Resources b)
         {
-            for (int i = 0; i < (int) ResourcesType.End; i++)
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
                 if (a._resources[i] <= b._resources[i])
                     return false;
@@ -199,7 +201,7 @@ namespace Core
 
         public static bool operator >=(Resources a, Resources b)
         {
-            for (int i = 0; i < (int) ResourcesType.End; i++)
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
                 if (a._resources[i] < b._resources[i])
                     return false;
@@ -220,16 +222,27 @@ namespace Core
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < (int) ResourcesType.End; i++)
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
-                sb.Append(string.Format(" {0} : {1} ", (ResourcesType) i, _resources[i]));
+                sb.Append(string.Format(" {0} : {1} ", (ResourcesType)i, _resources[i]));
             }
             return sb.ToString();
+        }
+        public static Resources operator*(Resources a, int n)
+        {
+            return new Resources()
+            {
+                Gold = a.Gold * n,
+                Meat = a.Meat * n,
+                Wood = a.Wood * n,
+                Rock = a.Rock * n,
+                Population = a.Population * n
+            };
         }
 
         public void Update(Resources a)
         {
-            for (int i = 0; i < (int) ResourcesType.End; i++)
+            for (int i = 0; i < (int)ResourcesType.End; i++)
             {
                 _resources[i] += a._resources[i];
             }

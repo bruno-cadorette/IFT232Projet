@@ -7,17 +7,22 @@ using System.Runtime.Serialization;
 using Core.Buildings;
 using Core.Technologies;
 using Core.Utility;
+using Core.Army;
+using Core.Map;
+using Core.RandomEvent;
 
 namespace Core
 {
     [DataContract]
     public class Game
     {
-        private RandomEvent evt = new RandomEvent();
+        private RandomEventFactory evt = new RandomEventFactory();
+
+        public WorldMap WorldMap { get; private set; }
 
         public Game()
         {
-            BuildingFactory.GetInstance();
+            WorldMap = new WorldMap();
             Players = new List<Player>();
             Hostility = 3;
             Alea = 0;
@@ -39,7 +44,7 @@ namespace Core
 
         public Player CurrentPlayer
         {
-            get { return Players[PlayerIndex]; }
+            get { return Players.ElementAtOrDefault(PlayerIndex); }
         }
 
          
@@ -63,7 +68,7 @@ namespace Core
                 DataContractSerializer serializer = new DataContractSerializer(typeof (Game));
                 fileStream.Position = 0;
                 Game g = serializer.ReadObject(fileStream) as Game;
-                g.evt = new RandomEvent();
+                g.evt = new RandomEventFactory();
                 return g;
             }
         }
@@ -71,15 +76,23 @@ namespace Core
         public IEnumerable<string> NextTurn()
         {
             List<string> turnText = new List<string>();
+            WorldMap.Update();
             do
             {
-                turnText.Add(NextTurnInternal());
-                //Console.WriteLine(turnText);
-                if (CurrentPlayer is PlayerAI)
+                CurrentPlayer.Cities = WorldMap.Where(x => x.Value.PlayerId == CurrentPlayer.ID && x.Value is City).Select(x => x.Value as City).ToList();
+                CurrentPlayer.Cities.ForEach(n => n.Update());
+                CurrentPlayer.ResearchedTech.ToList().ForEach(n => n.Update());
+                turnText.Add(IncreaseHostility());
+                if (CurrentPlayer.HasLost())
                 {
-                    Console.WriteLine("\nTour du joueur AI: {0}", CurrentPlayer.playerName);
-                    ((PlayerAI) CurrentPlayer).Play();
+                    Players.Remove(CurrentPlayer);
                 }
+                else if (CurrentPlayer is PlayerAI)
+                {
+                    turnText.Add(String.Format("Tour du joueur AI: {0}", CurrentPlayer.playerName));
+                    (CurrentPlayer as PlayerAI).Play();
+                }
+                NextPlayer();
             } while (CurrentPlayer is PlayerAI);
             if (HasWin())
             {
@@ -88,26 +101,30 @@ namespace Core
             if (HasLost())
             {
                 turnText.Add("Vous avez perdu!  :'( ");
-            }
-            
-            
-            
+            }           
             return turnText.Where(t=>!string.IsNullOrEmpty(t));
         }
-
-        private string NextTurnInternal()
+        private void NextPlayer()
         {
-            string turnText = "";
-            CurrentPlayer.Cities.ForEach(n => n.Update());
-            CurrentPlayer.ResearchedTech.ToList().ForEach(n => n.Update());
+            PlayerIndex++;
+            if (PlayerIndex >= Players.Count)
+            {
+                PlayerIndex -= Players.Count;
+                TurnIndex++;
+            }
+        }
+
+        private string IncreaseHostility()
+        {
+            string turnText="";
             Random hostylityAument = RandomGen.GetInstance();
 
-            Hostility += hostylityAument.Next(-1, 1 + TurnIndex/10);
+            Hostility += hostylityAument.Next(-1, 1 + TurnIndex / 10);
             foreach (City city in CurrentPlayer.Cities)
             {
                 if (Hostility > hostylityAument.Next(0, 100))
                 {
-                    turnText += city.Attack(BarbarianArmyGenerator.CreateArmy(TurnIndex));
+                    WorldMap.Add(BarbarianArmy.CreateArmy(TurnIndex));
                 }
                 //On reutilise la variable hostilityAument pour generer les evenements aleatoires
                 Alea = hostylityAument.Next(0, 100);
@@ -115,13 +132,6 @@ namespace Core
                 {
                     turnText += evt.Next(CurrentPlayer.Cities.First());
                 }
-            }
-
-            PlayerIndex++;
-            if (PlayerIndex >= Players.Count)
-            {
-                PlayerIndex -= Players.Count;
-                TurnIndex++;
             }
             return turnText;
         }
@@ -131,20 +141,26 @@ namespace Core
             entity.Upgrade(technology);
             CurrentPlayer.CurrentCity.RemoveResources(technology.ApplicationCost);
         }
+        public void CreatePlayer(string playerName, string cityName)
+        {
+            Player player = new Player()
+            {
+                ID = Players.Count,
+                playerName = playerName,
+            };
 
+            WorldMap.Add(player.CreateCity(cityName));
+            player.NextCity();
+            Players.Add(player);
+        }
 
         public bool CreateCity(string name)
         {
-            if (CurrentPlayer.CurrentCity.Ressources >= City.CostToCreate)
+            var city = CurrentPlayer.Cities.FirstOrDefault(n => n.Ressources >= City.CostToCreate);
+            if (city!=null)
             {
-                CurrentPlayer.CurrentCity.RemoveResources(City.CostToCreate);
-                CurrentPlayer.CreateCity(name);
-                return true;
-            }
-            if (CurrentPlayer.Cities.Any(n => n.Ressources >= City.CostToCreate))
-            {
-                CurrentPlayer.Cities.First(n => n.Ressources >= City.CostToCreate).RemoveResources(City.CostToCreate);
-                CurrentPlayer.CreateCity(name);
+                city.RemoveResources(City.CostToCreate);
+                WorldMap.Add(CurrentPlayer.CreateCity(name));
                 return true;
             }
             return false;
@@ -174,17 +190,12 @@ namespace Core
 
         public Boolean HasWin()
         {
-            var population = CurrentPlayer.Cities.Sum(city => city.Ressources[ResourcesType.Population]);
-            
-            
-            
-            return population >= 10000;
+            return !HasLost() && CurrentPlayer.Cities.Sum(city => city.Ressources[ResourcesType.Population]) >= 10000;
         }
 
         public Boolean HasLost()
         {
-            var population = CurrentPlayer.Cities.Sum(city => city.Ressources[ResourcesType.Population]);
-            return population <= 0 || TurnIndex >= 150;
+            return Players.Count == 0;
         }
     }
 }

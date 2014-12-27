@@ -34,7 +34,7 @@ namespace Ift232Tests
         public void CreateUnit()
         {
             SetUp();
-            ArmyUnit unit = ArmyFactory.CreateArmyUnit(0, city);
+            Soldier unit = ArmyFactory.CreateArmyUnit(0, city);
             Assert.IsTrue(unit.Attributes.Attack == 2);
             Assert.IsTrue(unit.InConstruction);
             unit.Update();
@@ -48,7 +48,7 @@ namespace Ift232Tests
         public void RequirementTestFail()
         {
             SetUp();
-            ArmyUnit unit = ArmyFactory.CreateArmyUnit(0, city);
+            Soldier unit = ArmyFactory.CreateArmyUnit(0, city);
             var resource = new Resources {Wood = 1000, Gold = 50000, Rock = 10000, Population = 100000};
             var buildings = new[] {caserne};
             Assert.IsFalse(unit.CanBeBuild(resource, buildings.ToList()));
@@ -58,7 +58,7 @@ namespace Ift232Tests
         public void RequirementTest()
         {
             SetUp();
-            ArmyUnit unit = ArmyFactory.CreateArmyUnit(0, city);
+            Soldier unit = ArmyFactory.CreateArmyUnit(0, city);
             var resource = new Resources {Wood = 1000, Gold = 50000, Meat = 60000, Rock = 10000, Population = 100000};
             var buildings = new[] {caserne};
             Assert.IsTrue(unit.CanBeBuild(resource, buildings));
@@ -75,9 +75,9 @@ namespace Ift232Tests
             city.Update();
             city.Update();
             Resources old = new Resources(city.Ressources);
-            city.Attack(BarbarianArmyGenerator.CreateArmy(1));
-            Assert.IsTrue(old == city.Ressources);
-            Assert.IsTrue(city.Army.Count == 19);
+            city.Defend(BarbarianArmy.CreateArmy(1));
+            Assert.AreEqual(old, city.Ressources);
+            Assert.AreEqual(2, city.Army.Size);
         }
 
         [TestMethod]
@@ -93,10 +93,10 @@ namespace Ift232Tests
 
             for (int i = 0; i < 10; i++)
             {
-                opponent.Add(ArmyFactory.CreateBarbarian(0));
+                opponent.Add(ArmyFactory.CreateBarbarian());
             }
-            city.Attack(opponent);
-            Assert.IsTrue(old != city.Ressources);
+            city.Defend(opponent);
+            Assert.AreNotEqual(old, city.Ressources);
         }
     }
 }

@@ -7,11 +7,12 @@ using System.Runtime.Serialization;
 using Core.Army;
 using Core.Buildings;
 using Core.Technologies;
+using Core.Map;
 
 namespace Core
 {
     [DataContract]
-    public class City
+    public class City : WorldMapItem
     {
         public static Resources CostToCreate = new Resources
         {
@@ -32,7 +33,7 @@ namespace Core
             Ressources = new Resources { Wood = 10000, Gold = 10000, Meat = 10000, Rock = 10000, Population = 500 };
             Buildings = new List<Building>();
 
-            recruitement = new List<ArmyUnit>();
+            recruitement = new List<Soldier>();
             Army = new Armies();
             _turnsSinceCreation = 0;
         }
@@ -46,7 +47,7 @@ namespace Core
         }
 
         [DataMember]
-        public List<ArmyUnit> recruitement { get; private set; }
+        public List<Soldier> recruitement { get; private set; }
 
         [DataMember]
         public Armies Army { get; private set; }
@@ -77,10 +78,11 @@ namespace Core
             return "Ville de " + Name;
         }
 
-        public void RemoveResources(Resources resource)
+        public Resources RemoveResources(Resources resource)
         {
             Ressources -= resource;
             Ressources.Abs();
+            return Ressources;
         }
 
         public void AddResources(Resources resource)
@@ -100,9 +102,9 @@ namespace Core
             {
                 entities = Buildings;
             }
-            else if (entity is ArmyUnit)
+            else if (entity is Soldier)
             {
-                entities = Army;
+               // entities = Army;
             }
 
             int n = 0;
@@ -131,7 +133,7 @@ namespace Core
         public Building AddBuilding(int type)
         {
             var building = BuildingFactory.CreateBuilding(type, this);
-            
+
             if (building != null)
             {
                 RemoveResources(building.Requirement.Resources);
@@ -169,8 +171,8 @@ namespace Core
 
             //Càd que sans rien, une ville gagne 5 de chaque ressource sauf de population
             //Avec une maison, elle gagnera 6 de Meat et 5 du reste, etc<
-            List<ArmyUnit> finished = new List<ArmyUnit>();
-            foreach (ArmyUnit unit in recruitement)
+            List<Soldier> finished = new List<Soldier>();
+            foreach (Soldier unit in recruitement)
             {
                 unit.Update();
                 if (unit.InConstruction == false)
@@ -179,12 +181,12 @@ namespace Core
                     finished.Add(unit);
                 }
             }
-            foreach (ArmyUnit unit in finished)
+            foreach (Soldier unit in finished)
             {
                 recruitement.Remove(unit);
             }
 
-            Resources rsc = Buildings.Aggregate(new Resources(),(acc, x) => acc + x.Update());
+            Resources rsc = Buildings.Aggregate(new Resources(), (acc, x) => acc + x.Update());
             rsc += BaseProduction();
             Ressources.Update(rsc);
         }
@@ -201,41 +203,23 @@ namespace Core
             return false;
         }
 
-        public string Attack(Armies barbarianArmy)
+        public bool Defend(Armies barbarianArmy)
         {
             string resume = string.Format("La ville est attaqué par des barbares, ils sont {0} ", barbarianArmy.Count());
 
-            int armySize = Army.Count;
-            int barbarianArmySize = barbarianArmy.Count;
-
-            if (Army.Count == 0)
+            if (Army.Fight(barbarianArmy))
             {
-                foreach (var unit in barbarianArmy)
-                {
-                    RemoveResources(unit.Transport);
-                }
-                resume += string.Format("Nous n'avions aucune defense, nous nous somme fait ecraser");
+                this.Ressources += barbarianArmy.Resources;
+                barbarianArmy.Resources = Resources.Zero();
+                resume += string.Format("Nous avons gagné!");
+                return true;
             }
             else
             {
-
-                if (barbarianArmy.Fight(Army))
-                {
-                    foreach (var unit in barbarianArmy)
-                    {
-                        RemoveResources(unit.Transport);
-                    }
-                    resume += string.Format("Nous avons perdu... Les Barbars sont repartis avec ns ressources !");
-                }
-                else
-                {
-                    resume += string.Format("Nous avons gagné!");
-                }
-
-                resume += string.Format("Dans la bataille nous avons perdu  {0} soldats et eux {1}", armySize - Army.Count(),
-                 barbarianArmySize - barbarianArmy.Count);
+                barbarianArmy.Resources += RemoveResources(barbarianArmy.AvailableTransport());
+                resume += string.Format("Nous avons perdu... Les Barbars sont repartis avec ns ressources !");
+                return false;
             }
-            return resume;
         }
 
         public void TechChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -247,6 +231,23 @@ namespace Core
                     ResearchedTechnologies.Add((Technology)tech);
                 }
             }
+        }
+
+        public override WorldMapItem InteractWith(WorldMapItem item)
+        {
+            if (item.PlayerId == PlayerId)
+            {
+                Army.Merge(item as Armies);
+                Ressources += (item as Armies).Resources;
+            }
+            else
+            {
+                if(!Defend(item as Armies))
+                {
+                    PlayerId = item.PlayerId;
+                }
+            }
+            return null;
         }
     }
 }

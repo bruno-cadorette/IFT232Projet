@@ -10,7 +10,7 @@ namespace Core
 {
     [DataContract]
     [KnownType(typeof (Building))]
-    [KnownType(typeof (ArmyUnit))]
+    [KnownType(typeof (Soldier))]
     public abstract class UpgradableEntity : BuildableEntity
     {
         [DataMember] 
@@ -61,6 +61,28 @@ namespace Core
         public bool CanBeUpgraded(Resources actualResource, Technology technology)
         {
             return !InConstruction && technology.ApplicationCost <= actualResource && CanBeAffected(technology);
+        }
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj) && 
+                Enumerable.SequenceEqual(_CurrentTechnologies.OrderBy(x=>x), (obj as UpgradableEntity)._CurrentTechnologies.OrderBy(x=>x));
+        }
+        public static bool operator ==(UpgradableEntity a, UpgradableEntity b)
+        {
+            if ((object)a == null)
+            {
+                return (object)b == null;
+            }
+
+            return a.Equals(b);
+        }
+        public static bool operator !=(UpgradableEntity a, UpgradableEntity b)
+        {
+            return !(a == b);
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

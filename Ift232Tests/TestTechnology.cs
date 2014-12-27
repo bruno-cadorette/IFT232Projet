@@ -103,7 +103,7 @@ namespace Ift232Tests
             caserne.FinishConstruction();
             city.ResearchedTechnologies.Add(TechnologyFactory.CreateTechnology(2, city));
             Technology technology = city.ResearchedTechnologies.Find(n => n.ID == 2);
-            ArmyUnit unit = ArmyFactory.CreateArmyUnit(0, city);
+            Soldier unit = ArmyFactory.CreateArmyUnit(0, city);
             Assert.IsTrue(technology.CanAffect(unit));
         }
 
@@ -118,7 +118,7 @@ namespace Ift232Tests
             caserne.FinishConstruction();
             city.ResearchedTechnologies.Add(TechnologyFactory.CreateTechnology(2, city));
             Technology technology = city.ResearchedTechnologies.Find(n => n.ID == 2);
-            ArmyUnit unit = ArmyFactory.CreateArmyUnit(0, city);
+            Soldier unit = ArmyFactory.CreateArmyUnit(0, city);
             Assert.IsTrue(technology.CanAffect((UpgradableEntity) unit));
         }
 

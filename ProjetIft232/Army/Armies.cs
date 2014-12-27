@@ -2,163 +2,138 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.Utility;
+using Core.Map;
+using System.Runtime.Serialization;
 
 namespace Core.Army
 {
-    public class Armies : ICollection<ArmyUnit>
+    [DataContract]
+    public class Armies : MovableItem, IEnumerable<Groupment>
     {
-        private readonly List<ArmyUnit> flees;
-        private List<ArmyUnit> units;
+        [DataMember]
+        private List<Groupment> units;
+        public Resources Resources { get; set; }
 
         public Armies()
         {
-            units = new List<ArmyUnit>();
-            flees = new List<ArmyUnit>();
+            units = new List<Groupment>();
+            Resources = new Resources();
         }
 
-        public void Rally()
+        public Resources AvailableTransport()
         {
-            units.AddRange(flees);
-            flees.Clear();
+            return Resources - units.Aggregate(Resources.Zero(), (acc, x) => acc + x.Transport);
         }
 
-        public void Add(ArmyUnit unit)
+        public Resources GiveAllResources()
         {
-            units.Add(unit);
+            var resources = Resources;
+            Resources = Resources.Zero();
+            return resources;
+        }
+        private void Regroup()
+        {
+            units = units.Where(x => x.Size > 0).ToList();
         }
 
-        public int Defense()
+        public void Add(Soldier unit)
         {
-            return units.Sum(n => n.Attributes.Defence * n.Size);
-        }
-
-        public int Attack()
-        {
-            return units.Sum(n => n.Attributes.Attack * n.Size);
-        }
-
-
-        public void LoseUnit(int n)
-        {
-            int unitId;
-            int number;
-            int moral;
-            ArmyUnit tmp;
-            int lost = n;
-            if (lost > Count)
-                units.Clear();
-            while (lost > 0 && units.Any())
+            var groupment = units.FirstOrDefault(x => x.Type == unit);
+            if (groupment != null)
             {
-                unitId = RandomGen.GetInstance().Next(0, units.Count);
-                number = RandomGen.GetInstance().Next(1, Math.Min(units[unitId].Size, lost));
-                tmp = units[unitId];
-                tmp.moral -= (number * 100 / tmp.Size) * 100 / tmp.moral;
-                moral = (number * 100 / Count) * 100;
-
-                foreach (var unit in units)
-                {
-                    if (unit.moral > 0)
-                    {
-                        unit.moral -= moral / unit.moral;
-                    }
-                    if (unit.moral < 30)
-                    {
-                        if (unit.moral < RandomGen.GetInstance().Next(0, 100))
-                        {
-                            flees.Add(unit);
-                            unit.moral = 0;
-                        }
-                    }
-                }
-
-
-                tmp.Size -= number;
-                if (tmp.Size == 0)
-                {
-                    units.Remove(tmp);
-                }
-                units = units.Where(w => w.moral > 0).ToList();
-                lost -= number;
+                groupment.Add(1);
             }
+            else
+            {
+                units.Add(new Groupment(unit));
+            }
+        }
+        public int Attack
+        {
+            get
+            {
+                return units.Sum(n => n.Attributes.Attack);
+            }
+        }
+
+        public int Defense
+        {
+            get
+            {
+                return units.Sum(n => n.Attributes.Defence);
+            }
+        }
+
+        public int Size
+        {
+            get
+            {
+                return units.Sum(n => n.Size);
+            }
+        }
+
+
+        public void LoseUnit(int damage)
+        {
+            foreach (var group in units)
+            {
+                float ratio = (float)group.Attributes.Defence / (float)Defense;
+                group.TakeDamage((int)(ratio * damage));
+            }
+            Regroup();
         }
 
         public bool Fight(Armies opponent)
         {
-            int ourDefense;
-            int ourAttack;
 
-            int theirDefense;
-            int theirAttack;
-
-            int ourDamage;
-            int theirDamage;
-
-
-            if (Count == 0)
+            if (this.Size == 0)
                 return false;
-            if (opponent.Count() == 0)
+            if (opponent.Size == 0)
                 return true;
 
             while (true)
             {
-                ourDefense = Defense();
-                ourAttack = Attack();
 
-                theirDefense = opponent.Defense();
-                theirAttack = opponent.Attack();
 
-                ourDamage = Math.Max(Count * (1 + ourAttack / theirDefense) / 20, 1);
-                theirDamage = Math.Max(opponent.Count() * (1 + theirAttack / ourDefense) / 20, 1);
+                int ourDamage = DamageCalculator(Attack, opponent.Defense);
+                int theirDamage = DamageCalculator(opponent.Attack, Defense);
 
                 LoseUnit(theirDamage);
 
                 opponent.LoseUnit(ourDamage);
 
 
-                if (Count == 0)
+                if (Size == 0)
                 {
-                    opponent.Rally();
                     return false;
                 }
-                if (opponent.Count == 0)
+                if (opponent.Size == 0)
                 {
-                    Rally();
                     return true;
                 }
             }
         }
 
-        public void Clear()
+        private int DamageCalculator(int attack, int defense)
         {
-            units.Clear();
+            float ratio = Math.Min(Math.Max((float)attack / (float)defense, 0.05f), 1f);
+            return(int)(attack*ratio);
         }
 
-        public bool Contains(ArmyUnit unit)
+        public void Merge(Armies army)
         {
-            return units.Contains(unit);
+            foreach (var group in army)
+            {
+                var a = this.FirstOrDefault(x => x.Type == group.Type);
+                if (a!=null)
+                {
+                    a.Add(group.Size);
+                }
+            }
+            Resources += army.GiveAllResources();
         }
 
-        public void CopyTo(ArmyUnit[] array, int arrayIndex)
-        {
-            units.CopyTo(array, arrayIndex);
-        }
-
-        public int Count
-        {
-            get { return units.Sum(n => n.Size); }
-        }
-
-        public bool IsReadOnly
-        {
-            get { return false; }
-        }
-
-        public bool Remove(ArmyUnit unit)
-        {
-            return units.Remove(unit);
-        }
-
-        public IEnumerator<ArmyUnit> GetEnumerator()
+        public IEnumerator<Groupment> GetEnumerator()
         {
             return units.GetEnumerator();
         }
@@ -166,6 +141,26 @@ namespace Core.Army
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
+        }
+
+        public override WorldMapItem InteractWith(WorldMapItem item)
+        {
+            var otherArmy = (item as Armies);
+            if (item.PlayerId == PlayerId)
+            {
+                Merge(otherArmy);
+                return null;
+            }
+            else if (Fight(otherArmy))
+            {
+                Resources += otherArmy.GiveAllResources();
+                return null;
+            }
+            else
+            {
+                otherArmy.Resources += GiveAllResources();
+                return otherArmy;
+            }
         }
     }
 }

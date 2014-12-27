@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Core
+namespace Core.RandomEvent
 {
     public abstract class Effect
     {
@@ -133,7 +133,7 @@ namespace Core
         public Effect counterEffect { get; private set; }
     }
 
-    public class RandomEvent
+    public class RandomEventFactory
     {
         public Dictionary<Event, int> events = new Dictionary<Event, int>();
         //Exemple de tuple : 
@@ -141,7 +141,7 @@ namespace Core
         // {Meteores,(((Ressources, (( nombre de batiments détruits,description),(batiment requis, antidescription))))}
 
 
-        public RandomEvent()
+        public RandomEventFactory()
         {
             events.Add(
                 new Event("Météorites", 0,

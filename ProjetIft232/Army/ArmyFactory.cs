@@ -16,14 +16,14 @@ namespace Core.Army
             return root.Element(XName.Get("Soldiers")).Elements(XName.Get("Soldier"));
         }
 
-        public ArmyUnit GetSoldier(int type)
+        public Soldier GetSoldier(int type)
         {
-            return new ArmyUnit((ArmyUnit) _entities[type]);
+            return new Soldier((Soldier) _entities[type]);
         }
 
-        public IEnumerable<ArmyUnit> Soldiers()
+        public IEnumerable<Soldier> Soldiers()
         {
-            return _entities.Select(x => (ArmyUnit) x.Value);
+            return _entities.Select(x => (Soldier) x.Value);
         }
 
 
@@ -32,10 +32,10 @@ namespace Core.Army
         {
             Resources resources = GetResources(element);
             string specialType = Special(element);
-            int Attack = int.Parse(GetAttribute(element, "Attack"));
-            int Defense = int.Parse(GetAttribute(element, "Defense"));
-            int Size = int.Parse(GetAttribute(element, "size"));
-            ArmyUnit army = new ArmyUnit(id, name, description, Attack, Defense, Size, turns, resources, requirement);
+            int attack = int.Parse(GetAttribute(element, "Attack"));
+            int defense = int.Parse(GetAttribute(element, "Defense"));
+            int health = int.Parse(GetAttribute(element, "Health")); 
+            Soldier army = new Soldier(id, name, description, attack, defense, health, turns, resources, requirement);
 
             switch (specialType)
             {
@@ -60,9 +60,9 @@ namespace Core.Army
             return instance;
         }
 
-        public static ArmyUnit CreateArmyUnit(int id, City city)
+        public static Soldier CreateArmyUnit(int id, City city)
         {
-            ArmyUnit unit = GetInstance().GetSoldier(id);
+            Soldier unit = GetInstance().GetSoldier(id);
             if (unit != null)
             {
                 foreach (
@@ -80,9 +80,9 @@ namespace Core.Army
             return null;
         }
 
-        public static ArmyUnit CreateBarbarian(int id)
+        public static Soldier CreateBarbarian()
         {
-            return GetInstance().GetSoldier(id);
+            return GetInstance().Soldiers().FirstOrDefault();
         }
     }
 }

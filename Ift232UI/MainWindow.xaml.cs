@@ -11,6 +11,8 @@ using Core.Army;
 using Core.Buildings;
 using Core.Technologies;
 using MessageBox = Xceed.Wpf.Toolkit.MessageBox;
+using Core.Map;
+using System.Windows.Media;
 
 namespace Ift232UI
 {
@@ -48,7 +50,7 @@ namespace Ift232UI
             }
             else Close();
         }
-    
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -80,16 +82,21 @@ namespace Ift232UI
         private void NextTurn_Click(object sender, RoutedEventArgs e)
         {
             var turnText = Game.NextTurn();
-            Update();
+
 
             if (turnText.Any())
             {
                 MessageBox.Show(string.Join(Environment.NewLine, turnText));
             }
 
-            if(Game.HasWin() || Game.HasLost())
+
+            if (Game.HasWin() || Game.HasLost())
             {
                 Application.Current.Shutdown();
+            }
+            else
+            {
+                Update();
             }
         }
 
@@ -99,11 +106,12 @@ namespace Ift232UI
             Players.SelectedIndex = Game.PlayerIndex;
             Cities.Content = Game.CurrentPlayer.CurrentCity;
             UnitBox.ItemsSource = ArmyFactory.GetInstance().Soldiers();
-            CurrentUnit.ItemsSource = Game.CurrentPlayer.CurrentCity.Army.Where(n => !n.InConstruction);
+            CurrentUnit.ItemsSource = Game.CurrentPlayer.CurrentCity.Army.Where(n => !n.Type.InConstruction);
             TabArmy.IsEnabled = Game.CurrentPlayer.CurrentCity.FinishedBuildings.Any(t => t is Casern);
             TabTrade.IsEnabled = Game.CurrentPlayer.CurrentCity.FinishedBuildings.Any(t => t is Market);
             UpdateRessource();
             UpdateTechnologyTab();
+            UpdateMap();
             if (Listboxdereve.IsLoaded && Listboxdereve.SelectedItem != null)
             {
                 var currentValue = Listboxdereve.SelectedItem.ToString();
@@ -113,6 +121,79 @@ namespace Ift232UI
                 NBProdTextBox.Text =
                     Game.CurrentPlayer.CurrentCity.CountBuilding(currentValue, true)
                         .ToString(CultureInfo.InvariantCulture);
+            }
+        }
+
+        private IEnumerable<Tuple<Position, Button>> CreateMap()
+        {
+            var lastPosition = new Position(0, 0);
+            var count = Game.WorldMap.Count();
+            foreach (var item in Game.WorldMap)
+            {
+                foreach (var space in FillSpaces(lastPosition, item.Key))
+                {
+                    yield return space;
+                }
+                lastPosition = NextPosition(item.Key);
+                if (item.Value is City)
+                {
+                    var city = item.Value as City;
+                    yield return Tuple.Create(item.Key, new Button()
+                    {
+                        Content = city.Name + " " + city.Army.Size,
+                        Background = Brushes.Gold
+                    });
+                }
+                else if (item.Value is Armies)
+                {
+                    yield return Tuple.Create(item.Key, new Button()
+                    {
+                        Content = (item.Value as Armies).Size,
+                        Background = Brushes.Red
+                    });
+                }
+                else
+                {
+                    yield return Tuple.Create(item.Key, new Button()
+                    {
+                        Content = "wtf"
+                    });
+                }
+            }
+            foreach (var space in FillSpaces(lastPosition, WorldMap.MaxBound))
+            {
+                yield return space;
+            }
+            yield return Tuple.Create(WorldMap.MaxBound, new Button()
+                {
+                    Content = "nature"
+                });
+        }
+        private IEnumerable<Tuple<Position, Button>> FillSpaces(Position current, Position goal)
+        {
+            var next = current;
+            while (next != goal)
+            {
+                yield return Tuple.Create(next, new Button()
+                {
+                    Content = "nature"
+                });
+                next = NextPosition(next);
+            }
+        }
+        private Position NextPosition(Position current)
+        {
+            return Game.WorldMap.Length == current.Y ? new Position(current.X + 1, 0) : new Position(current.X, current.Y + 1);
+        }
+
+        private void UpdateMap()
+        {
+            Map.Children.Clear();
+            var a = CreateMap();
+            var c = a.Count();
+            foreach (var button in a)
+            {
+                Map.Children.Add(button.Item2);
             }
         }
 
@@ -200,7 +281,7 @@ namespace Ift232UI
 
         private void BoughtResources_Loaded(object sender, RoutedEventArgs e)
         {
-            ResourcesType[] listeEchange = {ResourcesType.Wood, ResourcesType.Meat, ResourcesType.Rock};
+            ResourcesType[] listeEchange = { ResourcesType.Wood, ResourcesType.Meat, ResourcesType.Rock };
             if (!boughtResourcesIsLoaded)
             {
                 foreach (var elmt in listeEchange)
@@ -218,7 +299,7 @@ namespace Ift232UI
                 return;
             int val1 = FirstValue.Value.HasValue ? FirstValue.Value.Value : 0;
             String currentValue = SoldResources.SelectedItem.ToString();
-            Market m = (Market) Game.GetMarket();
+            Market m = (Market)Game.GetMarket();
             if (m == null)
                 return;
             var boughtType = Resource.Name.First(n => n.Value == BoughtResources.SelectedItem.ToString());
@@ -251,7 +332,7 @@ namespace Ift232UI
 
             int qty = FirstValue.Value.Value;
 
-            bool done = ((Market) Game.GetMarket()).Achat(Game.CurrentPlayer.CurrentCity, qty, soldType.Key,
+            bool done = ((Market)Game.GetMarket()).Achat(Game.CurrentPlayer.CurrentCity, qty, soldType.Key,
                 boughtType.Key);
             if (done)
             {
@@ -286,7 +367,7 @@ namespace Ift232UI
         {
             if (SoldierQuantityBox.Value.HasValue)
             {
-                int armyTypeId = ((ArmyUnit) UnitBox.SelectedItem).ID;
+                int armyTypeId = ((Soldier)UnitBox.SelectedItem).ID;
                 int quantity = SoldierQuantityBox.Value.Value;
                 for (var i = 0; i < quantity; i++)
                 {
@@ -344,7 +425,7 @@ namespace Ift232UI
 
         private void TechnologyToDo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var technology = (Technology) TechnologyToDo.SelectedItem;
+            var technology = (Technology)TechnologyToDo.SelectedItem;
             if (technology == null)
             {
                 return;
@@ -356,7 +437,7 @@ namespace Ift232UI
 
         private void UpgradableEntityList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selection = (CountableListItem<UpgradableEntity>) UpgradableEntityList.SelectedItem;
+            var selection = (CountableListItem<UpgradableEntity>)UpgradableEntityList.SelectedItem;
             if (selection != null)
             {
                 //UpgradableEntityList.ItemsSource = Enumerable.Empty<UpgradableEntity>();
@@ -370,14 +451,14 @@ namespace Ift232UI
         {
             if (technologySelectedIsResearched)
             {
-                var technologyDone = (Technology) TechnologyDone.SelectedItem;
+                var technologyDone = (Technology)TechnologyDone.SelectedItem;
                 if (technologyDone == null)
                     return;
-                var entity = (CountableListItem<UpgradableEntity>) UpgradableEntityList.SelectedItem;
+                var entity = (CountableListItem<UpgradableEntity>)UpgradableEntityList.SelectedItem;
                 if (entity != null)
                 {
                     Game.CurrentPlayer.CurrentCity.UpgradeEntities(entity.Item, technologyDone,
-                        (int) ApplyCountSlider.Value);
+                        (int)ApplyCountSlider.Value);
                 }
                 technologySelectedIsResearched = false;
                 TechnologyDone.SelectedItem = null;
@@ -386,7 +467,7 @@ namespace Ift232UI
             }
             else
             {
-                var technologyToDo = (Technology) TechnologyToDo.SelectedItem;
+                var technologyToDo = (Technology)TechnologyToDo.SelectedItem;
                 if (technologyToDo == null)
                     return;
                 if (Game.CurrentPlayer.ResearchTechnology(technologyToDo.ID))
@@ -403,12 +484,12 @@ namespace Ift232UI
 
         private void ApplyCountSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            SliderCount.Content = (int) ApplyCountSlider.Value;
+            SliderCount.Content = (int)ApplyCountSlider.Value;
         }
 
         private void TechnologyDone_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var technology = (Technology) TechnologyDone.SelectedItem;
+            var technology = (Technology)TechnologyDone.SelectedItem;
             if (technology == null)
             {
                 return;
@@ -427,19 +508,19 @@ namespace Ift232UI
                     .Where(building => building.CanBeAffected(technology))
                     .GroupBy(x => x.ID)
                     .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count()));
-
+                /*
                 var soldiers = Game.CurrentPlayer.CurrentCity.Army
-                    .Where(soldier => soldier.CanBeAffected(technology))
-                    .GroupBy(x => x.ID)
-                    .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count()));
+                    .Where(soldier => soldier.Type.CanBeAffected(technology))
+                    .GroupBy(x => x.Type.ID)
+                    .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count()));*/
                 //Quand les ID vont être unique
                 var entities = Game.CurrentPlayer.CurrentCity.Buildings.Cast<UpgradableEntity>()
-                    .Concat(Game.CurrentPlayer.CurrentCity.Army)
+                    .Concat(Game.CurrentPlayer.CurrentCity.Army.Select(x => x.Type))
                     .Where(entity => entity.CanBeAffected(technology))
                     .GroupBy(x => x.ID)
-                    .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count())); 
+                    .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count()));
 
-                UpgradableEntityList.ItemsSource = buildings.Concat(soldiers);
+                UpgradableEntityList.ItemsSource = buildings;//.Concat(soldiers);
                 technologySelectedIsResearched = true;
             }
             else
@@ -455,23 +536,24 @@ namespace Ift232UI
 
         private void ArmyRequirementUpdate()
         {
-            var army = (ArmyUnit) UnitBox.SelectedItem;
+            var army = (Soldier)UnitBox.SelectedItem;
             if (army == null)
                 return;
-            try
+
+
+
+            if (SoldierQuantityBox.Value.HasValue)
             {
-                int number = (int) SoldierQuantityBox.Value;
+                int number = SoldierQuantityBox.Value.Value;
                 ArmyRequirement.Content = "";
-                ArmyRequirement.Content += "Or : " + army.Requirement.Resources[ResourcesType.Gold]*number;
-                ArmyRequirement.Content += " / Viande : " + army.Requirement.Resources[ResourcesType.Meat]*number;
-                ArmyRequirement.Content += " / Bois : " + army.Requirement.Resources[ResourcesType.Wood]*number;
-                ArmyRequirement.Content += " / Roche : " + army.Requirement.Resources[ResourcesType.Rock]*number;
+                ArmyRequirement.Content += "Or : " + army.Requirement.Resources[ResourcesType.Gold] * number;
+                ArmyRequirement.Content += " / Viande : " + army.Requirement.Resources[ResourcesType.Meat] * number;
+                ArmyRequirement.Content += " / Bois : " + army.Requirement.Resources[ResourcesType.Wood] * number;
+                ArmyRequirement.Content += " / Roche : " + army.Requirement.Resources[ResourcesType.Rock] * number;
                 ArmyRequirement.Content += " / Population : " +
-                                           army.Requirement.Resources[ResourcesType.Population]*number;
+                                           army.Requirement.Resources[ResourcesType.Population] * number;
             }
-            catch (InvalidOperationException)
-            {
-            }
+
         }
 
         private void SoldierQuantityBox_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

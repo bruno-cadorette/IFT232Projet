@@ -109,7 +109,7 @@
   </Batiments>
 
   <Soldiers>
-    <Soldier Name="Escouade de Guerriers" id = "0" turns="3" size="10" Description="Un guerrier sans education" Attack="2" Defense="2">
+    <Soldier Name="Escouade de Guerriers" id = "0" turns="3" Description="Un guerrier sans education" Attack="2" Defense="2" Health="3">
       <Resources>
         <Rock>1</Rock>
         <Gold>1</Gold>
@@ -128,7 +128,7 @@
       </Requirements>
     </Soldier>
 
-    <Soldier Name="Troupe de Cavaliers" id = "1" turns="3" size="5" Description="Un homme a cheval" Attack="8" Defense="3">
+    <Soldier Name="Troupe de Cavaliers" id = "1" turns="3" Description="Un homme a cheval" Attack="8" Defense="3" Health="5">
       <Resources>
         <Rock>16</Rock>
         <Gold>19</Gold>

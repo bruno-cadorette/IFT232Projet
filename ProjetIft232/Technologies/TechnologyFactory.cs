@@ -71,14 +71,18 @@ namespace Core.Technologies
                 var soldierAttributes = enhancement.Element(XName.Get("SoldierAttributes"));
                 int attack = 0;
                 int defence = 0;
+                int health = 0;
                 if (soldierAttributes != null)
                 {
                     var xElementAttack = soldierAttributes.Element(XName.Get("Attack"));
                     var xElementDefence = soldierAttributes.Element(XName.Get("Defence"));
+                    var xElementHealth = soldierAttributes.Element(XName.Get("Health"));
+                    
                     attack = (xElementAttack != null) ? int.Parse(xElementAttack.Value) : 0;
                     defence = (xElementDefence != null) ? int.Parse(xElementDefence.Value) : 0;
+                    health = (xElementHealth != null) ? int.Parse(xElementHealth.Value) : 0;
                 }
-                return new Enhancement(resources, new SoldierAttributes(attack, defence), constructionTime);
+                return new Enhancement(resources, new SoldierAttributes(attack, defence, health), constructionTime);
             }
             return Enhancement.Zero();
         }

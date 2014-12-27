@@ -7,8 +7,8 @@
     <ProjectGuid>{4D3DF023-7A7A-4F62-8470-F236132D5BE1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ProjetIft232</RootNamespace>
-    <AssemblyName>ProjetIft232</AssemblyName>
+    <RootNamespace>Core</RootNamespace>
+    <AssemblyName>Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -48,18 +48,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Army\ArmyFactory.cs" />
-    <Compile Include="Army\ArmyUnit.cs" />
+    <Compile Include="Army\BarbarianArmy.cs" />
+    <Compile Include="Army\Groupment.cs" />
+    <Compile Include="Army\Soldier.cs" />
     <Compile Include="Army\Armies.cs" />
     <Compile Include="Army\SoldierAttributes.cs" />
     <Compile Include="BuildableEntity.cs" />
     <Compile Include="Buildings\BuildingFactory.cs" />
     <Compile Include="Buildings\Casern.cs" />
+    <Compile Include="Map\MovableItem.cs" />
+    <Compile Include="Map\Position.cs" />
+    <Compile Include="Map\WorldMap.cs" />
+    <Compile Include="Map\WorldMapItem.cs" />
     <Compile Include="Player.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PlayerAI.cs" />
-    <Compile Include="RandomEvent.cs" />
-    <Compile Include="BarbarianArmyGenerator.cs" />
+    <Compile Include="RandomEvent\RandomEvent.cs" />
     <Compile Include="Buildings\Building.cs" />
     <Compile Include="BuildableEntityFactory.cs" />
     <Compile Include="Requirement.cs" />
@@ -74,6 +79,7 @@
     <Compile Include="Technologies\TechnologyFactory.cs" />
     <Compile Include="UpgradableEntity.cs" />
     <Compile Include="Utility\RandomGen.cs" />
+    <Compile Include="Utility\Singleton.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

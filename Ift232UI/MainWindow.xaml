@@ -54,7 +54,7 @@
         </StackPanel>
         <!--<TextBox Name="Resourcesvilles" IsEnabled="False" HorizontalAlignment="Left" Height="28" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" Width="188" Loaded="Resourcesvilles_Loaded"/>-->
 
-        <TabControl Grid.Row="2" Grid.Column="0" >
+        <TabControl Grid.Row="5" Grid.Column="5" >
             <TabItem Header="Ville">
                 <TabItem.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -204,7 +204,6 @@
 
                 </Grid>
             </TabItem>
-
             <TabItem Header="Options">
                 <Grid Background="#FFF0F0F0"  >
                     <Grid.ColumnDefinitions>
@@ -225,6 +224,12 @@
                     <Button Name ="BtnLoad" Content="CHARGER PARTIE" HorizontalAlignment="Left" Margin="10,121,0,0" VerticalAlignment="Top" Width="179" Grid.ColumnSpan="3" Height="36" Click="BtnLoad_Click"/>
                     <Button Name ="BtnSaveNQuit" Content="SAUVEGARDER ET QUITTER" Grid.Column="2" HorizontalAlignment="Left" Margin="203,40,0,0" VerticalAlignment="Top" Width="244" Height="98" Click="Button_Click"/>
                 </Grid>
+            </TabItem>
+            <TabItem Header="Carte">
+                <UniformGrid x:Name="Map">
+                    
+                    
+                </UniformGrid>
             </TabItem>
         </TabControl>
         <Popup Name="popup"  VerticalOffset="20"  PlacementRectangle="300,140,100,150" PopupAnimation="Fade"  AllowsTransparency="True" Margin="300,100,100,10" Placement="Mouse"  IsOpen="False">

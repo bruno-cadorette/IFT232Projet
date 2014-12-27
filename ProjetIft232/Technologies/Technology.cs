@@ -62,7 +62,7 @@ namespace Core.Technologies
             {
                 return AffectedBuildings.Contains(entity.ID);
             }
-            else if (entity is ArmyUnit)
+            else if (entity is Soldier)
             {
                 return AffectedSoldiers.Contains(entity.ID);
             }

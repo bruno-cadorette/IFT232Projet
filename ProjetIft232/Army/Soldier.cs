@@ -4,38 +4,27 @@ using Core.Technologies;
 namespace Core.Army
 {
     [DataContract]
-    public class ArmyUnit : UpgradableEntity
+    public class Soldier : UpgradableEntity
     {
-        public ArmyUnit(int id, string name, string desc, int attack, int def, int size, int turn, Resources transport,
+        public Soldier(int id, string name, string desc, int attack, int defence, int health, int turn, Resources transport,
             Requirement requirement)
             : base(id, name, desc, turn, requirement)
         {
-            Attributes = new SoldierAttributes(attack, def);
+            Attributes = new SoldierAttributes(attack, defence, health);
             Transport = transport;
-            Size = size;
-            moral = 100;
         }
 
-        public ArmyUnit(ArmyUnit army)
+        public Soldier(Soldier army)
             : base(army)
         {
             Attributes = army.Attributes;
             Transport = army.Transport;
-            Size = army.Size;
-            moral = 100;
         }
 
         public SoldierAttributes Attributes { get; set; }
 
-
-        [DataMember]
-        public int Size { get; set; }
-
-
         [DataMember]
         public Resources Transport { get; set; }
-
-        public int moral { get; set; }
 
 
         public void Update()

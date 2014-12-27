@@ -65,6 +65,7 @@
     <Compile Include="LoaderTest.cs" />
     <Compile Include="RandomGenTest.cs" />
     <Compile Include="RequirementGraphTest.cs" />
+    <Compile Include="WorldMapTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProjetIft232\Core.csproj">
