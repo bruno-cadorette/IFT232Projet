@@ -57,6 +57,7 @@
     <Compile Include="Buildings\BuildingFactory.cs" />
     <Compile Include="Buildings\Casern.cs" />
     <Compile Include="Map\MovableItem.cs" />
+    <Compile Include="Map\MovableItemSpawner.cs" />
     <Compile Include="Map\Position.cs" />
     <Compile Include="Map\WorldMap.cs" />
     <Compile Include="Map\WorldMapItem.cs" />

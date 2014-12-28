@@ -12,7 +12,7 @@ using Core.Map;
 namespace Core
 {
     [DataContract]
-    public class City : WorldMapItem
+    public class City : WorldMapItem, MovableItemSpawner
     {
         public static Resources CostToCreate = new Resources
         {
@@ -104,7 +104,7 @@ namespace Core
             }
             else if (entity is Soldier)
             {
-               // entities = Army;
+                // entities = Army;
             }
 
             int n = 0;
@@ -242,12 +242,27 @@ namespace Core
             }
             else
             {
-                if(!Defend(item as Armies))
+                if (!Defend(item as Armies))
                 {
                     PlayerId = item.PlayerId;
                 }
             }
             return null;
+        }
+
+        public MovableItem Spawn(Position goal)
+        {
+            if (Army.Size > 0)
+            {
+                Armies army = Army;
+                army.Goal = goal;
+                Army = new Armies();
+                return army;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

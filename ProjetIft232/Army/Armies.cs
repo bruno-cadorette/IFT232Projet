@@ -17,6 +17,7 @@ namespace Core.Army
         public Armies()
         {
             units = new List<Groupment>();
+            Speed = 1;
             Resources = new Resources();
         }
 
@@ -47,6 +48,10 @@ namespace Core.Army
             {
                 units.Add(new Groupment(unit));
             }
+        }
+        private void Add(Groupment group)
+        {
+            units.Add(group);
         }
         public int Attack
         {
@@ -117,7 +122,7 @@ namespace Core.Army
         private int DamageCalculator(int attack, int defense)
         {
             float ratio = Math.Min(Math.Max((float)attack / (float)defense, 0.05f), 1f);
-            return(int)(attack*ratio);
+            return (int)(attack * ratio);
         }
 
         public void Merge(Armies army)
@@ -125,9 +130,13 @@ namespace Core.Army
             foreach (var group in army)
             {
                 var a = this.FirstOrDefault(x => x.Type == group.Type);
-                if (a!=null)
+                if (a != null)
                 {
                     a.Add(group.Size);
+                }
+                else
+                {
+                    this.Add(group);
                 }
             }
             Resources += army.GiveAllResources();

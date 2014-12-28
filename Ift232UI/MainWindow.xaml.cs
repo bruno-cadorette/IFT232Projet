@@ -123,11 +123,29 @@ namespace Ift232UI
                         .ToString(CultureInfo.InvariantCulture);
             }
         }
+        private Position firstClick;
 
-        private IEnumerable<Tuple<Position, Button>> CreateMap()
+        private RoutedEventHandler MapButtonClick(Position position)
+        {
+            return (sender, args) =>
+                {
+                    if (firstClick == null)
+                    {
+                        firstClick = position;
+                    }
+                    else
+                    {
+                        Game.WorldMap.SetMove(firstClick, position);
+                        firstClick = null;
+                        UpdateMap();
+                    }
+                };
+        }
+
+        private IEnumerable<Button> CreateMap()
         {
             var lastPosition = new Position(0, 0);
-            var count = Game.WorldMap.Count();
+
             foreach (var item in Game.WorldMap)
             {
                 foreach (var space in FillSpaces(lastPosition, item.Key))
@@ -135,49 +153,58 @@ namespace Ift232UI
                     yield return space;
                 }
                 lastPosition = NextPosition(item.Key);
+                Button button;
                 if (item.Value is City)
                 {
                     var city = item.Value as City;
-                    yield return Tuple.Create(item.Key, new Button()
+                    button = new Button()
                     {
                         Content = city.Name + " " + city.Army.Size,
                         Background = Brushes.Gold
-                    });
+                    };
+
                 }
                 else if (item.Value is Armies)
                 {
-                    yield return Tuple.Create(item.Key, new Button()
+                    button = new Button()
                     {
                         Content = (item.Value as Armies).Size,
                         Background = Brushes.Red
-                    });
+                    };
                 }
                 else
                 {
-                    yield return Tuple.Create(item.Key, new Button()
+                    button = new Button()
                     {
                         Content = "wtf"
-                    });
+                    };
                 }
+                button.Click += MapButtonClick(item.Key);
+                yield return button;
             }
+
             foreach (var space in FillSpaces(lastPosition, WorldMap.MaxBound))
             {
                 yield return space;
             }
-            yield return Tuple.Create(WorldMap.MaxBound, new Button()
+            var lastButton = new Button()
                 {
                     Content = "nature"
-                });
+                };
+            lastButton.Click += MapButtonClick(WorldMap.MaxBound);
+            yield return lastButton;
         }
-        private IEnumerable<Tuple<Position, Button>> FillSpaces(Position current, Position goal)
+        private IEnumerable<Button> FillSpaces(Position current, Position goal)
         {
             var next = current;
             while (next != goal)
             {
-                yield return Tuple.Create(next, new Button()
+                var button = new Button()
                 {
                     Content = "nature"
-                });
+                };
+                button.Click += MapButtonClick(next);
+                yield return button;
                 next = NextPosition(next);
             }
         }
@@ -189,11 +216,9 @@ namespace Ift232UI
         private void UpdateMap()
         {
             Map.Children.Clear();
-            var a = CreateMap();
-            var c = a.Count();
-            foreach (var button in a)
+            foreach (var button in CreateMap())
             {
-                Map.Children.Add(button.Item2);
+                Map.Children.Add(button);
             }
         }
 

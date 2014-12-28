@@ -4,6 +4,7 @@ using Core.Map;
 using System.Collections.Generic;
 using Core.Army;
 using System.Linq;
+using Core;
 
 namespace Ift232Tests
 {
@@ -14,7 +15,7 @@ namespace Ift232Tests
         [TestMethod]
         public void KeyTest()
         {
-            var table = new Dictionary<Position,int>();
+            var table = new Dictionary<Position, int>();
             table.Add(new Position(1, 5), 1);
             table.Add(new Position(1, 2), 5);
             Assert.IsTrue(table.ContainsKey(new Position(1, 2)));
@@ -30,7 +31,7 @@ namespace Ift232Tests
                 Speed = 1
             };
             var position = m.NextPosition(new Position(1, 0), emptyPoints);
-            Assert.AreEqual(new Position(1,1), position);
+            Assert.AreEqual(new Position(1, 1), position);
         }
 
         [TestMethod]
@@ -41,7 +42,7 @@ namespace Ift232Tests
                 Goal = new Position(3, 5),
                 Speed = 150
             };
-            var position = m.NextPosition(new Position(1, 0),emptyPoints);
+            var position = m.NextPosition(new Position(1, 0), emptyPoints);
             Assert.AreEqual(new Position(3, 5), position);
         }
         [TestMethod]
@@ -52,8 +53,8 @@ namespace Ift232Tests
                 Goal = new Position(3, 0),
                 Speed = 2
             };
-            var position = m.NextPosition(new Position(5, 0),emptyPoints);
-            Assert.AreEqual(new Position(3, 0),position);
+            var position = m.NextPosition(new Position(5, 0), emptyPoints);
+            Assert.AreEqual(new Position(3, 0), position);
         }
         [TestMethod]
         public void AtDestination()
@@ -65,6 +66,31 @@ namespace Ift232Tests
             };
             var position = m.NextPosition(new Position(3, 0), emptyPoints);
             Assert.AreEqual(new Position(3, 0), position);
+        }
+
+        [TestMethod]
+        public void MoveOnMyOwn()
+        {
+            var city = new City("Toulouse")
+                {
+                    PlayerId = 1
+                };
+            var worldMap = new WorldMap();
+            var army = new Armies()
+            {
+                Speed = 1
+            };
+
+            for (int i = 0; i < 10; i++)
+            {
+                army.Add(ArmyFactory.CreateBarbarian());
+            }
+            city.Army.Merge(army);
+            worldMap.Add(new Position(0, 0), city);
+            worldMap.SetMove(new Position(0, 0), new Position(1, 0));
+            Assert.AreEqual(city, worldMap[new Position(0, 0)]);
+            Assert.AreEqual(army.PlayerId, worldMap[new Position(1, 0)].PlayerId);
+            
         }
 
         [TestMethod]

@@ -37,6 +37,26 @@ namespace Core.Map
                 return MaxBound.Y - MinBound.Y;
             }
         }
+        public void SetMove(Position from, Position to)
+        {
+            if (map.ContainsKey(from))
+            {
+                var item = map[from];
+                if (item is MovableItemSpawner)
+                {
+                    var newItem = (item as MovableItemSpawner).Spawn(to);
+                    if (newItem != null)
+                    {
+                        MakeMovement(newItem, newItem.NextPosition(from, map));
+                    }
+                }
+                else
+                {
+                    var movable = item as MovableItem;
+                    movable.Goal = to;
+                }
+            }
+        }
 
         public Position AvailableRandomPosition()
         {
@@ -92,8 +112,13 @@ namespace Core.Map
             {
                 throw new IndexOutOfRangeException();
             }
-            var item = map[from];
+            var item = map[from] as MovableItem;
             map.Remove(from);
+
+            MakeMovement(item, to);
+        }
+        private void MakeMovement(MovableItem item, Position to)
+        {
             if (map.ContainsKey(to))
             {
                 var newItem = map[to].InteractWith(item);
@@ -105,6 +130,13 @@ namespace Core.Map
             else
             {
                 map.Add(to, item);
+            }
+        }
+        public WorldMapItem this[Position key]
+        {
+            get
+            {
+                return map[key];
             }
         }
 
