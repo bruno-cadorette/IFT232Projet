@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Core.Army
+namespace Core.Military
 {
-    public class BarbarianArmy : Armies
+    public class BarbarianArmy : Army
     {
         protected override Position NewGoal(IEnumerable<KeyValuePair<Position, WorldMapItem>> pointsOfInterest)
         {

@@ -1,4 +1,4 @@
-﻿using Core.Army;
+﻿using Core.Military;
 using Core.Buildings;
 using Core.Technologies;
 using System;

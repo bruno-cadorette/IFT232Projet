@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace Core.Army
+namespace Core.Military
 {
     [DataContract]
     public class Groupment

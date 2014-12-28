@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 using Core.Buildings;
 using Core.Technologies;
 using Core.Utility;
-using Core.Army;
+using Core.Military;
 using Core.Map;
 using Core.RandomEvent;
 

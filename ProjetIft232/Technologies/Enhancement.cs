@@ -1,5 +1,5 @@
 ﻿using System.Runtime.Serialization;
-using Core.Army;
+using Core.Military;
 
 namespace Core.Technologies
 {

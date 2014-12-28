@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Core;
-using Core.Army;
+using Core.Military;
 using Core.Buildings;
 using Core.Utility;
 
@@ -89,7 +89,7 @@ namespace Ift232Tests
             city.Update();
             city.Update();
             Resources old = new Resources(city.Ressources);
-            Armies opponent = new Armies();
+            Army opponent = new Army();
 
             for (int i = 0; i < 10; i++)
             {

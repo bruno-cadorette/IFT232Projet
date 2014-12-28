@@ -47,12 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Army\ArmyFactory.cs" />
-    <Compile Include="Army\BarbarianArmy.cs" />
-    <Compile Include="Army\Groupment.cs" />
-    <Compile Include="Army\Soldier.cs" />
-    <Compile Include="Army\Armies.cs" />
-    <Compile Include="Army\SoldierAttributes.cs" />
+    <Compile Include="Military\ArmyFactory.cs" />
+    <Compile Include="Military\BarbarianArmy.cs" />
+    <Compile Include="Military\Groupment.cs" />
+    <Compile Include="Military\Soldier.cs" />
+    <Compile Include="Military\Army.cs" />
+    <Compile Include="Military\SoldierAttributes.cs" />
     <Compile Include="BuildableEntity.cs" />
     <Compile Include="Buildings\BuildingFactory.cs" />
     <Compile Include="Buildings\Casern.cs" />

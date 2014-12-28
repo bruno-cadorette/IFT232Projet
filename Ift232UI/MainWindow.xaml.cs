@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
 using Core;
-using Core.Army;
+using Core.Military;
 using Core.Buildings;
 using Core.Technologies;
 using MessageBox = Xceed.Wpf.Toolkit.MessageBox;
@@ -164,11 +164,11 @@ namespace Ift232UI
                     };
 
                 }
-                else if (item.Value is Armies)
+                else if (item.Value is Army)
                 {
                     button = new Button()
                     {
-                        Content = (item.Value as Armies).Size,
+                        Content = (item.Value as Army).Size,
                         Background = Brushes.Red
                     };
                 }

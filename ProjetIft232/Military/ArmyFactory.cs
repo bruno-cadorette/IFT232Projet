@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Xml.Linq;
 
-namespace Core.Army
+namespace Core.Military
 {
     public class ArmyFactory : BuildableEntityFactory
     {

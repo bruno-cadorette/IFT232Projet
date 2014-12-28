@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Core;
-using Core.Army;
+using Core.Military;
 using Core.Buildings;
 using Core.Technologies;
 

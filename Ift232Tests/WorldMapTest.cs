@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Core.Map;
 using System.Collections.Generic;
-using Core.Army;
+using Core.Military;
 using System.Linq;
 using Core;
 
@@ -25,7 +25,7 @@ namespace Ift232Tests
         [TestMethod]
         public void Move()
         {
-            var m = new Armies()
+            var m = new Army()
             {
                 Goal = new Position(3, 5),
                 Speed = 1
@@ -37,7 +37,7 @@ namespace Ift232Tests
         [TestMethod]
         public void MoveClose()
         {
-            var m = new Armies()
+            var m = new Army()
             {
                 Goal = new Position(3, 5),
                 Speed = 150
@@ -48,7 +48,7 @@ namespace Ift232Tests
         [TestMethod]
         public void MoveBackward()
         {
-            var m = new Armies()
+            var m = new Army()
             {
                 Goal = new Position(3, 0),
                 Speed = 2
@@ -59,7 +59,7 @@ namespace Ift232Tests
         [TestMethod]
         public void AtDestination()
         {
-            var m = new Armies()
+            var m = new Army()
             {
                 Goal = new Position(3, 0),
                 Speed = 2
@@ -76,7 +76,7 @@ namespace Ift232Tests
                     PlayerId = 1
                 };
             var worldMap = new WorldMap();
-            var army = new Armies()
+            var army = new Army()
             {
                 Speed = 1
             };
@@ -96,11 +96,11 @@ namespace Ift232Tests
         [TestMethod]
         public void InteractWithEnemy()
         {
-            var army1 = new Armies()
+            var army1 = new Army()
             {
                 PlayerId = 0
             };
-            var army2 = new Armies()
+            var army2 = new Army()
             {
                 Goal = new Position(0, 0),
                 Speed = 10,

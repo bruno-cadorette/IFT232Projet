@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using Core.Army;
+using Core.Military;
 using Core.Buildings;
 
 namespace Core.Technologies

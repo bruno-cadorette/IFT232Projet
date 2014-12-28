@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Core;
-using Core.Army;
+using Core.Military;
 
 namespace Ift232Tests
 {
@@ -62,7 +62,7 @@ namespace Ift232Tests
         public void TestAttack()
         {
             Resources old = new Resources(city1.Ressources);
-            Armies opponent = new Armies();
+            Army opponent = new Army();
 
             for (int i = 0; i < 10; i++)
             {

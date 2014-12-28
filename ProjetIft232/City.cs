@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.Serialization;
-using Core.Army;
+using Core.Military;
 using Core.Buildings;
 using Core.Technologies;
 using Core.Map;
@@ -34,7 +34,7 @@ namespace Core
             Buildings = new List<Building>();
 
             recruitement = new List<Soldier>();
-            Army = new Armies();
+            Army = new Army();
             _turnsSinceCreation = 0;
         }
 
@@ -50,7 +50,7 @@ namespace Core
         public List<Soldier> recruitement { get; private set; }
 
         [DataMember]
-        public Armies Army { get; private set; }
+        public Army Army { get; private set; }
 
         [DataMember]
         public List<Technology> ResearchedTechnologies { get; private set; }
@@ -203,7 +203,7 @@ namespace Core
             return false;
         }
 
-        public bool Defend(Armies barbarianArmy)
+        public bool Defend(Army barbarianArmy)
         {
             string resume = string.Format("La ville est attaqué par des barbares, ils sont {0} ", barbarianArmy.Count());
 
@@ -237,12 +237,12 @@ namespace Core
         {
             if (item.PlayerId == PlayerId)
             {
-                Army.Merge(item as Armies);
-                Ressources += (item as Armies).Resources;
+                Army.Merge(item as Army);
+                Ressources += (item as Army).Resources;
             }
             else
             {
-                if (!Defend(item as Armies))
+                if (!Defend(item as Army))
                 {
                     PlayerId = item.PlayerId;
                 }
@@ -254,9 +254,9 @@ namespace Core
         {
             if (Army.Size > 0)
             {
-                Armies army = Army;
+                Army army = Army;
                 army.Goal = goal;
-                Army = new Armies();
+                Army = new Army();
                 return army;
             }
             else

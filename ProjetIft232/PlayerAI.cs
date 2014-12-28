@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Core.Army;
+using Core.Military;
 using Core.Buildings;
 
 namespace Core

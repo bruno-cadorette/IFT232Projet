@@ -5,16 +5,16 @@ using Core.Utility;
 using Core.Map;
 using System.Runtime.Serialization;
 
-namespace Core.Army
+namespace Core.Military
 {
     [DataContract]
-    public class Armies : MovableItem, IEnumerable<Groupment>
+    public class Army : MovableItem, IEnumerable<Groupment>
     {
         [DataMember]
         private List<Groupment> units;
         public Resources Resources { get; set; }
 
-        public Armies()
+        public Army()
         {
             units = new List<Groupment>();
             Speed = 1;
@@ -88,7 +88,7 @@ namespace Core.Army
             Regroup();
         }
 
-        public bool Fight(Armies opponent)
+        public bool Fight(Army opponent)
         {
 
             if (this.Size == 0)
@@ -125,7 +125,7 @@ namespace Core.Army
             return (int)(attack * ratio);
         }
 
-        public void Merge(Armies army)
+        public void Merge(Army army)
         {
             foreach (var group in army)
             {
@@ -154,7 +154,7 @@ namespace Core.Army
 
         public override WorldMapItem InteractWith(WorldMapItem item)
         {
-            var otherArmy = (item as Armies);
+            var otherArmy = (item as Army);
             if (item.PlayerId == PlayerId)
             {
                 Merge(otherArmy);

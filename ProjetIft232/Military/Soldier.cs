@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Serialization;
 using Core.Technologies;
 
-namespace Core.Army
+namespace Core.Military
 {
     [DataContract]
     public class Soldier : UpgradableEntity

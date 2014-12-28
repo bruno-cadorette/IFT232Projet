@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Core.Buildings;
 using Core.Technologies;
-using Core.Army;
+using Core.Military;
 
 namespace Core
 {
