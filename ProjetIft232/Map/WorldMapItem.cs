@@ -13,7 +13,7 @@ namespace Core.Map
         public int PlayerId { get; set; }
         [DataMember]
         public bool CanBeDeleted { get; protected set; }
-        public abstract WorldMapItem InteractWith(WorldMapItem item);
+        public abstract WorldMapItem InteractWith(WorldMapItem item, Land land);
         public WorldMapItem()
         {
             CanBeDeleted = false;

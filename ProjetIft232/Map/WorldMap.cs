@@ -8,6 +8,17 @@ namespace Core.Map
     public class WorldMap : IEnumerable<KeyValuePair<Position, WorldMapItem>>
     {
         private Dictionary<Position, WorldMapItem> map = new Dictionary<Position, WorldMapItem>();
+        private Land[,] landScape = new Land[MaxBound.X, MaxBound.Y];
+        public WorldMap()
+        {
+            for (int i = 0; i < landScape.GetUpperBound(0); i++)
+            {
+                for (int j = 0; j < landScape.GetUpperBound(1); j++)
+                {
+                    landScape[i, j] = new Land();
+                }
+            }
+        }
         public static Position MinBound
         {
             get
@@ -57,20 +68,29 @@ namespace Core.Map
                 }
             }
         }
+        private IEnumerable<Position> ValidPositions()
+        {
+            for (int i = 0; i < landScape.GetUpperBound(0); i++)
+            {
+                for (int j = 0; j < landScape.GetUpperBound(1); j++)
+                {
+                    if (landScape[i, j].CanTravel)
+                    {
+                        var position = new Position(i, j);
+                        if (!map.ContainsKey(position))
+                        {
+                            yield return position;
+                        }
+                    }
+                }
+            }
+        }
 
         public Position AvailableRandomPosition()
         {
             var random = new Random();
-            int cell = random.Next(Length * Height - map.Count);
-            int i = 0;
-            for (; i < cell; i++)
-            {
-                if (map.ContainsKey(new Position(i % Length, i / Length)))
-                {
-                    cell++;
-                }
-            }
-            return new Position(i % Length, i / Length);
+            var positions = ValidPositions().ToArray();
+            return positions[random.Next(positions.Length)];
         }
         public void Update()
         {
@@ -84,17 +104,9 @@ namespace Core.Map
             }
         }
 
-        public void Add(WorldMapItem item)
+        public void AddToRandomPosition(WorldMapItem item)
         {
-            var position = AvailableRandomPosition();
-            if (map.ContainsKey(position))
-            {
-                Add(item);
-            }
-            else
-            {
-                Add(position, item);
-            }
+            Add(AvailableRandomPosition(), item);
         }
         public void Add(Position position, WorldMapItem item)
         {
@@ -121,7 +133,7 @@ namespace Core.Map
         {
             if (map.ContainsKey(to))
             {
-                var newItem = map[to].InteractWith(item);
+                var newItem = map[to].InteractWith(item, landScape[to.X, to.Y]);
                 if (newItem != null)
                 {
                     map[to] = newItem;

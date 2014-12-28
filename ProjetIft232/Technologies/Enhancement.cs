@@ -19,6 +19,7 @@ namespace Core.Technologies
         [DataMember]
         public int ConstructionTime { get; private set; }
 
+        [DataMember]
         public SoldierAttributes SoldierAttributes { get; private set; }
 
 

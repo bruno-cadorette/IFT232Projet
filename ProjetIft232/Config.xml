@@ -119,11 +119,11 @@
           <Building>5</Building>
         </Buildings>
         <Resources>
-          <Gold>200</Gold>
-          <Wood>20</Wood>
-          <Meat>100</Meat>
+          <Gold>20</Gold>
+          <Wood>2</Wood>
+          <Meat>10</Meat>
           <Rock>0</Rock>
-          <Population>10</Population>
+          <Population>1</Population>
         </Resources>
       </Requirements>
     </Soldier>
@@ -139,11 +139,11 @@
           <Building>5</Building>
         </Buildings>
         <Resources>
-          <Gold>250</Gold>
-          <Wood>75</Wood>
-          <Meat>200</Meat>
+          <Gold>50</Gold>
+          <Wood>15</Wood>
+          <Meat>40</Meat>
           <Rock>0</Rock>
-          <Population>10</Population>
+          <Population>2</Population>
         </Resources>
       </Requirements>
     </Soldier>

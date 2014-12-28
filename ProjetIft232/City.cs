@@ -37,6 +37,11 @@ namespace Core
             Army = new Army();
             _turnsSinceCreation = 0;
         }
+        private Land land = new Land()
+        {
+            AttackerBonus = new SoldierAttributes(0, 0, 0),
+            DefenderBonus = new SoldierAttributes(0, 500, 0)
+        };
 
         [DataMember]
         public List<Building> Buildings { get; private set; }
@@ -206,8 +211,8 @@ namespace Core
         public bool Defend(Army barbarianArmy)
         {
             string resume = string.Format("La ville est attaqué par des barbares, ils sont {0} ", barbarianArmy.Count());
-
-            if (Army.Fight(barbarianArmy))
+            land.DefenderBonus = new SoldierAttributes(Ressources.Population,land.DefenderBonus.Defence,0);
+            if (Army.Fight(barbarianArmy, land))
             {
                 this.Ressources += barbarianArmy.Resources;
                 barbarianArmy.Resources = Resources.Zero();
@@ -233,7 +238,7 @@ namespace Core
             }
         }
 
-        public override WorldMapItem InteractWith(WorldMapItem item)
+        public override WorldMapItem InteractWith(WorldMapItem item, Land land)
         {
             if (item.PlayerId == PlayerId)
             {

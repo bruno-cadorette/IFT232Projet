@@ -90,7 +90,11 @@ namespace Core.Military
 
         public bool Fight(Army opponent)
         {
-
+            return Fight(opponent, new Land());
+            
+        }
+        public bool Fight(Army opponent, Land land)
+        {
             if (this.Size == 0)
                 return false;
             if (opponent.Size == 0)
@@ -98,10 +102,8 @@ namespace Core.Military
 
             while (true)
             {
-
-
-                int ourDamage = DamageCalculator(Attack, opponent.Defense);
-                int theirDamage = DamageCalculator(opponent.Attack, Defense);
+                int ourDamage = DamageCalculator(Attack + land.DefenderBonus.Attack, opponent.Defense + land.AttackerBonus.Defence);
+                int theirDamage = DamageCalculator(opponent.Attack + land.AttackerBonus.Attack, Defense + land.DefenderBonus.Defence);
 
                 LoseUnit(theirDamage);
 
@@ -121,8 +123,12 @@ namespace Core.Military
 
         private int DamageCalculator(int attack, int defense)
         {
+            if(attack == 0)
+            {
+                return 0;
+            }
             float ratio = Math.Min(Math.Max((float)attack / (float)defense, 0.05f), 1f);
-            return (int)(attack * ratio);
+            return Math.Max((int)(attack * ratio),1);
         }
 
         public void Merge(Army army)
@@ -152,7 +158,7 @@ namespace Core.Military
             return this.GetEnumerator();
         }
 
-        public override WorldMapItem InteractWith(WorldMapItem item)
+        public override WorldMapItem InteractWith(WorldMapItem item, Land land)
         {
             var otherArmy = (item as Army);
             if (item.PlayerId == PlayerId)
@@ -160,7 +166,7 @@ namespace Core.Military
                 Merge(otherArmy);
                 return null;
             }
-            else if (Fight(otherArmy))
+            else if (Fight(otherArmy, land))
             {
                 Resources += otherArmy.GiveAllResources();
                 return null;

@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Map\Land.cs" />
     <Compile Include="Military\ArmyFactory.cs" />
     <Compile Include="Military\BarbarianArmy.cs" />
     <Compile Include="Military\Groupment.cs" />

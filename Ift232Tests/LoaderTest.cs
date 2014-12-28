@@ -13,7 +13,7 @@ namespace Ift232Tests
         {
             var casern = BuildingFactory.GetInstance().GetBuilding((int) BuildingType.Casern);
             var builds = new[] {0, 1};
-            var requirements = new Requirement(builds,
+            var requirements = new Requirement(builds, Enumerable.Empty<int>(),
                 new Resources {Wood = 500, Gold = 1000, Meat = 250, Rock = 1500, Population = 10});
             Assert.AreEqual(requirements.Resources, casern.Requirement.Resources);
             var a1 = requirements.Buildings.ToArray();

@@ -124,7 +124,7 @@ namespace Core
             {
                 if (Hostility > hostylityAument.Next(0, 100))
                 {
-                    WorldMap.Add(BarbarianArmy.CreateArmy(TurnIndex));
+                    WorldMap.AddToRandomPosition(BarbarianArmy.CreateArmy(TurnIndex));
                 }
                 //On reutilise la variable hostilityAument pour generer les evenements aleatoires
                 Alea = hostylityAument.Next(0, 100);
@@ -149,7 +149,7 @@ namespace Core
                 playerName = playerName,
             };
 
-            WorldMap.Add(player.CreateCity(cityName));
+            WorldMap.AddToRandomPosition(player.CreateCity(cityName));
             player.NextCity();
             Players.Add(player);
         }
@@ -160,7 +160,7 @@ namespace Core
             if (city!=null)
             {
                 city.RemoveResources(City.CostToCreate);
-                WorldMap.Add(CurrentPlayer.CreateCity(name));
+                WorldMap.AddToRandomPosition(CurrentPlayer.CreateCity(name));
                 return true;
             }
             return false;

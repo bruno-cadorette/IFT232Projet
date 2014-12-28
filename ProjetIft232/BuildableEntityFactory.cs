@@ -22,7 +22,7 @@ namespace Core
 
         private XDocument document { get; set; }
 
-        public Dictionary<int, BuildableEntity> _entities { get; set; }
+        protected Dictionary<int, BuildableEntity> _entities { get; set; }
 
         protected BuildableEntity GetEntity(int type)
         {

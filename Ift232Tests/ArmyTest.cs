@@ -19,7 +19,10 @@ namespace Ift232Tests
         private void SetUp()
         {
             RandomGen.SetToPredictable(5);
-            city = new City("Toulouse");
+            city = new City("Toulouse")
+            {
+                PlayerId = 1
+            };
             Building house = city.AddBuilding((int) BuildingType.House);
             house.FinishConstruction();
 
@@ -89,9 +92,8 @@ namespace Ift232Tests
             city.Update();
             city.Update();
             Resources old = new Resources(city.Ressources);
-            Army opponent = new Army();
-
-            for (int i = 0; i < 10; i++)
+            BarbarianArmy opponent = new BarbarianArmy();
+            for (int i = 0; i < 1000; i++)
             {
                 opponent.Add(ArmyFactory.CreateBarbarian());
             }

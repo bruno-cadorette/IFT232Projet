@@ -12,12 +12,6 @@ namespace Core
         [DataMember] 
         private IEnumerable<int> _Technologies;
 
-        public Requirement(IEnumerable<int> buildings, Resources resources)
-        {
-            Buildings = buildings;
-            Resources = resources;
-        }
-
 
         public Requirement(IEnumerable<int> buildings, IEnumerable<int> technologies, Resources resources)
         {
@@ -37,20 +31,11 @@ namespace Core
             return new Requirement(new int[0], new int[0], Resources.Zero());
         }
 
-
-        public bool IsValid(Resources actualResource, IEnumerable<Building> actualBuildings)
-        {
-            return actualResource >= Resources &&
-                   Buildings.All(type =>
-                       actualBuildings.Any(x =>
-                           x.ID == type && !x.InConstruction)
-                       );
-        }
-
         public bool IsValid(Resources actualResource, IEnumerable<Building> actualBuildings,
             IEnumerable<Technology> actualTechnologies)
         {
-            return IsValid(actualResource, actualBuildings) &&
+            return actualResource >= Resources &&
+                   Buildings.All(type => actualBuildings.Any(x => x.ID == type && !x.InConstruction)) &&
                    _Technologies.All(tech => actualTechnologies.Any(x => x.ID == tech && !x.InConstruction));
         }
 
@@ -61,14 +46,14 @@ namespace Core
                       " Bois : " + Resources[ResourcesType.Wood] + " Roche : " + Resources[ResourcesType.Rock] +
                       " Population : " + Resources[ResourcesType.Population];
             result += " Batiments : ";
-            foreach (var each in Buildings)
+            foreach (var id in Buildings)
             {
-                result += " " + BuildingFactory.GetInstance()._entities[each].Name + " ";
+                result += " " + BuildingFactory.GetInstance().GetBuilding(id).Name + " ";
             }
             result += " Technologies : ";
-            foreach (var each in _Technologies)
+            foreach (var id in _Technologies)
             {
-                result += " " + TechnologyFactory.GetInstance()._entities[each].Name + " ";
+                result += " " + TechnologyFactory.GetInstance().GetTechnology(id).Name + " ";
             }
             return result;
         }

@@ -20,6 +20,7 @@ namespace Core.Military
         }
         [DataMember]
         public int Size { get; private set; }
+        private int health;
         public Resources Transport
         {
             get
@@ -32,6 +33,7 @@ namespace Core.Military
         {
             Type = soldier;
             Size = 1;
+            health = Type.Attributes.Health;
 
         }
         public void Add(int n)
@@ -44,7 +46,15 @@ namespace Core.Military
         }
         public void TakeDamage(int damage)
         {
-            Remove(damage / Type.Attributes.Health);
+            var currentDamage = health - damage;
+            if (currentDamage < 0)
+            {
+                Remove(1 + (currentDamage * -1 / Type.Attributes.Health));
+            }
+            else
+            {
+                health = currentDamage;
+            }
         }
 
         public override string ToString()
