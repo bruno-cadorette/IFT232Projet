@@ -15,12 +15,13 @@
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
         </TabControl>
-        <TextBox x:Name="EntityNameTextBox" HorizontalAlignment="Left" Height="23" Margin="169,29,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding CurrentBuilding.Name, NotifyOnTargetUpdated=True}"/>
-        <TextBlock x:Name="NabeTextBloc" HorizontalAlignment="Left" Margin="119,29,0,0" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top" RenderTransformOrigin="0.22,-0.188"/>
-        <Button x:Name="SaveButton" Content="Save" HorizontalAlignment="Left" Margin="432,289,0,0" VerticalAlignment="Top" Width="75" Click="SaveButton_Click"/>
-        <Custom:RequirementControl Header="Building Requirements" AddCommand="{Binding AddToRequirementCommand}" SelectorItemSource="{Binding Buildings}" ListItemSource="{Binding CurrentBuilding.Requirements}" 
+        <Grid>
+            <TextBox x:Name="EntityNameTextBox" HorizontalAlignment="Left" Height="23" Margin="169,29,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding CurrentBuilding.Name, NotifyOnTargetUpdated=True}"/>
+            <TextBlock x:Name="NabeTextBloc" HorizontalAlignment="Left" Margin="119,29,0,0" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top" RenderTransformOrigin="0.22,-0.188"/>
+            <Button x:Name="SaveButton" Content="Save" HorizontalAlignment="Left" Margin="432,289,0,0" VerticalAlignment="Top" Width="75" Click="SaveButton_Click"/>
+            <Custom:RequirementControl Header="Building Requirements" AddCommand="{Binding AddToRequirementCommand}" SelectorItemSource="{Binding Buildings}" ListItemSource="{Binding CurrentBuilding.Requirements}" 
                                    HorizontalAlignment="Left" Margin="336,117,0,0" VerticalAlignment="Top" Height="137" Width="132"/>
-        <Custom:ResourcesBuilder Header="Resources" DataContext="{Binding CurrentBuilding.Resources, Mode=TwoWay}" HorizontalAlignment="Left" Margin="160,117,0,0" VerticalAlignment="Top" Height="177"/>
-
+            <Custom:ResourcesBuilder Header="Resources" DataContext="{Binding CurrentBuilding.Resources, Mode=TwoWay}" HorizontalAlignment="Left" Margin="160,117,0,0" VerticalAlignment="Top" Height="177"/>
+        </Grid>
     </Grid>
 </Window>
