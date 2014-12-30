@@ -70,9 +70,7 @@ namespace GameBuilder
         }
         private void ReplaceItem(int index, LandscapeViewModel item)
         {
-            LandscapeTiles.RemoveAt(index);
-            LandscapeTiles.Insert(index, item);
-            LandscapeTiles[index].Color = item.Color;
+            LandscapeTiles.ChangeAt(index, item);
         }
 
         private void Fill(int x, int y, LandscapeViewModel colorTarget, LandscapeViewModel remplacement)

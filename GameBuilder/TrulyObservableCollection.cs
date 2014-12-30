@@ -22,6 +22,10 @@ namespace GameBuilder
         {
             CollectionChanged += new NotifyCollectionChangedEventHandler(TrulyObservableCollection_CollectionChanged);
         }
+        public void ChangeAt(int index, T item)
+        {
+            base.SetItem(index, item);
+        }
 
         void TrulyObservableCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {

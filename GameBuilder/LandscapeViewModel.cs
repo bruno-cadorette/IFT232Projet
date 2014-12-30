@@ -9,7 +9,18 @@ namespace GameBuilder
 {
     public class LandscapeViewModel : BindableBase
     {
-        public Color Color { get; set; }
+        private Color color;
+        public Color Color
+        {
+            get
+            {
+                return color;
+            }
+            set
+            {
+                SetProperty(ref color, value);
+            }
+        }
         public SolidColorBrush Brush
         {
             get
@@ -19,7 +30,7 @@ namespace GameBuilder
         }
         public LandscapeViewModel(Color color)
         {
-            Color = color;
+            this.color = color;
         }
         public static bool operator ==(LandscapeViewModel a, LandscapeViewModel b)
         {
