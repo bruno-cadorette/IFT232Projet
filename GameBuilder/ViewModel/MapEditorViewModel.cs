@@ -73,21 +73,62 @@ namespace GameBuilder
         {
             LandscapeTiles.ChangeAt(index, item);
         }
-
-        private void Fill(int x, int y, LandscapeViewModel colorTarget, LandscapeViewModel remplacement)
+        private void ReplaceItem(Coordonate point, LandscapeViewModel item)
         {
-            if (colorTarget == remplacement)
+            LandscapeTiles.ChangeAt(GetIndex((int)point.X, (int)point.Y), item);
+        }
+
+        
+        private struct Coordonate
+        {
+            public int X { get; set; }
+            public int Y { get; set; }
+
+            public Coordonate(int x, int y) : this()
             {
-                return;
+                X = x;
+                Y = y;
             }
-            if (IsValid(x) && IsValid(y) && GetColor(x, y) == colorTarget)
+        }
+        private void Fill(int x, int y, LandscapeViewModel targetColor, LandscapeViewModel replacementColor)
+        {
+            Queue<Coordonate> q = new Queue<Coordonate>();
+            q.Enqueue(new Coordonate(x,y));
+            while (q.Count > 0)
             {
-                ReplaceItem(GetIndex(x, y), remplacement);
-                Fill(x, y + 1, colorTarget, remplacement);
-                Fill(x, y - 1, colorTarget, remplacement);
-                Fill(x + 1, y, colorTarget, remplacement);
-                Fill(x - 1, y, colorTarget, remplacement);
+                Coordonate n = q.Dequeue();
+                if (GetColor(n) != targetColor)
+                    continue;
+                Coordonate w = n, e = new Coordonate(n.X + 1, n.Y);
+                while ((w.X > 0) && GetColor(n) == targetColor)
+                {
+                    ReplaceItem(w, replacementColor);
+                    if ((w.Y > 0) && GetColor(w.X, w.Y - 1) == targetColor)
+                    {
+                        q.Enqueue(new Coordonate(w.X, w.Y - 1));
+                    }
+                        
+                    if ((w.Y < Height - 1) && GetColor(w.X, w.Y + 1) == targetColor)
+                    {
+                        q.Enqueue(new Coordonate(w.X, w.Y + 1));
+                    }
+                    w.X--;
+                }
+                while ((e.X < Width - 1) && GetColor(e.X, e.Y) == targetColor)
+                {
+                    ReplaceItem(e, replacementColor);
+                    if ((e.Y > 0) && GetColor(e.X, e.Y - 1) == targetColor)
+                    {
+                        q.Enqueue(new Coordonate(e.X, e.Y - 1));
+                    }
+                    if ((e.Y < Height - 1) && GetColor(e.X, e.Y + 1) == targetColor)
+                    {
+                        q.Enqueue(new Coordonate(e.X, e.Y + 1));
+                    }
+                    e.X++;
+                }
             }
+
         }
         private bool IsValid(int x)
         {
@@ -98,9 +139,13 @@ namespace GameBuilder
         {
             return LandscapeTiles[GetIndex(x, y)];
         }
+        private LandscapeViewModel GetColor(Coordonate point)
+        {
+            return GetColor((int)point.X, (int)point.Y);
+        }
+
         private int GetIndex(int x, int y)
         {
-
             return y * lenght + x;
         }
         private IEnumerable<LandscapeViewModel> LandscapeGenerator()
