@@ -16,15 +16,22 @@ namespace GameBuilder.Utility
         {
             
         }
+        public new T this[int index]
+        {
+            get
+            {
+                return base[index];
+            }
+            set
+            {
+                base.SetItem(index, value);
+            }
+        }
 
         public TrulyObservableCollection(IEnumerable<T> collection)
             : base(collection)
         {
             CollectionChanged += new NotifyCollectionChangedEventHandler(TrulyObservableCollection_CollectionChanged);
-        }
-        public void ChangeAt(int index, T item)
-        {
-            base.SetItem(index, item);
         }
 
         void TrulyObservableCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

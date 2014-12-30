@@ -30,17 +30,11 @@ namespace GameBuilder
                 return 100;
             }
         }
-        public int TotalNumberOfItems
-        {
-            get
-            {
-                return Height * Width;
-            }
-        }
         public bool FillMode { get; set; }
         public bool EraseMode { get; set; }
         public ICommand ChangeLand { get; private set; }
         public ICommand SaveLand { get; private set; }
+        public ICommand SelectLandscape { get; private set; }
 
         private int lenght;
 
@@ -61,30 +55,28 @@ namespace GameBuilder
                     }
                     else
                     {
-                        ReplaceItem(i, EraseMode ? LandscapeViewModel.DefaultLandscape() : SelectedLandscape);
+                        LandscapeTiles[i] = EraseMode ? LandscapeViewModel.DefaultLandscape() : SelectedLandscape;
                     }
                 });
+            SelectLandscape = new RelayCommand<LandscapeViewModel>(x => SelectedLandscape = x);
         }
         private IEnumerable<LandscapeViewModel> TilesGenerator()
         {
-            return Enumerable.Repeat(LandscapeViewModel.DefaultLandscape(), TotalNumberOfItems);
-        }
-        private void ReplaceItem(int index, LandscapeViewModel item)
-        {
-            LandscapeTiles.ChangeAt(index, item);
+            return Enumerable.Repeat(LandscapeViewModel.DefaultLandscape(), Height * Width);
         }
         private void ReplaceItem(Coordonate point, LandscapeViewModel item)
         {
-            LandscapeTiles.ChangeAt(GetIndex((int)point.X, (int)point.Y), item);
+            LandscapeTiles[GetIndex((int)point.X, (int)point.Y)] = item;
         }
 
-        
+
         private struct Coordonate
         {
             public int X { get; set; }
             public int Y { get; set; }
 
-            public Coordonate(int x, int y) : this()
+            public Coordonate(int x, int y)
+                : this()
             {
                 X = x;
                 Y = y;
@@ -93,7 +85,7 @@ namespace GameBuilder
         private void Fill(int x, int y, LandscapeViewModel targetColor, LandscapeViewModel replacementColor)
         {
             Queue<Coordonate> q = new Queue<Coordonate>();
-            q.Enqueue(new Coordonate(x,y));
+            q.Enqueue(new Coordonate(x, y));
             while (q.Count > 0)
             {
                 Coordonate n = q.Dequeue();
@@ -107,7 +99,7 @@ namespace GameBuilder
                     {
                         q.Enqueue(new Coordonate(w.X, w.Y - 1));
                     }
-                        
+
                     if ((w.Y < Height - 1) && GetColor(w.X, w.Y + 1) == targetColor)
                     {
                         q.Enqueue(new Coordonate(w.X, w.Y + 1));
@@ -150,7 +142,7 @@ namespace GameBuilder
         }
         private IEnumerable<LandscapeViewModel> LandscapeGenerator()
         {
-            return typeof(Brushes).GetProperties().Select(x => new LandscapeViewModel((x.GetValue(null, null) as SolidColorBrush).Color));
+            return typeof(Brushes).GetProperties().Select(x => new LandscapeViewModel((x.GetValue(null, null) as SolidColorBrush).Color)).OrderBy(x => x.Color.ToString());
         }
     }
 }

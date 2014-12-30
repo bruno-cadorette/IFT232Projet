@@ -3,25 +3,40 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MapEditor" Height="701" Width="771">
     <Grid>
-        <ToggleButton Content="Fill" IsChecked="{Binding FillMode}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
-        <ToggleButton Content="Erase" IsChecked="{Binding EraseMode}" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="75"/>
-        <ItemsControl ItemsSource="{Binding Landscape}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top" Width="96"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Left"  Margin="96,0,0,0" VerticalAlignment="Top">
-            <ItemsControl x:Name="MapItemControl" ItemsSource="{Binding LandscapeTiles}" AlternationCount="{Binding TotalNumberOfItems}">
+        <Grid>
+            <ToggleButton Content="Fill" IsChecked="{Binding FillMode}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
+            <ToggleButton Content="Erase" IsChecked="{Binding EraseMode}" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="75"/>
+            <ScrollViewer Width="115" HorizontalAlignment="Left" Margin="0,75,0,0">
+                <ItemsControl ItemsSource="{Binding LandscapeSelector}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Background="{Binding Brush}" 
+                                    Command="{Binding Path=DataContext.SelectLandscape, 
+                                    RelativeSource={RelativeSource Mode=FindAncestor,      
+                                    AncestorType={x:Type ItemsControl}}}"
+                                CommandParameter="{Binding }"
+                                Width="32"
+                                Height="32">
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top" Width="96"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+            
+        </Grid>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Left"  Margin="153,0,0,0" VerticalAlignment="Top">
+            <ItemsControl ItemsSource="{Binding LandscapeTiles}" AlternationCount="{Binding LandscapeTiles.Count}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button Background="{Binding Brush}" 
-                                Command="{
-                            Binding Path=DataContext.ChangeLand, 
-                            RelativeSource={RelativeSource Mode=FindAncestor,      
-                            AncestorType={x:Type ItemsControl}}}"
-                                Content="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                Command="{Binding Path=DataContext.ChangeLand, 
+                                    RelativeSource={RelativeSource Mode=FindAncestor,      
+                                    AncestorType={x:Type ItemsControl}}}"
                                 CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                 Width="32"
                                 Height="32"
@@ -36,6 +51,6 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
-        
+
     </Grid>
 </Window>
