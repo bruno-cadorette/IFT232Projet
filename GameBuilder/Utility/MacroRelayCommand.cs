@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace GameBuilder
+namespace GameBuilder.Utility
 {
     class MacroRelayCommand<T> : ICommand, ICollection<RelayCommand<T>>
     {

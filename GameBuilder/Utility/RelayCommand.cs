@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace GameBuilder
+namespace GameBuilder.Utility
 {
     public class RelayCommand<T> : ICommand
     {
