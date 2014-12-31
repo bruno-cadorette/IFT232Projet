@@ -5,49 +5,41 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace GameBuilder
 {
     public class LandscapeViewModel : BindableBase
     {
-        private Color color;
-        public Color Color
+        public int ID { get; set; }
+        public BitmapSource Tile { get; set; }
+
+        public ImageBrush Brush
         {
             get
             {
-                return color;
-            }
-            set
-            {
-                SetProperty(ref color, value);
+                return new ImageBrush(Tile);
             }
         }
-        public SolidColorBrush Brush
+        public static LandscapeViewModel DefaultLandscape { get; set; }
+
+        public LandscapeViewModel(int id, BitmapSource tile)
         {
-            get
-            {
-                return new SolidColorBrush(Color);
-            }
-        }
-        public LandscapeViewModel(Color color)
-        {
-            this.color = color;
+            ID = id;
+            Tile = tile;
         }
         public static bool operator ==(LandscapeViewModel a, LandscapeViewModel b)
         {
-            return a.Color == b.Color;
+            return a.ID == b.ID;
         }
         public static bool operator !=(LandscapeViewModel a, LandscapeViewModel b)
         {
             return !(a == b);
         }
-        public static LandscapeViewModel DefaultLandscape()
-        {
-            return new LandscapeViewModel(Brushes.Gray.Color);
-        }
+
         public override string ToString()
         {
-            return Color.ToString();
+            return ID.ToString();
         }
     }
 }

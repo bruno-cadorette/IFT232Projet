@@ -40,9 +40,10 @@ namespace GameBuilder
 
         public MapEditorViewModel()
         {
-            LandscapeTiles = new TrulyObservableCollection<LandscapeViewModel>(TilesGenerator());
             LandscapeSelector = new TrulyObservableCollection<LandscapeViewModel>(LandscapeGenerator());
-            SelectedLandscape = LandscapeSelector[new Random().Next(LandscapeSelector.Count)];
+            LandscapeViewModel.DefaultLandscape = LandscapeSelector.First();
+            LandscapeTiles = new TrulyObservableCollection<LandscapeViewModel>(TilesGenerator());
+            SelectedLandscape = LandscapeViewModel.DefaultLandscape;
             lenght = (int)Math.Sqrt(LandscapeTiles.Count);
             FillMode = false;
             ChangeLand = new RelayCommand<int>(i =>
@@ -55,14 +56,14 @@ namespace GameBuilder
                     }
                     else
                     {
-                        LandscapeTiles[i] = EraseMode ? LandscapeViewModel.DefaultLandscape() : SelectedLandscape;
+                        LandscapeTiles[i] = EraseMode ? LandscapeViewModel.DefaultLandscape : SelectedLandscape;
                     }
                 });
             SelectLandscape = new RelayCommand<LandscapeViewModel>(x => SelectedLandscape = x);
         }
         private IEnumerable<LandscapeViewModel> TilesGenerator()
         {
-            return Enumerable.Repeat(LandscapeViewModel.DefaultLandscape(), Height * Width);
+            return Enumerable.Repeat(LandscapeViewModel.DefaultLandscape, Height * Width);
         }
         private void ReplaceItem(Coordonate point, LandscapeViewModel item)
         {
@@ -142,7 +143,8 @@ namespace GameBuilder
         }
         private IEnumerable<LandscapeViewModel> LandscapeGenerator()
         {
-            return typeof(Brushes).GetProperties().Select(x => new LandscapeViewModel((x.GetValue(null, null) as SolidColorBrush).Color)).OrderBy(x => x.Color.ToString());
-        }
+            return new TileSetGenerator(@"C:\Users\Bruno\Documents\GitHub\IFT232Projet\GameBuilder\tileset.png").GetTiles(32, 32)
+                .Select((x,id) => new LandscapeViewModel(id,x));
+       }
     }
 }
