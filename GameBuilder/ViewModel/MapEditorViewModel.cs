@@ -78,12 +78,12 @@ namespace GameBuilder
             while (q.Count > 0)
             {
                 Coordonate n = q.Dequeue();
-                if (GetColor(n) != targetColor)
+                if (GetColor(n.X, n.Y) != targetColor)
                 {
                     continue;
                 }
                 Coordonate w = n, e = new Coordonate(n.X + 1, n.Y);
-                while ((w.X >= 0) && GetColor(n) == targetColor)
+                while ((w.X >= 0) && GetColor(w.X, w.Y) == targetColor)
                 {
                     ReplaceItem(w, replacementColor);
                     if ((w.Y > 0) && GetColor(w.X, w.Y - 1) == targetColor)
@@ -117,10 +117,6 @@ namespace GameBuilder
         private LandscapeViewModel GetColor(int x, int y)
         {
             return LandscapeTiles[GetIndex(x, y)];
-        }
-        private LandscapeViewModel GetColor(Coordonate point)
-        {
-            return GetColor((int)point.X, (int)point.Y);
         }
 
         private int GetIndex(int x, int y)
