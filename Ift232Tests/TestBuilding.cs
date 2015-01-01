@@ -10,6 +10,7 @@ namespace Ift232Tests
     public class TestBuilding
     {
         [TestMethod]
+        [DeploymentItem(@"Data\Config.xml")]
         public void Build()
         {
             City city = new City("Toulouse!");

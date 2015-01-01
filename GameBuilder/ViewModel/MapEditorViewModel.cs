@@ -16,35 +16,23 @@ namespace GameBuilder
         public TrulyObservableCollection<LandscapeViewModel> LandscapeTiles { get; set; }
         public TrulyObservableCollection<LandscapeViewModel> LandscapeSelector { get; set; }
         public LandscapeViewModel SelectedLandscape { get; set; }
-        public int Height
-        {
-            get
-            {
-                return 100;
-            }
-        }
-        public int Width
-        {
-            get
-            {
-                return 100;
-            }
-        }
+        public int Height { get; set; }
+        public int Width { get; set; }
         public bool FillMode { get; set; }
         public bool EraseMode { get; set; }
         public ICommand ChangeLand { get; private set; }
         public ICommand SaveLand { get; private set; }
         public ICommand SelectLandscape { get; private set; }
 
-        private int lenght;
-
-        public MapEditorViewModel()
+        public MapEditorViewModel(TileSetGenerator tileSetGenerator, int width, int height)
         {
-            LandscapeSelector = new TrulyObservableCollection<LandscapeViewModel>(LandscapeGenerator());
+            Width = width;
+            Height = height;
+            LandscapeSelector = new TrulyObservableCollection<LandscapeViewModel>(
+                tileSetGenerator.GetTiles().Select((x, id) => new LandscapeViewModel(id, x)));
             LandscapeViewModel.DefaultLandscape = LandscapeSelector.First();
             LandscapeTiles = new TrulyObservableCollection<LandscapeViewModel>(TilesGenerator());
             SelectedLandscape = LandscapeViewModel.DefaultLandscape;
-            lenght = (int)Math.Sqrt(LandscapeTiles.Count);
             FillMode = false;
             ChangeLand = new RelayCommand<int>(i =>
                 {
@@ -91,9 +79,11 @@ namespace GameBuilder
             {
                 Coordonate n = q.Dequeue();
                 if (GetColor(n) != targetColor)
+                {
                     continue;
+                }
                 Coordonate w = n, e = new Coordonate(n.X + 1, n.Y);
-                while ((w.X > 0) && GetColor(n) == targetColor)
+                while ((w.X >= 0) && GetColor(n) == targetColor)
                 {
                     ReplaceItem(w, replacementColor);
                     if ((w.Y > 0) && GetColor(w.X, w.Y - 1) == targetColor)
@@ -107,7 +97,7 @@ namespace GameBuilder
                     }
                     w.X--;
                 }
-                while ((e.X < Width - 1) && GetColor(e.X, e.Y) == targetColor)
+                while ((e.X <= Width - 1) && GetColor(e.X, e.Y) == targetColor)
                 {
                     ReplaceItem(e, replacementColor);
                     if ((e.Y > 0) && GetColor(e.X, e.Y - 1) == targetColor)
@@ -123,10 +113,6 @@ namespace GameBuilder
             }
 
         }
-        private bool IsValid(int x)
-        {
-            return 0 <= x && x < lenght;
-        }
 
         private LandscapeViewModel GetColor(int x, int y)
         {
@@ -139,12 +125,7 @@ namespace GameBuilder
 
         private int GetIndex(int x, int y)
         {
-            return y * lenght + x;
+            return y * Height + x;
         }
-        private IEnumerable<LandscapeViewModel> LandscapeGenerator()
-        {
-            return new TileSetGenerator(@"C:\Users\Bruno\Documents\GitHub\IFT232Projet\GameBuilder\tileset.png").GetTiles(32, 32)
-                .Select((x,id) => new LandscapeViewModel(id,x));
-       }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameBuilder.Utility;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -20,12 +21,10 @@ namespace GameBuilder
     /// </summary>
     public partial class MapEditor : Window
     {
-        public ObservableCollection<Button> Landscape { get; set; }
         public MapEditorViewModel mapEditorViewModel { get; set; }
         public MapEditor()
         {
-            
-            mapEditorViewModel = new MapEditorViewModel();
+            mapEditorViewModel = new MapEditorViewModel(new TileSetGenerator("tileset.png",32,32),100,100);
             DataContext = mapEditorViewModel;
             InitializeComponent();
             

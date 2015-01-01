@@ -1,0 +1,237 @@
+<Entities>
+  <Batiments>
+    <Batiment Name="Maison" id = "0" turns="3" Description="Un bâtiment principalement composé de bois permettant à votre population actuelle de créer une famille et donc d'augmenter votre population.">
+      <Resources>
+        <Population>1</Population>
+      </Resources>
+      <Requirements>
+        <Resources>
+          <Gold>200</Gold>
+          <Wood>150</Wood>
+          <Meat>25</Meat>
+          <Rock>150</Rock>
+          <Population>10</Population>
+        </Resources>
+      </Requirements>
+    </Batiment>
+
+    <Batiment Name="Ferme" id = "1" turns="3" Description="Une parcelle de terre réservée à l'élevage et la culture afin de récolter de la nourriture.">
+      <Resources>
+        <Meat>10</Meat>
+      </Resources>
+      <Requirements>
+        <Resources>
+          <Gold>200</Gold>
+          <Wood>150</Wood>
+          <Meat>0</Meat>
+          <Rock>250</Rock>
+          <Population>10</Population>
+        </Resources>
+      </Requirements>
+    </Batiment>
+
+    <Batiment Name="Mine" id = "2" turns="3" Description="Une infrastructure basée sous la terre exploitant les minéraux afin d'obtenir de l'or. On a toujours besoin d'or...">
+      <Resources>
+        <Gold>100</Gold>
+      </Resources>
+      <Requirements>
+        <Resources>
+          <Gold>200</Gold>
+          <Wood>150</Wood>
+          <Meat>0</Meat>
+          <Rock>250</Rock>
+          <Population>10</Population>
+        </Resources>
+      </Requirements>
+    </Batiment>
+
+    <Batiment Name="Scierie" id = "3" turns="3" Description="Un joyeux camp de bûcheron. Vive le Canada !">
+      <Resources>
+        <Wood>10</Wood>
+      </Resources>
+      <Requirements>
+        <Resources>
+          <Gold>200</Gold>
+          <Wood>300</Wood>
+          <Meat>0</Meat>
+          <Rock>250</Rock>
+          <Population>10</Population>
+        </Resources>
+      </Requirements>
+    </Batiment>
+
+    <Batiment Name="Carrière" id = "4" turns="3" Description="Un chantier placé sur une source de granit infinie...Quoi de mieux pour un revenu de roche à chaque tour ?">
+      <Resources>
+        <Rock>10</Rock>
+      </Resources>
+      <Requirements>
+        <Resources>
+          <Gold>200</Gold>
+          <Wood>100</Wood>
+          <Meat>0</Meat>
+          <Rock>250</Rock>
+          <Population>10</Population>
+        </Resources>
+      </Requirements>
+    </Batiment>
+
+    <Batiment Name="Caserne" id = "5" turns="5" Description="Un camp d'entraînement pour des soldats d'élite !Enfin...Jusqu'à ce qu'on trouve meilleur que ces bras cassés...">
+      <Requirements>
+        <Buildings>
+          <Building>0</Building>
+          <Building>1</Building>
+        </Buildings>
+        <Resources>
+          <Gold>1000</Gold>
+          <Wood>500</Wood>
+          <Meat>250</Meat>
+          <Rock>1500</Rock>
+          <Population>10</Population>
+        </Resources>
+      </Requirements>
+      <Special type="Casern" />
+    </Batiment>
+
+    <Batiment Name="École" id = "6" turns="3" Description= "Un bâtiment assez banal...Enfin, il y a quelques personnes un peu bizarre qui font des recherches dedans...">
+    </Batiment>
+
+    <Batiment Name="Marché" id = "7" turns="3" Description="Un bâtiment permettant l'échange de ressources.Qui sait, peut-être que si vous aidez le marchand il vous donnera un peu d'or...">
+      <Special type="Market" />
+    </Batiment>
+
+    <Batiment Name="Hopital" id = "8" turns="3" Description="Un bâtiment permettant d'accepter et de soigner les malades.Qui sait, peut-être qu'un jour il permettra d'endiguer l'Ebola...">
+      <Requirements>
+        <Technologies>
+          <Technology>0</Technology>
+        </Technologies>
+      </Requirements>
+    </Batiment>
+  </Batiments>
+
+  <Soldiers>
+    <Soldier Name="Escouade de Guerriers" id = "0" turns="3" Description="Un guerrier sans education" Attack="2" Defense="2" Health="3">
+      <Resources>
+        <Rock>1</Rock>
+        <Gold>1</Gold>
+      </Resources>
+      <Requirements>
+        <Buildings>
+          <Building>5</Building>
+        </Buildings>
+        <Resources>
+          <Gold>20</Gold>
+          <Wood>2</Wood>
+          <Meat>10</Meat>
+          <Rock>0</Rock>
+          <Population>1</Population>
+        </Resources>
+      </Requirements>
+    </Soldier>
+
+    <Soldier Name="Troupe de Cavaliers" id = "1" turns="3" Description="Un homme a cheval" Attack="8" Defense="3" Health="5">
+      <Resources>
+        <Rock>16</Rock>
+        <Gold>19</Gold>
+        <Population>20</Population>
+      </Resources>
+      <Requirements>
+        <Buildings>
+          <Building>5</Building>
+        </Buildings>
+        <Resources>
+          <Gold>50</Gold>
+          <Wood>15</Wood>
+          <Meat>40</Meat>
+          <Rock>0</Rock>
+          <Population>2</Population>
+        </Resources>
+      </Requirements>
+    </Soldier>
+  </Soldiers>
+
+  <Technologies>
+    <Technology Name="Paille" id = "0" turns="3" Description="Recherche pour faire des maisons de paille">
+      <AffectedEntities>
+        <AffectedBuilding>
+          0
+        </AffectedBuilding>
+      </AffectedEntities>
+      <Requirements>
+        <Buildings>
+          <Building>1</Building>
+        </Buildings>
+        <Resources>
+          <Gold>100</Gold>
+          <Wood>15</Wood>
+          <Meat>75</Meat>
+          <Rock>0</Rock>
+          <Population>0</Population>
+        </Resources>
+      </Requirements>
+      <ApplicationCost>
+        <Resources>
+          <Gold>10</Gold>
+        </Resources>
+      </ApplicationCost>
+      <Enhancement>
+        <Resources>
+          <Population>1</Population>
+        </Resources>
+        <ConstructionTime>
+          1
+        </ConstructionTime>
+      </Enhancement>
+    </Technology>
+    
+    <Technology Name="Taxes" id = "1" turns="3" Description="Le marché nous donne de l'argent!!!!">
+      <AffectedEntities>
+        <AffectedBuilding>
+          7
+        </AffectedBuilding>
+      </AffectedEntities>
+      <Requirements>
+        <Resources>
+          <Gold>150</Gold>
+          <Wood>15</Wood>
+          <Meat>75</Meat>
+          <Rock>100</Rock>
+          <Population>20</Population>
+        </Resources>
+      </Requirements>
+      <Enhancement>
+        <Resources>
+          <Gold>10</Gold>
+        </Resources>
+      </Enhancement>
+    </Technology>
+    
+    <Technology Name="Cote de maille" id = "2" turns="3" Description="Améliore les armures">
+      <AffectedEntities>
+        <AffectedSoldier>
+          0
+        </AffectedSoldier>
+        <AffectedSoldier>
+          1
+        </AffectedSoldier>
+      </AffectedEntities>
+      <Requirements>
+        <Resources>
+          <Gold>100</Gold>
+          <Wood>15</Wood>
+          <Meat>75</Meat>
+          <Rock>100</Rock>
+          <Population>20</Population>
+        </Resources>
+      </Requirements>
+      <Enhancement>
+        <SoldierAttributes>
+          <Defence>
+            10
+          </Defence>
+        </SoldierAttributes>
+      </Enhancement>
+    </Technology>
+
+  </Technologies>
+
+</Entities>

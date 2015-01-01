@@ -153,7 +153,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="tileset.png" />
+    <Content Include="tileset.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
