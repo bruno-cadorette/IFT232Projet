@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 namespace Core.Military
 {
     [DataContract]
-    public class Army : MovableItem, IEnumerable<Groupment>
+    public class Army : MovableItem, IMapItemConverter, IEnumerable<Groupment>
     {
         [DataMember]
         private List<Groupment> units;
@@ -91,7 +91,6 @@ namespace Core.Military
         public bool Fight(Army opponent)
         {
             return Fight(opponent, new Land());
-            
         }
         public bool Fight(Army opponent, Land land)
         {
@@ -123,12 +122,12 @@ namespace Core.Military
 
         private int DamageCalculator(int attack, int defense)
         {
-            if(attack == 0)
+            if (attack == 0)
             {
                 return 0;
             }
             float ratio = Math.Min(Math.Max((float)attack / (float)defense, 0.05f), 1f);
-            return Math.Max((int)(attack * ratio),1);
+            return Math.Max((int)(attack * ratio), 1);
         }
 
         public void Merge(Army army)
@@ -175,6 +174,24 @@ namespace Core.Military
             {
                 otherArmy.Resources += GiveAllResources();
                 return otherArmy;
+            }
+        }
+
+        public WorldMapItem Convert()
+        {
+            var resources = this.Resources - City.CostToCreate;
+            if (resources >= Resources.Zero())
+            {
+                var city = new City("New city gas", this)
+                {
+                    PlayerId = PlayerId,
+                };
+                city.AddResources(resources);
+                return city;
+            }
+            else
+            {
+                return null;
             }
         }
     }

@@ -79,7 +79,7 @@ namespace Core
             WorldMap.Update();
             do
             {
-                CurrentPlayer.Cities = WorldMap.Where(x => x.Value.PlayerId == CurrentPlayer.ID && x.Value is City).Select(x => x.Value as City).ToList();
+                CurrentPlayer.Cities = WorldMap.GetAllItemsFromPlayer(CurrentPlayer.ID).OfType<City>().ToList();
                 CurrentPlayer.Cities.ForEach(n => n.Update());
                 CurrentPlayer.ResearchedTech.ToList().ForEach(n => n.Update());
                 turnText.Add(IncreaseHostility());

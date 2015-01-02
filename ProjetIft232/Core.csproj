@@ -47,7 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Map\IMapItemConverter.cs" />
     <Compile Include="Map\Land.cs" />
+    <Compile Include="Map\MapCellInfo.cs" />
     <Compile Include="Military\ArmyFactory.cs" />
     <Compile Include="Military\BarbarianArmy.cs" />
     <Compile Include="Military\Groupment.cs" />
@@ -58,7 +60,7 @@
     <Compile Include="Buildings\BuildingFactory.cs" />
     <Compile Include="Buildings\Casern.cs" />
     <Compile Include="Map\MovableItem.cs" />
-    <Compile Include="Map\MovableItemSpawner.cs" />
+    <Compile Include="Map\IMovableItemSpawner.cs" />
     <Compile Include="Map\Position.cs" />
     <Compile Include="Map\WorldMap.cs" />
     <Compile Include="Map\WorldMapItem.cs" />

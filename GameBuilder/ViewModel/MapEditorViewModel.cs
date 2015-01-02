@@ -11,7 +11,7 @@ using System.Windows.Media;
 
 namespace GameBuilder
 {
-    public class MapEditorViewModel
+    public class MapEditorViewModel : BindableBase
     {
         public TrulyObservableCollection<LandscapeViewModel> LandscapeTiles { get; set; }
         public TrulyObservableCollection<LandscapeViewModel> LandscapeSelector { get; set; }
@@ -19,6 +19,7 @@ namespace GameBuilder
         public int Height { get; set; }
         public int Width { get; set; }
         public bool FillMode { get; set; }
+        public bool ColorSelector { get; set; }
         public bool EraseMode { get; set; }
         public ICommand ChangeLand { get; private set; }
         public ICommand SaveLand { get; private set; }
@@ -42,6 +43,10 @@ namespace GameBuilder
                         int y = i / Height;
                         Fill(x, y, LandscapeTiles[i], SelectedLandscape);
                     }
+                    else if (ColorSelector)
+                    {
+                        SelectedLandscape = LandscapeTiles[i];
+                    }
                     else
                     {
                         LandscapeTiles[i] = EraseMode ? LandscapeViewModel.DefaultLandscape : SelectedLandscape;
@@ -55,7 +60,7 @@ namespace GameBuilder
         }
         private void ReplaceItem(Coordonate point, LandscapeViewModel item)
         {
-            LandscapeTiles[GetIndex((int)point.X, (int)point.Y)] = item;
+            LandscapeTiles[GetIndex(point.X, point.Y)] = item;
         }
 
 

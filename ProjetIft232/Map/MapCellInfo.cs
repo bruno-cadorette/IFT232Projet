@@ -5,8 +5,9 @@ using System.Text;
 
 namespace Core.Map
 {
-    public interface MovableItemSpawner
+    public class MapCellInfo
     {
-        MovableItem Spawn(Position goal);
+        public Land Land { get; set; }
+        public WorldMapItem Item { get; set; }
     }
 }

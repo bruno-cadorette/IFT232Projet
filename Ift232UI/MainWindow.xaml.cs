@@ -144,74 +144,9 @@ namespace Ift232UI
 
         private IEnumerable<Button> CreateMap()
         {
-            var lastPosition = new Position(0, 0);
-
-            foreach (var item in Game.WorldMap)
-            {
-                foreach (var space in FillSpaces(lastPosition, item.Key))
-                {
-                    yield return space;
-                }
-                lastPosition = NextPosition(item.Key);
-                Button button;
-                if (item.Value is City)
-                {
-                    var city = item.Value as City;
-                    button = new Button()
-                    {
-                        Content = city.Name + " " + city.Army.Size,
-                        Background = Brushes.Gold
-                    };
-
-                }
-                else if (item.Value is Army)
-                {
-                    button = new Button()
-                    {
-                        Content = (item.Value as Army).Size,
-                        Background = Brushes.Red
-                    };
-                }
-                else
-                {
-                    button = new Button()
-                    {
-                        Content = "wtf"
-                    };
-                }
-                button.Click += MapButtonClick(item.Key);
-                yield return button;
-            }
-
-            foreach (var space in FillSpaces(lastPosition, WorldMap.MaxBound))
-            {
-                yield return space;
-            }
-            var lastButton = new Button()
-                {
-                    Content = "nature"
-                };
-            lastButton.Click += MapButtonClick(WorldMap.MaxBound);
-            yield return lastButton;
+            return Enumerable.Empty<Button>();
         }
-        private IEnumerable<Button> FillSpaces(Position current, Position goal)
-        {
-            var next = current;
-            while (next != goal)
-            {
-                var button = new Button()
-                {
-                    Content = "nature"
-                };
-                button.Click += MapButtonClick(next);
-                yield return button;
-                next = NextPosition(next);
-            }
-        }
-        private Position NextPosition(Position current)
-        {
-            return Game.WorldMap.Length == current.Y ? new Position(current.X + 1, 0) : new Position(current.X, current.Y + 1);
-        }
+
 
         private void UpdateMap()
         {

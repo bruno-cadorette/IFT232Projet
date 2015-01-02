@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Core.Map
 {
-    public class WorldMap : IEnumerable<KeyValuePair<Position, WorldMapItem>>
+    public class WorldMap : IEnumerable<MapCellInfo>
     {
         private Dictionary<Position, WorldMapItem> map = new Dictionary<Position, WorldMapItem>();
         private Land[,] landScape = new Land[MaxBound.X, MaxBound.Y];
@@ -48,14 +48,18 @@ namespace Core.Map
                 return MaxBound.Y - MinBound.Y;
             }
         }
+        public IEnumerable<WorldMapItem> GetAllItemsFromPlayer(int id)
+        {
+            return map.Values.Where(x => x.PlayerId == id);
+        }
         public void SetMove(Position from, Position to)
         {
             if (map.ContainsKey(from))
             {
                 var item = map[from];
-                if (item is MovableItemSpawner)
+                if (item is IMovableItemSpawner)
                 {
-                    var newItem = (item as MovableItemSpawner).Spawn(to);
+                    var newItem = (item as IMovableItemSpawner).Spawn(to);
                     if (newItem != null)
                     {
                         MakeMovement(newItem, newItem.NextPosition(from, map));
@@ -66,6 +70,14 @@ namespace Core.Map
                     var movable = item as MovableItem;
                     movable.Goal = to;
                 }
+            }
+        }
+        public void ConvertItem(Position position)
+        {
+            var newItem = (map[position] as IMapItemConverter).Convert();
+            if (newItem!=null)
+            {
+                map[position] = newItem;
             }
         }
         private IEnumerable<Position> ValidPositions()
@@ -152,9 +164,25 @@ namespace Core.Map
             }
         }
 
-        public IEnumerator<KeyValuePair<Position, WorldMapItem>> GetEnumerator()
+        private IEnumerable<MapCellInfo> GetAllCells()
         {
-            return map.OrderBy(x => x.Key).GetEnumerator();
+            for (int i = 0; i < MaxBound.X; i++)
+            {
+                for (int j = 0; j < MaxBound.Y; j++)
+                {
+                    var position = new Position(i,j);
+                    yield return new MapCellInfo()
+                    {
+                        Land = landScape[i, j],
+                        Item = map.ContainsKey(position) ? map[position] : null
+                    };
+                }
+            }
+        }
+
+        public IEnumerator<MapCellInfo> GetEnumerator()
+        {
+            return GetAllCells().GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()

@@ -12,7 +12,7 @@ using Core.Map;
 namespace Core
 {
     [DataContract]
-    public class City : WorldMapItem, MovableItemSpawner
+    public class City : WorldMapItem, IMovableItemSpawner
     {
         public static Resources CostToCreate = new Resources
         {
@@ -26,7 +26,11 @@ namespace Core
         [DataMember]
         private int _turnsSinceCreation;
 
-        public City(string name)
+        public City(string name) : this(name,new Army())
+        {
+            
+        }
+        public City(string name, Army army)
         {
             ResearchedTechnologies = new List<Technology>();
             Name = name;
@@ -34,7 +38,7 @@ namespace Core
             Buildings = new List<Building>();
 
             recruitement = new List<Soldier>();
-            Army = new Army();
+            Army = army;
             _turnsSinceCreation = 0;
         }
         private Land land = new Land()
@@ -52,7 +56,7 @@ namespace Core
         }
 
         [DataMember]
-        public List<Soldier> recruitement { get; private set; }
+        private List<Soldier> recruitement;
 
         [DataMember]
         public Army Army { get; private set; }
