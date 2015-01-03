@@ -77,6 +77,10 @@
       <Project>{51a7ce62-8604-476a-b507-0ded0b5716da}</Project>
       <Name>GameBuilder</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GameHelper\GameHelper.csproj">
+      <Project>{7277bb77-36c0-4f13-bfdd-f1233854a72b}</Project>
+      <Name>GameHelper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ProjetIft232\Core.csproj">
       <Project>{4d3df023-7a7a-4f62-8470-f236132d5be1}</Project>
       <Name>Core</Name>

@@ -10,13 +10,13 @@ namespace Core.Map
     {
         public SoldierAttributes AttackerBonus { get; set; }
         public SoldierAttributes DefenderBonus { get; set; }
-        public bool CanTravel { get; set; }
+        public bool CanBeTraveled { get; set; }
         public string Name { get; set; }
         public Land()
         {
             AttackerBonus = new SoldierAttributes();
             DefenderBonus = new SoldierAttributes();
-            CanTravel = true;
+            CanBeTraveled = true;
         }
     }
 }

@@ -86,7 +86,7 @@ namespace Core.Map
             {
                 for (int j = 0; j < landScape.GetUpperBound(1); j++)
                 {
-                    if (landScape[i, j].CanTravel)
+                    if (landScape[i, j].CanBeTraveled)
                     {
                         var position = new Position(i, j);
                         if (!map.ContainsKey(position))
@@ -98,7 +98,7 @@ namespace Core.Map
             }
         }
 
-        public Position AvailableRandomPosition()
+        private Position AvailableRandomPosition()
         {
             var random = new Random();
             var positions = ValidPositions().ToArray();
@@ -122,7 +122,10 @@ namespace Core.Map
         }
         public void Add(Position position, WorldMapItem item)
         {
-            map.Add(position, item);
+            if(IsValid(position))
+            {
+                map.Add(position, item);
+            }
         }
         private bool IsValid(Position position)
         {
@@ -132,10 +135,6 @@ namespace Core.Map
 
         private void MoveItem(Position from, Position to)
         {
-            if (!IsValid(to))
-            {
-                throw new IndexOutOfRangeException();
-            }
             var item = map[from] as MovableItem;
             map.Remove(from);
 
@@ -151,7 +150,7 @@ namespace Core.Map
                     map[to] = newItem;
                 }
             }
-            else
+            else if (IsValid(to))
             {
                 map.Add(to, item);
             }
@@ -160,7 +159,7 @@ namespace Core.Map
         {
             get
             {
-                return map[key];
+                return map.ContainsKey(key)?map[key]:null;
             }
         }
 

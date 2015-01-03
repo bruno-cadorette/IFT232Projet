@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameBuilder.Utility
+namespace GameHelper
 {
     public class TrulyObservableCollection<T> : ObservableCollection<T> where T : INotifyPropertyChanged
     {

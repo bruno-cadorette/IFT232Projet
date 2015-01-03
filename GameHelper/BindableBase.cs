@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace GameBuilder.Utility
+namespace GameHelper
 {
     /// <summary>
     ///     Implementation of <see cref="INotifyPropertyChanged" /> to simplify models.

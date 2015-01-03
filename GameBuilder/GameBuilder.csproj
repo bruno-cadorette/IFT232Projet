@@ -71,12 +71,10 @@
     </ApplicationDefinition>
     <Compile Include="Utility\TileSetGenerator.cs" />
     <Compile Include="ViewModel\LandscapeViewModel.cs" />
-    <Compile Include="Utility\MacroRelayCommand.cs" />
     <Compile Include="Window\MapEditor.xaml.cs">
       <DependentUpon>MapEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\MapEditorViewModel.cs" />
-    <Compile Include="Utility\RelayCommand.cs" />
     <Compile Include="BuilderControl\RequirementControl.xaml.cs">
       <DependentUpon>RequirementControl.xaml</DependentUpon>
     </Compile>
@@ -84,7 +82,6 @@
       <DependentUpon>ResourcesControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\ResourceViewModel.cs" />
-    <Compile Include="Utility\TrulyObservableCollection.cs" />
     <Page Include="Window\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -93,7 +90,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Utility\BindableBase.cs" />
     <Compile Include="ViewModel\BuildingViewModel.cs" />
     <Compile Include="ViewModel\EntityCreationViewModel.cs" />
     <Compile Include="Window\MainWindow.xaml.cs">
@@ -147,6 +143,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GameHelper\GameHelper.csproj">
+      <Project>{7277bb77-36c0-4f13-bfdd-f1233854a72b}</Project>
+      <Name>GameHelper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ProjetIft232\Core.csproj">
       <Project>{4d3df023-7a7a-4f62-8470-f236132d5be1}</Project>
       <Name>Core</Name>

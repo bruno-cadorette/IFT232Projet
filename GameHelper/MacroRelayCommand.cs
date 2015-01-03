@@ -5,32 +5,32 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace GameBuilder.Utility
+namespace GameHelper
 {
-    public class RelayCommand<T> : ICommand
+    public class MacroRelayCommand<T> : List<RelayCommand<T>>,  ICommand
     {
         private Predicate<T> canExecute;
-        private Action<T> execute;
-        public RelayCommand(Action<T> execute)
-            : this(execute, p => true)
+        public MacroRelayCommand()
         {
+
         }
-        public RelayCommand(Action<T> execute, Predicate<T> canExecute)
+        public MacroRelayCommand(Predicate<T> canExecute)
         {
             this.canExecute = canExecute;
-            this.execute = execute;
         }
-
         public bool CanExecute(object parameter)
         {
-            return canExecute((T)parameter);
+            return canExecute((T)parameter) && this.All(x => x.CanExecute(parameter));
         }
 
         public event EventHandler CanExecuteChanged;
 
         public void Execute(object parameter)
         {
-            execute((T)parameter);
+            foreach (var command in this)
+            {
+                command.Execute(parameter);
+            }
         }
     }
 }

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ift232UI", "Ift232UI\Ift232
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameBuilder", "GameBuilder\GameBuilder.csproj", "{51A7CE62-8604-476A-B507-0DED0B5716DA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameHelper", "GameHelper\GameHelper.csproj", "{7277BB77-36C0-4F13-BFDD-F1233854A72B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{51A7CE62-8604-476A-B507-0DED0B5716DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51A7CE62-8604-476A-B507-0DED0B5716DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51A7CE62-8604-476A-B507-0DED0B5716DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7277BB77-36C0-4F13-BFDD-F1233854A72B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7277BB77-36C0-4F13-BFDD-F1233854A72B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7277BB77-36C0-4F13-BFDD-F1233854A72B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7277BB77-36C0-4F13-BFDD-F1233854A72B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

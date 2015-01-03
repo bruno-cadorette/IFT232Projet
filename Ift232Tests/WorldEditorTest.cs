@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GameBuilder.Utility;
 using System.IO;
 using GameBuilder;
+using GameHelper;
 namespace Ift232Tests
 {
     [TestClass]

@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MapEditor" Height="701" Width="771">
     <Grid>
-        <Grid>
             <ToggleButton Content="Fill" IsChecked="{Binding FillMode}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
             <ToggleButton Content="Erase" IsChecked="{Binding EraseMode}" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="75"/>
             <ScrollViewer Width="115" HorizontalAlignment="Left" Margin="0,75,0,0">
@@ -28,7 +27,6 @@
                 </ItemsControl>
             </ScrollViewer>
             
-        </Grid>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Left"  Margin="153,0,0,0" VerticalAlignment="Top">
             <ItemsControl ItemsSource="{Binding LandscapeTiles}" AlternationCount="{Binding LandscapeTiles.Count}">
                 <ItemsControl.ItemTemplate>
