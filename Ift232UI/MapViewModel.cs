@@ -38,6 +38,14 @@ namespace Ift232UI
         {
             this.game = game;
             var unSelect = new RelayCommand<Position>(x => SelectedCell = null);
+            var updateMap = new RelayCommand<Position>(_ =>
+            {
+                Tiles.Clear();
+                foreach (var tile in game.WorldMap.Select(x=>new MapItemViewModel(x)))
+                {
+                    Tiles.Add(tile);
+                }
+            });
             Tiles = new ObservableCollection<MapItemViewModel>(game.WorldMap.Select(x=>new MapItemViewModel(x)));
             SelectCell = new RelayCommand<int>(i =>
                 {
@@ -48,6 +56,7 @@ namespace Ift232UI
                     {
                         game.WorldMap.SetMove(SelectedCell, position);
                         unSelect.Execute(position);
+                        updateMap.Execute(position);
                     }
                     else
                     {
@@ -58,9 +67,15 @@ namespace Ift232UI
             SettleGround = new MacroRelayCommand<Position>(x => SelectedCell != null)
             {
                 new RelayCommand<Position>(game.WorldMap.ConvertItem, x => game.WorldMap[x] is IMapItemConverter),
-                unSelect
+                unSelect,
+                updateMap
             };
-            NextTurn = new RelayCommand<Position>(x => game.NextTurn());
+            NextTurn = new MacroRelayCommand<Position>()
+            {
+                new RelayCommand<Position>(x => game.NextTurn()),
+                updateMap
+            };
+
             AdministrateCity = new RelayCommand<Position>(x => { }, x => game.WorldMap[x] is City);
         }
     }

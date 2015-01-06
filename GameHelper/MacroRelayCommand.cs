@@ -10,7 +10,7 @@ namespace GameHelper
     public class MacroRelayCommand<T> : List<RelayCommand<T>>,  ICommand
     {
         private Predicate<T> canExecute;
-        public MacroRelayCommand()
+        public MacroRelayCommand() : this(x=>true)
         {
 
         }
