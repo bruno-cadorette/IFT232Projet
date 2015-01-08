@@ -48,6 +48,28 @@ namespace Core.Map
                 return MaxBound.Y - MinBound.Y;
             }
         }
+
+        public void UpdateFogOfWar()
+        {
+            foreach (KeyValuePair<Position, WorldMapItem> worldMapItem in map)
+            {
+                var vision = new Dictionary<Position, WorldMapItem>();
+                for (int i = 0; i < 2*worldMapItem.Value.VisionRange; i++)
+                {
+                    int x = worldMapItem.Key.X - worldMapItem.Value.VisionRange + i;
+                    for (int j = 0; j < 2 * worldMapItem.Value.VisionRange; j++)
+                    {
+                        int y = worldMapItem.Key.Y - worldMapItem.Value.VisionRange + j;
+                        Position p = new Position(x,y);
+                        if (map.ContainsKey(p) && p != worldMapItem.Key)
+                            vision[p] = map[p];
+
+                    }
+                }
+                worldMapItem.Value.UpdateVision(vision);
+            }
+        }
+
         public IEnumerable<WorldMapItem> GetAllItemsFromPlayer(int id)
         {
             return map.Values.Where(x => x.PlayerId == id);
@@ -114,6 +136,7 @@ namespace Core.Map
             {
                 MoveItem(item.Key, (item.Value as MovableItem).NextPosition(item.Key, map));
             }
+            UpdateFogOfWar();
         }
 
         public void AddToRandomPosition(WorldMapItem item)

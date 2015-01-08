@@ -49,6 +49,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AIPlayer\ArtificialPlayer.cs" />
+    <Compile Include="AIPlayer\Brain\Brain.cs" />
+    <Compile Include="AIPlayer\Brain\CombatNode.cs" />
+    <Compile Include="AIPlayer\Brain\EconomyNode.cs" />
+    <Compile Include="AIPlayer\Brain\ActionNode.cs" />
+    <Compile Include="AIPlayer\Brain\ImprovmentNode.cs" />
+    <Compile Include="AIPlayer\Brain\WatcherNode.cs" />
     <Compile Include="Map\IMapItemConverter.cs" />
     <Compile Include="Map\Land.cs" />
     <Compile Include="Map\MapCellInfo.cs" />
@@ -69,7 +76,7 @@
     <Compile Include="Player.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PlayerAI.cs" />
+    <Compile Include="AIPlayer\PlayerAI.cs" />
     <Compile Include="RandomEvent\RandomEvent.cs" />
     <Compile Include="Buildings\Building.cs" />
     <Compile Include="BuildableEntityFactory.cs" />
@@ -86,6 +93,7 @@
     <Compile Include="UpgradableEntity.cs" />
     <Compile Include="Utility\RandomGen.cs" />
     <Compile Include="Utility\Singleton.cs" />
+    <Compile Include="Utility\WeightedQueue.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

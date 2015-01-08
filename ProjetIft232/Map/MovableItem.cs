@@ -9,6 +9,11 @@ namespace Core.Map
     [DataContract]
     public abstract class MovableItem : WorldMapItem
     {
+
+        public MovableItem()
+        {
+            VisionRange = 3;
+        }
         public Position Goal { get; set; }
         public int Speed { get; set; }
         public Position NextPosition(Position current, IEnumerable<KeyValuePair<Position, WorldMapItem>> pointsOfInterest)

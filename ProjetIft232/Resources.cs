@@ -139,6 +139,22 @@ namespace Core
             return new Resources();
         }
 
+        public ResourcesType GetLowest()
+        {
+            int index = 0;
+            int min = int.MaxValue;
+            for (int i = 0; i < (int)ResourcesType.End; i++)
+            {
+                if (_resources[i] < min)
+                {
+                    index = i;
+                    min = _resources[i];
+                }
+            }
+            return (ResourcesType)index;
+
+        }
+
         public static Resources operator +(Resources debut, Resources b)
         {
             Resources ress = Zero();

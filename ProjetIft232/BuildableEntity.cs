@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using Core.Buildings;
@@ -65,6 +66,11 @@ namespace Core
         public bool CanBeBuild(Resources actualResource, IEnumerable<Building> actualBuildings)
         {
             return CanBeBuild(actualResource, actualBuildings.ToList(), new List<Technology>());
+        }
+
+        public bool CanBeBuild(City city)
+        {
+            return CanBeBuild(city.Ressources, city.FinishedBuildings, city.ResearchedTechnologies);
         }
 
         public void FinishConstruction()

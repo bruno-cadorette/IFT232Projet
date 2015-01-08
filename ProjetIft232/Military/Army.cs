@@ -15,6 +15,7 @@ namespace Core.Military
         public Resources Resources { get; set; }
 
         public Army()
+            :base()
         {
             units = new List<Groupment>();
             Speed = 1;

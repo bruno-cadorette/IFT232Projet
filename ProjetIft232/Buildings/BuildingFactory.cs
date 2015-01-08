@@ -21,6 +21,15 @@ namespace Core.Buildings
             return _entities.Select(x => (Building) x.Value);
         }
 
+        public IEnumerable<int> GetBuildingDoingThatResources(ResourcesType r)
+        {
+            foreach (Building building in Buildings())
+            {
+                if (building.Resource[r] > 0)
+                    yield return building.ID;
+            }
+        }
+
         protected override BuildableEntity CreateEntity(XElement element, int id, string name, string description,
             int turns, Requirement requirement)
         {

@@ -120,5 +120,31 @@ namespace Ift232Tests
             Assert.IsNotNull(map[new Position(0, 0)]);
             Assert.AreEqual(1, map[new Position(0, 0)].PlayerId);
         }
+
+        [TestMethod]
+        public void FogOfWarTest()
+        {
+            var map = new WorldMap();
+            var city = new City("Yo");
+            map.Add(new Position(0,0),city );
+            map.Update();
+            
+            Assert.IsTrue(city.ItemInSight() == 0);
+            Army army = new Army()
+            {
+                Speed = 10,
+                Goal = new Position(4,4)
+            };
+            map.Add(new Position(4,4),army );
+            map.Update();
+            //The city sees the army
+            Assert.IsTrue(city.ItemInSight() == 1);
+            //The Army doesn't see the city
+            Assert.IsTrue(army.ItemInSight() == 0);
+            army.Goal = new Position(10,10);
+            map.Update();
+            map.Update();
+            Assert.IsTrue(city.ItemInSight() == 0);
+        }
     }
 }

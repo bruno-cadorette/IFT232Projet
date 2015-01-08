@@ -10,6 +10,11 @@ namespace Core.Map
     public abstract class WorldMapItem
     {
         [DataMember]
+        public int VisionRange { get; set; }
+        //Make VISION
+        [DataMember]
+        public IEnumerable<KeyValuePair<Position, WorldMapItem>> VisionInterest { get; set; }
+        [DataMember]
         public int PlayerId { get; set; }
         [DataMember]
         public bool CanBeDeleted { get; protected set; }
@@ -17,6 +22,16 @@ namespace Core.Map
         public WorldMapItem()
         {
             CanBeDeleted = false;
+        }
+
+        public void UpdateVision(Dictionary<Position, WorldMapItem> vision)
+        {
+            VisionInterest = vision;
+        }
+
+        public int ItemInSight()
+        {
+            return VisionInterest.Count();
         }
     }
 }

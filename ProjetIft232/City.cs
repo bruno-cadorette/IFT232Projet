@@ -28,7 +28,7 @@ namespace Core
 
         public City(string name) : this(name,new Army())
         {
-            
+            VisionRange = 5;
         }
         public City(string name, Army army)
         {
@@ -195,9 +195,14 @@ namespace Core
                 recruitement.Remove(unit);
             }
 
-            Resources rsc = Buildings.Aggregate(new Resources(), (acc, x) => acc + x.Update());
+            Resources rsc = GetBuildingsResources();
             rsc += BaseProduction();
             Ressources.Update(rsc);
+        }
+
+        public Resources GetBuildingsResources()
+        {
+            return Buildings.Aggregate(new Resources(), (acc, x) => acc + x.Update());
         }
 
         public bool AddArmy(int type)

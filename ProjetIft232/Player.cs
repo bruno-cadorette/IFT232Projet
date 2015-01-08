@@ -76,5 +76,25 @@ namespace Core
         {
             return Cities.Count == 0;
         }
+
+        public IEnumerable<Technology> TechLeftToDo()
+        {
+            bool isDone = false;
+            foreach (var each in TechnologyFactory.GetInstance().Technologies())
+            {
+                foreach (var each2 in ResearchedTech)
+                {
+                    if (each.ID == each2.ID)
+                    {
+                        isDone = true;
+                    }
+                }
+                if (!isDone)
+                {
+                    yield return each;
+                }
+                isDone = false;
+            }
+        }
     }
 }
