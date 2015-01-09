@@ -13,6 +13,7 @@ using Core.Technologies;
 using MessageBox = Xceed.Wpf.Toolkit.MessageBox;
 using Core.Map;
 using System.Windows.Media;
+using GameHelper;
 
 namespace Ift232UI
 {
@@ -38,129 +39,51 @@ namespace Ift232UI
             if (Game != null)
             {
                 Update();
-                foreach (var player in Game.Players)
-                {
-                    Players.Items.Add(player.playerName);
-                }
                 Turns.Content = Game.TurnIndex;
                 Update();
-                Players.SelectedIndex = Game.PlayerIndex;
-                Cities.Content = Game.CurrentPlayer.CurrentCity;
+                Cities.Content = city;
                 UnitBox.ItemsSource = ArmyFactory.GetInstance().Soldiers();
             }
             else Close();
         }
 
+        public MainWindow(City city)
+        {
+            this.city = city;
+            DataContext = this;
+            InitializeComponent();
+            Game = new Game();
+            Update();
+            Turns.Content = Game.TurnIndex;
+            Update();
+            Cities.Content = city;
+            UnitBox.ItemsSource = ArmyFactory.GetInstance().Soldiers();
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        private City city;
 
-        private void SetPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-
-        private void btnNewCity_Click(object sender, RoutedEventArgs e)
-        {
-            if (Game.CurrentPlayer.CurrentCity.Ressources[ResourcesType.Population] > 500)
-            {
-                Game.CreateCity(tbNewCity.Text);
-                MessageBox.Show("Ville créée !");
-            }
-            else
-            {
-                MessageBox.Show("Vous devez avoir plus de population pour créer une nouvelle ville.");
-            }
-        }
-
-        private void Players_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Players.SelectedIndex = Game.PlayerIndex;
-            Update();
-        }
-
-        private void NextTurn_Click(object sender, RoutedEventArgs e)
-        {
-            var turnText = Game.NextTurn();
-
-
-            if (turnText.Any())
-            {
-                MessageBox.Show(string.Join(Environment.NewLine, turnText));
-            }
-
-
-            if (Game.HasWin() || Game.HasLost())
-            {
-                Application.Current.Shutdown();
-            }
-            else
-            {
-                Update();
-            }
-        }
 
         private void Update()
         {
             Turns.Content = Game.TurnIndex;
-            Players.SelectedIndex = Game.PlayerIndex;
-            Cities.Content = Game.CurrentPlayer.CurrentCity;
+            Cities.Content = city;
             UnitBox.ItemsSource = ArmyFactory.GetInstance().Soldiers();
-            CurrentUnit.ItemsSource = Game.CurrentPlayer.CurrentCity.Army.Where(n => !n.Type.InConstruction);
-            TabArmy.IsEnabled = Game.CurrentPlayer.CurrentCity.FinishedBuildings.Any(t => t is Casern);
-            TabTrade.IsEnabled = Game.CurrentPlayer.CurrentCity.FinishedBuildings.Any(t => t is Market);
+            CurrentUnit.ItemsSource = city.Army.Where(n => !n.Type.InConstruction);
+            TabArmy.IsEnabled = city.FinishedBuildings.Any(t => t is Casern);
+            TabTrade.IsEnabled = city.FinishedBuildings.Any(t => t is Market);
             UpdateRessource();
             UpdateTechnologyTab();
-            UpdateMap();
             if (Listboxdereve.IsLoaded && Listboxdereve.SelectedItem != null)
             {
-                var currentValue = Listboxdereve.SelectedItem.ToString();
+                var currentValue =(Building)Listboxdereve.SelectedItem;
                 tnbrbat.Text =
-                    Game.CurrentPlayer.CurrentCity.CountBuilding(currentValue, false)
+                    city.CountBuilding(currentValue.ID, false)
                         .ToString(CultureInfo.InvariantCulture);
                 NBProdTextBox.Text =
-                    Game.CurrentPlayer.CurrentCity.CountBuilding(currentValue, true)
+                    city.CountBuilding(currentValue.ID, true)
                         .ToString(CultureInfo.InvariantCulture);
             }
-        }
-        private Position firstClick;
-
-        private RoutedEventHandler MapButtonClick(Position position)
-        {
-            return (sender, args) =>
-                {
-                    if (firstClick == null)
-                    {
-                        firstClick = position;
-                    }
-                    else
-                    {
-                        Game.WorldMap.SetMove(firstClick, position);
-                        firstClick = null;
-                        UpdateMap();
-                    }
-                };
-        }
-
-        private IEnumerable<Button> CreateMap()
-        {
-            return Enumerable.Empty<Button>();
-        }
-
-
-        private void UpdateMap()
-        {
-            Map.Children.Clear();
-            foreach (var button in CreateMap())
-            {
-                Map.Children.Add(button);
-            }
-        }
-
-        private void getCities_Click(object sender, RoutedEventArgs e)
-        {
-            Game.CurrentPlayer.NextCity();
-            Update();
         }
 
         private void cbSelectBuilding_Loaded(object sender, RoutedEventArgs e)
@@ -185,14 +108,14 @@ namespace Ift232UI
             var currentValue = (sender as ComboBox).SelectedItem.ToString();
             Building currentBuilding = buildings.First(n => n.Name == currentValue);
             tbBuildingDatas.Text = currentBuilding.Description;
-            tbBuildingDatas.Text += currentBuilding.Requirement.toString();
+            tbBuildingDatas.Text += currentBuilding.Requirement;
             tbBuildingDatas.Text += " Nombre de tours nécessaires : ";
             tbBuildingDatas.Text += BuildingFactory.GetInstance().GetBuilding(currentBuilding.ID).TurnsLeft;
         }
 
         private void btnNewBuilding_Click(object sender, RoutedEventArgs e)
         {
-            if (Game.CurrentPlayer.CurrentCity.AddBuilding(cbSelectBuilding.SelectedIndex) != null)
+            if (city.AddBuilding(cbSelectBuilding.SelectedIndex) != null)
             {
                 MessageBox.Show("Bâtiment créé !!!");
             }
@@ -248,7 +171,7 @@ namespace Ift232UI
                 {
                     BoughtResources.Items.Add(elmt.ToString());
                 }
-                BoughtResources.SelectedValue = listeEchange.FirstOrDefault().ToString();
+                //BoughtResources.SelectedValue = listeEchange.FirstOrDefault().ToString();
             }
             boughtResourcesIsLoaded = true;
         }
@@ -269,7 +192,7 @@ namespace Ift232UI
             int val2 = m.Trade(val1, soldType.Key, boughtType.Key);
             SecondValue.Text = val2.ToString(CultureInfo.InvariantCulture);
 
-            FirstValue.Maximum = Game.CurrentPlayer.CurrentCity.Ressources[soldType.Key];
+            FirstValue.Maximum = city.Ressources[soldType.Key];
         }
 
         private void SoldResources_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -292,7 +215,7 @@ namespace Ift232UI
 
             int qty = FirstValue.Value.Value;
 
-            bool done = ((Market)Game.GetMarket()).Achat(Game.CurrentPlayer.CurrentCity, qty, soldType.Key,
+            bool done = ((Market)Game.GetMarket()).Achat(city, qty, soldType.Key,
                 boughtType.Key);
             if (done)
             {
@@ -315,11 +238,11 @@ namespace Ift232UI
 
         private void UpdateRessource()
         {
-            lbResGold.Content = Game.CurrentPlayer.CurrentCity.Ressources[ResourcesType.Gold];
-            lbResMeat.Content = Game.CurrentPlayer.CurrentCity.Ressources[ResourcesType.Meat];
-            lbResWood.Content = Game.CurrentPlayer.CurrentCity.Ressources[ResourcesType.Wood];
-            lbResRock.Content = Game.CurrentPlayer.CurrentCity.Ressources[ResourcesType.Rock];
-            lbResPop.Content = Game.CurrentPlayer.CurrentCity.Ressources[ResourcesType.Population];
+            lbResGold.Content = city.Ressources[ResourcesType.Gold];
+            lbResMeat.Content = city.Ressources[ResourcesType.Meat];
+            lbResWood.Content = city.Ressources[ResourcesType.Wood];
+            lbResRock.Content = city.Ressources[ResourcesType.Rock];
+            lbResPop.Content = city.Ressources[ResourcesType.Population];
         }
 
 
@@ -331,7 +254,7 @@ namespace Ift232UI
                 int quantity = SoldierQuantityBox.Value.Value;
                 for (var i = 0; i < quantity; i++)
                 {
-                    if (!Game.CurrentPlayer.CurrentCity.AddArmy(armyTypeId))
+                    if (!city.AddArmy(armyTypeId))
                     {
                         MessageBox.Show("Pas assez de ressource pour en produire!", "Production échouée",
                             MessageBoxButton.OK, MessageBoxImage.Exclamation);
@@ -360,7 +283,7 @@ namespace Ift232UI
             ApplyCountSlider.IsEnabled = false;
             Dictionary<int, Technology> tech = new Dictionary<int, Technology>();
             bool isDone = false;
-            foreach (var each in TechnologyFactory.GetInstance().Technologies())
+            /*foreach (var each in TechnologyFactory.GetInstance().Technologies())
             {
                 foreach (var each2 in Game.CurrentPlayer.ResearchedTech)
                 {
@@ -379,7 +302,7 @@ namespace Ift232UI
                 TechnologyToDo.ItemsSource = tech.Select(n => n.Value);
             else
                 TechnologyToDo.ItemsSource = null;
-            TechnologyDone.ItemsSource = Game.CurrentPlayer.ResearchedTech;
+            TechnologyDone.ItemsSource = Game.CurrentPlayer.ResearchedTech;*/
         }
 
 
@@ -391,7 +314,7 @@ namespace Ift232UI
                 return;
             }
             tbDescription.Text = technology.Description;
-            tbRequisite.Text = technology.Requirement.toString();
+            tbRequisite.Text = technology.Requirement.ToString();
             TechnologyButton.Content = "Rechercher";
         }
 
@@ -417,7 +340,7 @@ namespace Ift232UI
                 var entity = (CountableListItem<UpgradableEntity>)UpgradableEntityList.SelectedItem;
                 if (entity != null)
                 {
-                    Game.CurrentPlayer.CurrentCity.UpgradeEntities(entity.Item, technologyDone,
+                    city.UpgradeEntities(entity.Item, technologyDone,
                         (int)ApplyCountSlider.Value);
                 }
                 technologySelectedIsResearched = false;
@@ -455,7 +378,7 @@ namespace Ift232UI
                 return;
             }
             tbDescription.Text = technology.Description;
-            tbRequisite.Text = technology.Requirement.toString();
+            tbRequisite.Text = technology.Requirement.ToString();
             if (technology.InConstruction)
                 tbRequisite.Text += " Nombre de tours restants :" + technology.TurnsLeft;
             TechnologyButton.Content = "Appliquer";
@@ -464,18 +387,18 @@ namespace Ift232UI
             {
                 //Technology déjà faite
                 ApplyTechGrid.Visibility = Visibility.Visible;
-                var buildings = Game.CurrentPlayer.CurrentCity.Buildings
+                var buildings = city.Buildings
                     .Where(building => building.CanBeAffected(technology))
                     .GroupBy(x => x.ID)
                     .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count()));
                 /*
-                var soldiers = Game.CurrentPlayer.CurrentCity.Army
+                var soldiers = city.Army
                     .Where(soldier => soldier.Type.CanBeAffected(technology))
                     .GroupBy(x => x.Type.ID)
                     .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count()));*/
                 //Quand les ID vont être unique
-                var entities = Game.CurrentPlayer.CurrentCity.Buildings.Cast<UpgradableEntity>()
-                    .Concat(Game.CurrentPlayer.CurrentCity.Army.Select(x => x.Type))
+                var entities = city.Buildings.Cast<UpgradableEntity>()
+                    .Concat(city.Army.Select(x => x.Type))
                     .Where(entity => entity.CanBeAffected(technology))
                     .GroupBy(x => x.ID)
                     .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count()));

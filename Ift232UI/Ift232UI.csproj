@@ -59,6 +59,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BuildingManagementViewModel.cs" />
+    <Compile Include="CityManagementViewModel.cs" />
     <Compile Include="MapItemViewModel.cs" />
     <Compile Include="MapViewModel.cs" />
     <Compile Include="IntToPositionConverter.cs" />

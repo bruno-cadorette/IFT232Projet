@@ -99,9 +99,9 @@ namespace Core
             Ressources += resource;
         }
 
-        public int CountBuilding(String buildingName, bool inConstruction)
+        public int CountBuilding(int id, bool inConstruction)
         {
-            return Buildings.Count(n => n.Name == buildingName && n.InConstruction == inConstruction);
+            return Buildings.Count(n => n.ID == id && n.InConstruction == inConstruction);
         }
 
         public void UpgradeEntities(UpgradableEntity entity, Technology technology, int count)

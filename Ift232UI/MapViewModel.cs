@@ -32,11 +32,13 @@ namespace Ift232UI
         public ICommand SettleGround { get; private set; }
         public ICommand AdministrateCity { get; private set; }
         public ICommand NextTurn { get; private set; }
+        private Action<City> openCity;
         private Game game;
 
-        public MapViewModel(Game game)
+        public MapViewModel(Game game, Action<City> openCity)
         {
             this.game = game;
+            this.openCity = openCity;
             var unSelect = new RelayCommand<Position>(x => SelectedCell = null);
             var updateMap = new RelayCommand<Position>(_ =>
             {
@@ -49,8 +51,8 @@ namespace Ift232UI
             Tiles = new ObservableCollection<MapItemViewModel>(game.WorldMap.Select(x=>new MapItemViewModel(x)));
             SelectCell = new RelayCommand<int>(i =>
                 {
-                    int x = i % MaxBound.X;
-                    int y = i / MaxBound.Y;
+                    int x = i / MaxBound.X;
+                    int y = i % MaxBound.Y;
                     var position = new Position(x, y);
                     if (SelectedCell != null)
                     {
@@ -61,6 +63,10 @@ namespace Ift232UI
                     else
                     {
                         SelectedCell = position;
+                        if (game.WorldMap[SelectedCell] is City)
+                        {
+                            AdministrateCity.Execute(SelectedCell);
+                        }
                     }
                 },
                 x => SelectedCell == null || game.WorldMap[SelectedCell] is MovableItem);
@@ -76,7 +82,7 @@ namespace Ift232UI
                 updateMap
             };
 
-            AdministrateCity = new RelayCommand<Position>(x => { }, x => game.WorldMap[x] is City);
+            AdministrateCity = new RelayCommand<Position>(x => openCity(game.WorldMap[x] as City), x => game.WorldMap[x] is City);
         }
     }
 }

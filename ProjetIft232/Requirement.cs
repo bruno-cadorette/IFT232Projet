@@ -39,7 +39,7 @@ namespace Core
                    _Technologies.All(tech => actualTechnologies.Any(x => x.ID == tech && !x.InConstruction));
         }
 
-        public string toString()
+        public override string ToString()
         {
             string result = "";
             result += "Or : " + Resources[ResourcesType.Gold] + " Viande : " + Resources[ResourcesType.Meat] +
