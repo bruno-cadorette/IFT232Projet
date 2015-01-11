@@ -23,7 +23,7 @@ namespace GameHelper
 
         public bool CanExecute(object parameter)
         {
-            return canExecute((T)parameter);
+            return parameter == null || canExecute((T)parameter);
         }
 
         public event EventHandler CanExecuteChanged;

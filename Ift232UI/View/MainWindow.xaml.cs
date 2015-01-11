@@ -20,36 +20,28 @@ namespace Ift232UI
     /// <summary>
     ///     Logique d'interaction pour MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class MainWindow : Window
     {
         public Game Game;
+        public City City { get; set; }
+        public CityManagementViewModel CityManagementViewModel { get; set; }
+        public BuildingManagementViewModel BuildingManagementViewModel
+        {
+            get
+            {
+                return CityManagementViewModel.BuildingManagementViewModel;
+            }
+        }
         private bool boughtResourcesIsLoaded;
         private bool comboBoxBuildingIsLoaded;
-        private bool listBoxBuildingIsLoaded;
         private bool soldResourcesIsLoaded;
         private bool technologySelectedIsResearched;
 
-        public MainWindow()
-        {
-            DataContext = this;
-            InitializeComponent();
-            Inscription inscription = new Inscription();
-            inscription.ShowDialog();
-            Game = inscription.GetGame();
-            if (Game != null)
-            {
-                Update();
-                Turns.Content = Game.TurnIndex;
-                Update();
-                Cities.Content = city;
-                UnitBox.ItemsSource = ArmyFactory.GetInstance().Soldiers();
-            }
-            else Close();
-        }
 
         public MainWindow(City city)
         {
-            this.city = city;
+            City = city;
+            CityManagementViewModel = new CityManagementViewModel(City);
             DataContext = this;
             InitializeComponent();
             Game = new Game();
@@ -60,30 +52,16 @@ namespace Ift232UI
             UnitBox.ItemsSource = ArmyFactory.GetInstance().Soldiers();
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        private City city;
-
-
         private void Update()
         {
             Turns.Content = Game.TurnIndex;
-            Cities.Content = city;
+            Cities.Content = City;
             UnitBox.ItemsSource = ArmyFactory.GetInstance().Soldiers();
-            CurrentUnit.ItemsSource = city.Army.Where(n => !n.Type.InConstruction);
-            TabArmy.IsEnabled = city.FinishedBuildings.Any(t => t is Casern);
-            TabTrade.IsEnabled = city.FinishedBuildings.Any(t => t is Market);
+            CurrentUnit.ItemsSource = City.Army.Where(n => !n.Type.InConstruction);
+            TabArmy.IsEnabled = City.FinishedBuildings.Any(t => t is Casern);
+            TabTrade.IsEnabled = City.FinishedBuildings.Any(t => t is Market);
             UpdateRessource();
             UpdateTechnologyTab();
-            if (Listboxdereve.IsLoaded && Listboxdereve.SelectedItem != null)
-            {
-                var currentValue =(Building)Listboxdereve.SelectedItem;
-                tnbrbat.Text =
-                    city.CountBuilding(currentValue.ID, false)
-                        .ToString(CultureInfo.InvariantCulture);
-                NBProdTextBox.Text =
-                    city.CountBuilding(currentValue.ID, true)
-                        .ToString(CultureInfo.InvariantCulture);
-            }
         }
 
         private void cbSelectBuilding_Loaded(object sender, RoutedEventArgs e)
@@ -102,20 +80,10 @@ namespace Ift232UI
             comboBoxBuildingIsLoaded = true;
         }
 
-        private void cbSelectBuilding_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var buildings = BuildingFactory.GetInstance().Buildings().ToArray();
-            var currentValue = (sender as ComboBox).SelectedItem.ToString();
-            Building currentBuilding = buildings.First(n => n.Name == currentValue);
-            tbBuildingDatas.Text = currentBuilding.Description;
-            tbBuildingDatas.Text += currentBuilding.Requirement;
-            tbBuildingDatas.Text += " Nombre de tours nécessaires : ";
-            tbBuildingDatas.Text += BuildingFactory.GetInstance().GetBuilding(currentBuilding.ID).TurnsLeft;
-        }
 
         private void btnNewBuilding_Click(object sender, RoutedEventArgs e)
         {
-            if (city.AddBuilding(cbSelectBuilding.SelectedIndex) != null)
+            if (City.AddBuilding(cbSelectBuilding.SelectedIndex) != null)
             {
                 MessageBox.Show("Bâtiment créé !!!");
             }
@@ -124,19 +92,6 @@ namespace Ift232UI
                 MessageBox.Show("Le bâtiment n'a pu être créé faute de ressources!");
             }
             Update();
-        }
-
-        private void ListBox_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (!listBoxBuildingIsLoaded)
-            {
-                var buildings = BuildingFactory.GetInstance().Buildings().ToArray();
-                foreach (var building in buildings)
-                {
-                    Listboxdereve.Items.Add(building.Name);
-                }
-            }
-            listBoxBuildingIsLoaded = true;
         }
 
         private void Listboxdereve_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -192,7 +147,7 @@ namespace Ift232UI
             int val2 = m.Trade(val1, soldType.Key, boughtType.Key);
             SecondValue.Text = val2.ToString(CultureInfo.InvariantCulture);
 
-            FirstValue.Maximum = city.Ressources[soldType.Key];
+            FirstValue.Maximum = City.Ressources[soldType.Key];
         }
 
         private void SoldResources_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -215,7 +170,7 @@ namespace Ift232UI
 
             int qty = FirstValue.Value.Value;
 
-            bool done = ((Market)Game.GetMarket()).Achat(city, qty, soldType.Key,
+            bool done = ((Market)Game.GetMarket()).Achat(City, qty, soldType.Key,
                 boughtType.Key);
             if (done)
             {
@@ -238,11 +193,11 @@ namespace Ift232UI
 
         private void UpdateRessource()
         {
-            lbResGold.Content = city.Ressources[ResourcesType.Gold];
-            lbResMeat.Content = city.Ressources[ResourcesType.Meat];
-            lbResWood.Content = city.Ressources[ResourcesType.Wood];
-            lbResRock.Content = city.Ressources[ResourcesType.Rock];
-            lbResPop.Content = city.Ressources[ResourcesType.Population];
+            lbResGold.Content = City.Ressources[ResourcesType.Gold];
+            lbResMeat.Content = City.Ressources[ResourcesType.Meat];
+            lbResWood.Content = City.Ressources[ResourcesType.Wood];
+            lbResRock.Content = City.Ressources[ResourcesType.Rock];
+            lbResPop.Content = City.Ressources[ResourcesType.Population];
         }
 
 
@@ -254,7 +209,7 @@ namespace Ift232UI
                 int quantity = SoldierQuantityBox.Value.Value;
                 for (var i = 0; i < quantity; i++)
                 {
-                    if (!city.AddArmy(armyTypeId))
+                    if (!City.AddArmy(armyTypeId))
                     {
                         MessageBox.Show("Pas assez de ressource pour en produire!", "Production échouée",
                             MessageBoxButton.OK, MessageBoxImage.Exclamation);
@@ -340,7 +295,7 @@ namespace Ift232UI
                 var entity = (CountableListItem<UpgradableEntity>)UpgradableEntityList.SelectedItem;
                 if (entity != null)
                 {
-                    city.UpgradeEntities(entity.Item, technologyDone,
+                    City.UpgradeEntities(entity.Item, technologyDone,
                         (int)ApplyCountSlider.Value);
                 }
                 technologySelectedIsResearched = false;
@@ -387,7 +342,7 @@ namespace Ift232UI
             {
                 //Technology déjà faite
                 ApplyTechGrid.Visibility = Visibility.Visible;
-                var buildings = city.Buildings
+                var buildings = City.Buildings
                     .Where(building => building.CanBeAffected(technology))
                     .GroupBy(x => x.ID)
                     .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count()));
@@ -397,8 +352,8 @@ namespace Ift232UI
                     .GroupBy(x => x.Type.ID)
                     .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count()));*/
                 //Quand les ID vont être unique
-                var entities = city.Buildings.Cast<UpgradableEntity>()
-                    .Concat(city.Army.Select(x => x.Type))
+                var entities = City.Buildings.Cast<UpgradableEntity>()
+                    .Concat(City.Army.Select(x => x.Type))
                     .Where(entity => entity.CanBeAffected(technology))
                     .GroupBy(x => x.ID)
                     .Select(x => new CountableListItem<UpgradableEntity>(x.First(), x.Count()));

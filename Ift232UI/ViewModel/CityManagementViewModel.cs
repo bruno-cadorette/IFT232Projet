@@ -13,11 +13,6 @@ namespace Ift232UI
     public class CityManagementViewModel
     {
         private City city;
-        private bool boughtResourcesIsLoaded;
-        private bool comboBoxBuildingIsLoaded;
-        private bool listBoxBuildingIsLoaded;
-        private bool soldResourcesIsLoaded;
-        private bool technologySelectedIsResearched;
 
         public BuildingManagementViewModel BuildingManagementViewModel { get; set; }
 
@@ -52,6 +47,7 @@ namespace Ift232UI
         public CityManagementViewModel(City city)
         {
             this.city = city;
+            BuildingManagementViewModel = new BuildingManagementViewModel(city);
         }
 
    

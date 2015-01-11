@@ -43,12 +43,12 @@ namespace Ift232UI
             var updateMap = new RelayCommand<Position>(_ =>
             {
                 Tiles.Clear();
-                foreach (var tile in game.WorldMap.Select(x=>new MapItemViewModel(x)))
+                foreach (var tile in game.WorldMap.Select(x => new MapItemViewModel(x)))
                 {
                     Tiles.Add(tile);
                 }
             });
-            Tiles = new ObservableCollection<MapItemViewModel>(game.WorldMap.Select(x=>new MapItemViewModel(x)));
+            Tiles = new ObservableCollection<MapItemViewModel>(game.WorldMap.Select(x => new MapItemViewModel(x)));
             SelectCell = new RelayCommand<int>(i =>
                 {
                     int x = i / MaxBound.X;
@@ -82,7 +82,11 @@ namespace Ift232UI
                 updateMap
             };
 
-            AdministrateCity = new RelayCommand<Position>(x => openCity(game.WorldMap[x] as City), x => game.WorldMap[x] is City);
+            AdministrateCity = new MacroRelayCommand<Position>()
+            {
+                new RelayCommand<Position>(x => openCity(game.WorldMap[x] as City), x => game.WorldMap[x] is City),
+                unSelect
+            };
         }
     }
 }

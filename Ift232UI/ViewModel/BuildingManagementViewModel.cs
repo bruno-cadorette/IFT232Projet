@@ -20,6 +20,7 @@ namespace Ift232UI
                 return BuildingFactory.GetInstance().Buildings();
             }
         }
+        public ICommand CreateBuilding { get; private set; }
 
         public BuildingManagementViewModel(City city)
         {
@@ -29,19 +30,15 @@ namespace Ift232UI
                 BuildingCount = city.CountBuilding(x.ID, false);
                 InConstructionCount = city.CountBuilding(x.ID, true);
             });
+            CreateBuilding = new RelayCommand<Building>(x =>
+            {
+                city.AddBuilding(x.ID);
+            },
+            x=>x.CanBeBuild(city));
         }
         public int BuildingCount { get; set; }
         public int InConstructionCount { get; set; }
         public ICommand ShowBuildingsStatus { get; private set; }
-
-
-        private string BuildingDescription(Building building)
-        {
-            return building.Description
-            + building.Requirement
-            + " Nombre de tours nécessaires : "
-            + building.TurnsLeft;
-        }
 
     }
 }
