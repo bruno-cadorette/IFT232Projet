@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
         xmlns:local="clr-namespace:Ift232UI"
+        xmlns:helper="clr-namespace:GameHelper;assembly=GameHelper"
         Title="{Binding City.Name}" Height="433.382" Width="631.156"
         Icon="../ResourcesIcon/icon.ico">
     <Window.Resources>
@@ -100,8 +101,6 @@
                     <Button Content="Produire" Grid.Column="3" HorizontalAlignment="Left" Margin="250,18,0,0" VerticalAlignment="Top" Width="93" Click="ButtonBase_OnClick"/>
                     <xctk:IntegerUpDown Name="SoldierQuantityBox" Grid.Column="3" HorizontalAlignment="Left" Height="23" Margin="62,17,0,0"  Watermark="Quantité à produire" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.507,0.203" ValueChanged="SoldierQuantityBox_ValueChanged"/>
                     <xctk:CheckListBox Name="CurrentUnit" Grid.ColumnSpan="4" Grid.Column="0" HorizontalAlignment="Left" Height="144" Margin="76,98,0,0" VerticalAlignment="Top" Width="473"/>
-                    <Button Content="Attaquer !!!" HorizontalAlignment="Left" Margin="76,242,0,0" VerticalAlignment="Top" Width="473" Grid.ColumnSpan="4"
-                            Grid.Column="0" Height="39" Click="btnAttaquer"/>
                     <Label Name="ArmyRequirement" Grid.ColumnSpan="4" Content=" " HorizontalAlignment="Center" Height="28" Margin="76,56,68.594,0" VerticalAlignment="Top" Width="473"/>
                 </Grid>
             </TabItem>
@@ -195,11 +194,11 @@
                         <ColumnDefinition Width="130*"/>
                         <ColumnDefinition Width="125*"/>
                     </Grid.ColumnDefinitions>
-                    <ListBox HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="160" Height="200" Grid.ColumnSpan="2"/>
+                    <ListBox helper:SelectionBehavior.SelectionChanged="{Binding BuildingManagementViewModel.ShowBuildingsStatus}" ItemsSource="{Binding BuildingManagementViewModel.BuildingTypes}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="160" Height="200" Grid.ColumnSpan="2"/>
                     <Label Name="Nbrcree" Content="Nombre de batiments créés" HorizontalAlignment="Center" Margin="32,40,124,242" VerticalAlignment="Center" Width="166" Height="30" Grid.Column="2" Grid.ColumnSpan="3"/>
-                    <TextBox Name="tnbrbat" IsEnabled="False" HorizontalAlignment="Left" Height="22" Margin="2,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="71" Grid.Column="5"/>
+                    <TextBox Text="{Binding BuildingManagementViewModel.BuildingCount}" IsEnabled="False" HorizontalAlignment="Left" Height="22" Margin="2,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="71" Grid.Column="5"/>
                     <Label Name="NBProd" Content="Nombre de batiments en construction" HorizontalAlignment="Center" Margin="32,82,78,200" VerticalAlignment="Center" Width="212" Height="30" Grid.Column="2" Grid.ColumnSpan="3"/>
-                    <TextBox Name="NBProdTextBox" IsEnabled="False" HorizontalAlignment="Left" Height="24" Margin="0,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="71" Grid.Column="5"/>
+                    <TextBox Text="{Binding BuildingManagementViewModel.InConstructionCount}" IsEnabled="False" HorizontalAlignment="Left" Height="24" Margin="0,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="71" Grid.Column="5"/>
 
                 </Grid>
             </TabItem> 

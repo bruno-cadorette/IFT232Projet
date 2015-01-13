@@ -220,12 +220,6 @@ namespace Ift232UI
             }
         }
 
-        private void btnAttaquer(object sender, RoutedEventArgs e)
-        {
-            //CurrentUnit.SelectedItems
-            MessageBox.Show("Not implemented yet. Sorry Fortin.");
-        }
-
         private void FirstValue_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             UpdateMarketUi();

@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace Ift232UI
 {
-    public class BuildingManagementViewModel
+    public class BuildingManagementViewModel : BindableBase
     {
         private City city;
         public IEnumerable<Building> BuildingTypes
@@ -36,8 +36,30 @@ namespace Ift232UI
             },
             x=>x.CanBeBuild(city));
         }
-        public int BuildingCount { get; set; }
-        public int InConstructionCount { get; set; }
+        private int buildingCount;
+        public int BuildingCount
+        {
+            get
+            {
+                return buildingCount;
+            }
+            set
+            {
+                SetProperty(ref buildingCount, value);
+            }
+        }
+        private int inConstructionCount;
+        public int InConstructionCount
+        {
+            get
+            {
+                return inConstructionCount;
+            }
+            set
+            {
+                SetProperty(ref inConstructionCount, value);
+            }
+        }
         public ICommand ShowBuildingsStatus { get; private set; }
 
     }
