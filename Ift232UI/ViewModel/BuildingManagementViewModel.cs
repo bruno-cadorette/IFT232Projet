@@ -33,6 +33,7 @@ namespace Ift232UI
             CreateBuilding = new RelayCommand<Building>(x =>
             {
                 city.AddBuilding(x.ID);
+                OnPropertyChanged("Resources");
             },
             x=>x.CanBeBuild(city));
         }

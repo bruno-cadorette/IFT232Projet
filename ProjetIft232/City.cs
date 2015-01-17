@@ -28,7 +28,7 @@ namespace Core
 
         public City(string name) : this(name,new Army())
         {
-            VisionRange = 5;
+            VisionRange = 3;
         }
         public City(string name, Army army)
         {
@@ -205,7 +205,7 @@ namespace Core
             return Buildings.Aggregate(new Resources(), (acc, x) => acc + x.Update());
         }
 
-        public bool AddArmy(int type)
+        public bool AddArmy(int type, int number)
         {
             var armyUnit = ArmyFactory.CreateArmyUnit(type, this);
             if (armyUnit != null)

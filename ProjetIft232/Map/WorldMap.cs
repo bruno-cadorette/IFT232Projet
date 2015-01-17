@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Core.Map
 {
-    public class WorldMap : IEnumerable<MapCellInfo>
+    public class WorldMap
     {
         private Dictionary<Position, WorldMapItem> map = new Dictionary<Position, WorldMapItem>();
         private Land[,] landScape = new Land[MaxBound.X, MaxBound.Y];
@@ -48,26 +48,32 @@ namespace Core.Map
                 return MaxBound.Y - MinBound.Y;
             }
         }
-
+        private IEnumerable<Position> VisibleCells(Position position)
+        {
+            if(map.ContainsKey(position))
+            {
+                for (int i = 0; i < 2 * map[position].VisionRange+1; i++)
+                {
+                    int x = position.X - map[position].VisionRange + i;
+                    for (int j = 0; j < 2 * map[position].VisionRange+1; j++)
+                    {
+                        int y = position.Y - map[position].VisionRange + j;
+                        yield return new Position(x, y);
+                    }
+                }
+            }
+        }
         public void UpdateFogOfWar()
         {
             foreach (KeyValuePair<Position, WorldMapItem> worldMapItem in map)
             {
-                var vision = new Dictionary<Position, WorldMapItem>();
-                for (int i = 0; i < 2*worldMapItem.Value.VisionRange; i++)
-                {
-                    int x = worldMapItem.Key.X - worldMapItem.Value.VisionRange + i;
-                    for (int j = 0; j < 2 * worldMapItem.Value.VisionRange; j++)
-                    {
-                        int y = worldMapItem.Key.Y - worldMapItem.Value.VisionRange + j;
-                        Position p = new Position(x,y);
-                        if (map.ContainsKey(p) && p != worldMapItem.Key)
-                            vision[p] = map[p];
-
-                    }
-                }
+                var vision = VisibleCells(worldMapItem.Key).Where(p => map.ContainsKey(p) && p != worldMapItem.Key).ToDictionary(p => p, p => map[p]);
                 worldMapItem.Value.UpdateVision(vision);
             }
+        }
+        public IEnumerable<Position> VisibleCellsByPlayer(int playerId)
+        {
+            return map.Where(x => x.Value.PlayerId == playerId).SelectMany(x => VisibleCells(x.Key));
         }
 
         public IEnumerable<WorldMapItem> GetAllItemsFromPlayer(int id)
@@ -186,30 +192,23 @@ namespace Core.Map
             }
         }
 
-        private IEnumerable<MapCellInfo> GetAllCells()
+        public IEnumerable<MapCellInfo> GetAllCellsForPlayer(int playerId)
         {
+            var visibleTiles = new HashSet<Position>(VisibleCellsByPlayer(playerId));
+
             for (int i = 0; i < MaxBound.X; i++)
             {
                 for (int j = 0; j < MaxBound.Y; j++)
                 {
-                    var position = new Position(i,j);
+                    var position = new Position(i, j);
                     yield return new MapCellInfo()
                     {
                         Land = landScape[i, j],
-                        Item = map.ContainsKey(position) ? map[position] : null
+                        Item = map.ContainsKey(position) ? map[position] : null,
+                        IsVisible = visibleTiles.Contains(position)
                     };
                 }
             }
-        }
-
-        public IEnumerator<MapCellInfo> GetEnumerator()
-        {
-            return GetAllCells().GetEnumerator();
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
         }
     }
 }

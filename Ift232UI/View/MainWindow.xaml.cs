@@ -52,20 +52,10 @@ namespace Ift232UI
             InitializeComponent();
             Game = new Game();
             Update();
-            Turns.Content = Game.TurnIndex;
-            Update();
-            Cities.Content = city;
-            UnitBox.ItemsSource = ArmyFactory.GetInstance().Soldiers();
         }
 
         private void Update()
         {
-            Turns.Content = Game.TurnIndex;
-            Cities.Content = City;
-            UnitBox.ItemsSource = ArmyFactory.GetInstance().Soldiers();
-            TabArmy.IsEnabled = City.FinishedBuildings.Any(t => t is Casern);
-            TabTrade.IsEnabled = City.FinishedBuildings.Any(t => t is Market);
-            UpdateRessource();
             UpdateTechnologyTab();
         }
 
@@ -153,16 +143,6 @@ namespace Ift232UI
 
 
             Update();
-        }
-
-
-        private void UpdateRessource()
-        {
-            lbResGold.Content = City.Ressources[ResourcesType.Gold];
-            lbResMeat.Content = City.Ressources[ResourcesType.Meat];
-            lbResWood.Content = City.Ressources[ResourcesType.Wood];
-            lbResRock.Content = City.Ressources[ResourcesType.Rock];
-            lbResPop.Content = City.Ressources[ResourcesType.Population];
         }
 
 

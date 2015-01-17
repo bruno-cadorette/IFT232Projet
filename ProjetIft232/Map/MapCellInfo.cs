@@ -9,5 +9,6 @@ namespace Core.Map
     {
         public Land Land { get; set; }
         public WorldMapItem Item { get; set; }
+        public bool IsVisible { get; set; }
     }
 }

@@ -22,14 +22,14 @@ namespace Core.Configuration
                 return entities[index];
             }
         }
-        public T CreateEntity(int type, Resources resources, IEnumerable<Building> buildings, IEnumerable<Technology> technologies)
+        public T CreateEntity(int type, Resources resources, IEnumerable<Building> buildings, IEnumerable<Technology> technologies, int number = 1)
         {
             var entity = this[type];
             if (entity is UpgradableEntity)
             {
                 (entity as UpgradableEntity).Upgrade(technologies);
             }
-            return (entity.CanBeBuild(resources, buildings, technologies)) ? entity : null;
+            return (entity.CanBeBuild(resources * number, buildings, technologies)) ? entity : null;
         }
         public IEnumerable<T> Entities()
         {

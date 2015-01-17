@@ -34,7 +34,8 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
-        
+        <Label Content="{Binding TurnIndex}" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top"/>
+
 
 
     </Grid>

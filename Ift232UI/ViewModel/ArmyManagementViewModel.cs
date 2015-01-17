@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace Ift232UI
 {
-    public class ArmyManagementViewModel
+    public class ArmyManagementViewModel : BindableBase
     {
         private City city;
         public IEnumerable<Soldier> SoldierTypes
@@ -37,7 +37,11 @@ namespace Ift232UI
         public ArmyManagementViewModel(City city)
         {
             this.city = city;
-            TrainSoldiers = new RelayCommand<Soldier>(x => city.AddArmy(x.ID), x => x != null && NumberToCreate > 0);
+            TrainSoldiers = new RelayCommand<Soldier>(x => 
+                {
+                    city.AddArmy(x.ID, NumberToCreate);
+                    OnPropertyChanged("Resources");
+                }, x => x != null && NumberToCreate > 0);
         }
 
 

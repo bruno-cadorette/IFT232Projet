@@ -31,7 +31,7 @@
                 <Label>Tour:</Label>
                 <Label x:Name="Turns" Content="" Width="94" Height="30" VerticalAlignment="Bottom" RenderTransformOrigin="0.316,0.5"/>
             </DockPanel>
-            <Label Name="Cities" Grid.Column="1" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" Width="146"/>
+            <Label Content="{Binding CityManagementViewModel.CityName}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" Width="146"/>
         </Grid>
         <StackPanel Grid.Row="1" Grid.Column="0" FlowDirection="LeftToRight" Orientation="Horizontal">
             <StackPanel.Background>
@@ -44,15 +44,15 @@
             </StackPanel.Background>
 
             <Image Source="../ResourcesIcon/gold.png" />
-            <Label Name="lbResGold" />
+            <Label Name="lbResGold" Content="{Binding CityManagementViewModel.Resources.Gold}" />
             <Image Source="../ResourcesIcon/meat.png" />
-            <Label Name="lbResMeat" />
+            <Label Name="lbResMeat" Content="{Binding CityManagementViewModel.Resources.Meat}" />
             <Image Source="../ResourcesIcon/wood.png" />
-            <Label Name="lbResWood" />
+            <Label Name="lbResWood" Content="{Binding CityManagementViewModel.Resources.Wood}" />
             <Image Source="../ResourcesIcon/rock.png" />
-            <Label Name="lbResRock" />
+            <Label Name="lbResRock" Content="{Binding CityManagementViewModel.Resources.Rock}" />
             <Image Source="../ResourcesIcon/population.png" />
-            <Label Name="lbResPop" />
+            <Label Name="lbResPop" Content="{Binding CityManagementViewModel.Resources.Population}" />
         </StackPanel>
         <!--<TextBox Name="Resourcesvilles" IsEnabled="False" HorizontalAlignment="Left" Height="28" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" Width="188" Loaded="Resourcesvilles_Loaded"/>-->
 
@@ -83,7 +83,7 @@
                     <Label Content="Sélectionnez un bâtiment :" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top" Width="175" Grid.ColumnSpan="6"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Armée" Name="TabArmy">
+            <TabItem Header="Armée" IsEnabled="{Binding CityManagementViewModel.CanRecruitSoldiers}" Name="TabArmy">
                 <TabItem.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="#FFF7F3F3" Offset="0.344"/>
@@ -104,7 +104,7 @@
                     <Label Name="ArmyRequirement" Grid.ColumnSpan="4" Content=" " HorizontalAlignment="Center" Height="28" Margin="76,56,68.594,0" VerticalAlignment="Top" Width="473"/>
                 </Grid>
             </TabItem>
-            <TabItem Name="TabTrade" Header="Marché" Height="22" VerticalAlignment="Top">
+            <TabItem Name="TabTrade" IsEnabled="{Binding CityManagementViewModel.CanTrade}" Header="Marché" Height="22" VerticalAlignment="Top">
                 <TabItem.Background>
                     <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                         <GradientStop Color="#FFF3F3F3" Offset="0"/>
