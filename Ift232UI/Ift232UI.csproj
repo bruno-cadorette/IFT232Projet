@@ -59,6 +59,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModel\ArmyManagementViewModel.cs" />
     <Compile Include="ViewModel\BuildingManagementViewModel.cs" />
     <Compile Include="ViewModel\CityManagementViewModel.cs" />
     <Compile Include="ViewModel\MapItemViewModel.cs" />

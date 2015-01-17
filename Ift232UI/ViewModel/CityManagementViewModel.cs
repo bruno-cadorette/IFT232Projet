@@ -16,14 +16,7 @@ namespace Ift232UI
 
         public BuildingManagementViewModel BuildingManagementViewModel { get; set; }
 
-        public IEnumerable<Soldier> UnitTypes
-        {
-            get
-            {
-                return ArmyFactory.GetInstance().Soldiers();
-            }
-        }
-        public Soldier SelectedSoldier { get; set; }
+        public ArmyManagementViewModel ArmyManagementViewModel { get; set; }
 
 
         
@@ -48,6 +41,7 @@ namespace Ift232UI
         {
             this.city = city;
             BuildingManagementViewModel = new BuildingManagementViewModel(city);
+            ArmyManagementViewModel = new ArmyManagementViewModel(city);
         }
 
    

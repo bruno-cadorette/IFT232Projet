@@ -32,8 +32,14 @@ namespace Ift232UI
                 return CityManagementViewModel.BuildingManagementViewModel;
             }
         }
+        public ArmyManagementViewModel ArmyManagementViewModel
+        {
+            get
+            {
+                return CityManagementViewModel.ArmyManagementViewModel;
+            }
+        }
         private bool boughtResourcesIsLoaded;
-        private bool comboBoxBuildingIsLoaded;
         private bool soldResourcesIsLoaded;
         private bool technologySelectedIsResearched;
 
@@ -57,46 +63,10 @@ namespace Ift232UI
             Turns.Content = Game.TurnIndex;
             Cities.Content = City;
             UnitBox.ItemsSource = ArmyFactory.GetInstance().Soldiers();
-            CurrentUnit.ItemsSource = City.Army.Where(n => !n.Type.InConstruction);
             TabArmy.IsEnabled = City.FinishedBuildings.Any(t => t is Casern);
             TabTrade.IsEnabled = City.FinishedBuildings.Any(t => t is Market);
             UpdateRessource();
             UpdateTechnologyTab();
-        }
-
-        private void cbSelectBuilding_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (!comboBoxBuildingIsLoaded)
-            {
-                var buildings = BuildingFactory.GetInstance().Buildings().ToArray();
-                foreach (var building in buildings)
-                {
-                    cbSelectBuilding.Items.Add(building.Name);
-                }
-                var firstBuilding = buildings.FirstOrDefault();
-                if (firstBuilding != null)
-                    cbSelectBuilding.SelectedValue = firstBuilding.Name;
-            }
-            comboBoxBuildingIsLoaded = true;
-        }
-
-
-        private void btnNewBuilding_Click(object sender, RoutedEventArgs e)
-        {
-            if (City.AddBuilding(cbSelectBuilding.SelectedIndex) != null)
-            {
-                MessageBox.Show("Bâtiment créé !!!");
-            }
-            else
-            {
-                MessageBox.Show("Le bâtiment n'a pu être créé faute de ressources!");
-            }
-            Update();
-        }
-
-        private void Listboxdereve_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Update();
         }
 
         private void SoldResources_Loaded(object sender, RoutedEventArgs e)
@@ -186,11 +156,6 @@ namespace Ift232UI
         }
 
 
-        private void Resourcesvilles_Loaded(object sender, RoutedEventArgs e)
-        {
-            UpdateRessource();
-        }
-
         private void UpdateRessource()
         {
             lbResGold.Content = City.Ressources[ResourcesType.Gold];
@@ -200,25 +165,6 @@ namespace Ift232UI
             lbResPop.Content = City.Ressources[ResourcesType.Population];
         }
 
-
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (SoldierQuantityBox.Value.HasValue)
-            {
-                int armyTypeId = ((Soldier)UnitBox.SelectedItem).ID;
-                int quantity = SoldierQuantityBox.Value.Value;
-                for (var i = 0; i < quantity; i++)
-                {
-                    if (!City.AddArmy(armyTypeId))
-                    {
-                        MessageBox.Show("Pas assez de ressource pour en produire!", "Production échouée",
-                            MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                        break;
-                    }
-                }
-                Update();
-            }
-        }
 
         private void FirstValue_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
@@ -361,39 +307,22 @@ namespace Ift232UI
             }
         }
 
-        private void UnitBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ArmyRequirementUpdate();
-        }
 
         private void ArmyRequirementUpdate()
         {
-            var army = (Soldier)UnitBox.SelectedItem;
-            if (army == null)
-                return;
+            Soldier army = null;
+            int number = 0;
+            ArmyRequirement.Content = "";
+            ArmyRequirement.Content += "Or : " + army.Requirement.Resources[ResourcesType.Gold] * number;
+            ArmyRequirement.Content += " / Viande : " + army.Requirement.Resources[ResourcesType.Meat] * number;
+            ArmyRequirement.Content += " / Bois : " + army.Requirement.Resources[ResourcesType.Wood] * number;
+            ArmyRequirement.Content += " / Roche : " + army.Requirement.Resources[ResourcesType.Rock] * number;
+            ArmyRequirement.Content += " / Population : " +
+                                       army.Requirement.Resources[ResourcesType.Population] * number;
 
-
-
-            if (SoldierQuantityBox.Value.HasValue)
-            {
-                int number = SoldierQuantityBox.Value.Value;
-                ArmyRequirement.Content = "";
-                ArmyRequirement.Content += "Or : " + army.Requirement.Resources[ResourcesType.Gold] * number;
-                ArmyRequirement.Content += " / Viande : " + army.Requirement.Resources[ResourcesType.Meat] * number;
-                ArmyRequirement.Content += " / Bois : " + army.Requirement.Resources[ResourcesType.Wood] * number;
-                ArmyRequirement.Content += " / Roche : " + army.Requirement.Resources[ResourcesType.Rock] * number;
-                ArmyRequirement.Content += " / Population : " +
-                                           army.Requirement.Resources[ResourcesType.Population] * number;
-            }
 
         }
 
-        private void SoldierQuantityBox_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            if (SoldierQuantityBox.Value < 0)
-                SoldierQuantityBox.Value = 0;
-            ArmyRequirementUpdate();
-        }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {

@@ -97,10 +97,10 @@
                         <ColumnDefinition Width="35*"/>
                         <ColumnDefinition Width="353*"/>
                     </Grid.ColumnDefinitions>
-                    <ComboBox Name="UnitBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,17,0,0" Width="95" SelectionChanged="UnitBox_SelectionChanged"/>
-                    <Button Content="Produire" Grid.Column="3" HorizontalAlignment="Left" Margin="250,18,0,0" VerticalAlignment="Top" Width="93" Click="ButtonBase_OnClick"/>
-                    <xctk:IntegerUpDown Name="SoldierQuantityBox" Grid.Column="3" HorizontalAlignment="Left" Height="23" Margin="62,17,0,0"  Watermark="Quantité à produire" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.507,0.203" ValueChanged="SoldierQuantityBox_ValueChanged"/>
-                    <xctk:CheckListBox Name="CurrentUnit" Grid.ColumnSpan="4" Grid.Column="0" HorizontalAlignment="Left" Height="144" Margin="76,98,0,0" VerticalAlignment="Top" Width="473"/>
+                    <ComboBox Name="UnitBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,17,0,0" Width="95" ItemsSource="{Binding ArmyManagementViewModel.SoldierTypes}"/>
+                    <Button Content="Produire" Grid.Column="3" HorizontalAlignment="Left" Margin="250,18,0,0" VerticalAlignment="Top" Width="93" Command="{Binding ArmyManagementViewModel.TrainSoldiers}" CommandParameter="{Binding ElementName=UnitBox, Path=SelectedItem}"/>
+                    <xctk:IntegerUpDown Grid.Column="3" HorizontalAlignment="Left" Height="23" Margin="62,17,0,0"  Watermark="Quantité à produire" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.507,0.203" Value="{Binding ArmyManagementViewModel.NumberToCreate}"/>
+                    <xctk:CheckListBox ItemsSource="{Binding ArmyManagementViewModel.CurrentArmy}" Grid.ColumnSpan="4" Grid.Column="0" HorizontalAlignment="Left" Height="144" Margin="76,98,0,0" VerticalAlignment="Top" Width="473"/>
                     <Label Name="ArmyRequirement" Grid.ColumnSpan="4" Content=" " HorizontalAlignment="Center" Height="28" Margin="76,56,68.594,0" VerticalAlignment="Top" Width="473"/>
                 </Grid>
             </TabItem>
