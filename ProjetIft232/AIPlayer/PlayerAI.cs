@@ -48,7 +48,7 @@ namespace Core
                 {
                     case 0: // Random army creation
                     {
-                        cityTaken.AddArmy(armyValues[rd.Next(armyValues.Length)]);
+                        cityTaken.AddArmy(armyValues[rd.Next(armyValues.Length)], 1);
                     }
                         break;
                     case 2:

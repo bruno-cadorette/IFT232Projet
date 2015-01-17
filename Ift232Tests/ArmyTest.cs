@@ -72,8 +72,8 @@ namespace Ift232Tests
         {
             SetUp();
 
-            city.AddArmy(0);
-            city.AddArmy(0);
+            city.AddArmy(0, 1);
+            city.AddArmy(0, 1);
             city.Update();
             city.Update();
             city.Update();
@@ -87,7 +87,7 @@ namespace Ift232Tests
         public void AttackLostTest()
         {
             SetUp();
-            city.AddArmy(0);
+            city.AddArmy(0, 1);
             city.Update();
             city.Update();
             city.Update();

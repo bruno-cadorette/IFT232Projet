@@ -16,6 +16,7 @@ namespace Core
         End
     }
 
+    //A enlever parce que c'est fucking laid
     public class Resource
     {
         public static Dictionary<ResourcesType, string> Name = new Dictionary<ResourcesType, string>

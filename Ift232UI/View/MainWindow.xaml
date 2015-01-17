@@ -2,9 +2,13 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
-        Title="MainWindow" Height="433.382" Width="631.156"
-        Icon="ResourcesIcon/icon.ico">
-
+        xmlns:local="clr-namespace:Ift232UI"
+        xmlns:helper="clr-namespace:GameHelper;assembly=GameHelper"
+        Title="{Binding City.Name}" Height="433.382" Width="631.156"
+        Icon="../ResourcesIcon/icon.ico">
+    <Window.Resources>
+        <local:BuildingToStringConverter x:Key="BuildingToStringConverter" />
+    </Window.Resources>
     <Grid Name="MyGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="103*"/>
@@ -22,14 +26,12 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <ComboBox Name="Players" Grid.Row="0" Grid.Column="0" IsReadOnly="True" SelectionChanged="Players_SelectionChanged" />
+            <ComboBox Name="Players" Grid.Row="0" Grid.Column="0" IsReadOnly="True" />
             <DockPanel  Grid.Row="0" Grid.Column="2" Margin="0,0,75,0">
                 <Label>Tour:</Label>
                 <Label x:Name="Turns" Content="" Width="94" Height="30" VerticalAlignment="Bottom" RenderTransformOrigin="0.316,0.5"/>
             </DockPanel>
-            <Button Name="NextTurn" Content="Prochain Tour" Grid.Column="2" HorizontalAlignment="Left" Margin="121,0,0,0" VerticalAlignment="Top" Width="86" Height="30" Click="NextTurn_Click"/>
-            <Label Name="Cities" Grid.Column="1" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" Width="146"/>
-            <Button Name="getCities" Content="->" Grid.Column="1" HorizontalAlignment="Left" Margin="146,2,0,0" VerticalAlignment="Top" Width="57" Height="28" Click="getCities_Click"/>
+            <Label Content="{Binding CityManagementViewModel.CityName}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" Width="146"/>
         </Grid>
         <StackPanel Grid.Row="1" Grid.Column="0" FlowDirection="LeftToRight" Orientation="Horizontal">
             <StackPanel.Background>
@@ -41,16 +43,16 @@
                 </LinearGradientBrush>
             </StackPanel.Background>
 
-            <Image Source="ResourcesIcon/gold.png" />
-            <Label Name="lbResGold" />
-            <Image Source="ResourcesIcon/meat.png" />
-            <Label Name="lbResMeat" />
-            <Image Source="ResourcesIcon/wood.png" />
-            <Label Name="lbResWood" />
-            <Image Source="ResourcesIcon/rock.png" />
-            <Label Name="lbResRock" />
-            <Image Source="ResourcesIcon/population.png" />
-            <Label Name="lbResPop" />
+            <Image Source="../ResourcesIcon/gold.png" />
+            <Label Name="lbResGold" Content="{Binding CityManagementViewModel.Resources.Gold}" />
+            <Image Source="../ResourcesIcon/meat.png" />
+            <Label Name="lbResMeat" Content="{Binding CityManagementViewModel.Resources.Meat}" />
+            <Image Source="../ResourcesIcon/wood.png" />
+            <Label Name="lbResWood" Content="{Binding CityManagementViewModel.Resources.Wood}" />
+            <Image Source="../ResourcesIcon/rock.png" />
+            <Label Name="lbResRock" Content="{Binding CityManagementViewModel.Resources.Rock}" />
+            <Image Source="../ResourcesIcon/population.png" />
+            <Label Name="lbResPop" Content="{Binding CityManagementViewModel.Resources.Population}" />
         </StackPanel>
         <!--<TextBox Name="Resourcesvilles" IsEnabled="False" HorizontalAlignment="Left" Height="28" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" Width="188" Loaded="Resourcesvilles_Loaded"/>-->
 
@@ -74,16 +76,14 @@
                         <ColumnDefinition Width="17*"/>
                         <ColumnDefinition Width="371*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Name="btnNewCity" Content="Créer ville" Grid.Column="8" HorizontalAlignment="Left" Margin="124,48,0,0" VerticalAlignment="Top" Width="119" Height="29" Click="btnNewCity_Click"/>
-                    <Button Name="btnNewBuilding" Content="Créer bâtiment" HorizontalAlignment="Left" Margin="124,147,0,0" VerticalAlignment="Top" Width="132" Height="101" Grid.Column="8" Click="btnNewBuilding_Click"/>
-                    <TextBox Name="tbNewCity" HorizontalAlignment="Left" Height="23" Margin="0,51,0,0" TextWrapping="Wrap" Text="Nom future ville" VerticalAlignment="Top" Width="120" Grid.Column="7" Grid.ColumnSpan="2"/>
-                    <ComboBox Name="cbSelectBuilding" HorizontalAlignment="Left" Margin="0,104,0,0" VerticalAlignment="Top" Width="120" Grid.Column="7" Loaded="cbSelectBuilding_Loaded" SelectionChanged="cbSelectBuilding_SelectionChanged" Grid.ColumnSpan="2"/>
-                    <TextBox Name="tbBuildingDatas" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" Grid.ColumnSpan="9" HorizontalAlignment="Left" Height="101" Margin="10,147,0,0" Text="Données sur bâtiment" VerticalAlignment="Top" Width="326"/>
+                    <Button Name="btnNewBuilding" Content="Créer bâtiment" HorizontalAlignment="Left" Margin="124,147,0,0" VerticalAlignment="Top" Width="132" Height="101" Grid.Column="8" 
+                            Command="{Binding BuildingManagementViewModel.CreateBuilding}" CommandParameter="{Binding ElementName=cbSelectBuilding, Path=SelectedItem}"/>
+                    <ComboBox Name="cbSelectBuilding" HorizontalAlignment="Left" Margin="0,104,0,0" VerticalAlignment="Top" Width="120" Grid.Column="7" ItemsSource="{Binding BuildingManagementViewModel.BuildingTypes}" Grid.ColumnSpan="2"/>
+                    <TextBox Text="{Binding ElementName=cbSelectBuilding, Path=SelectedItem, Converter={StaticResource BuildingToStringConverter}}" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" Grid.ColumnSpan="9" HorizontalAlignment="Left" Height="101" Margin="10,147,0,0" VerticalAlignment="Top" Width="326"/>
                     <Label Content="Sélectionnez un bâtiment :" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top" Width="175" Grid.ColumnSpan="6"/>
-                    <Label Content="Nommez votre ville : " HorizontalAlignment="Left" Margin="10,48,0,0" VerticalAlignment="Top" Grid.ColumnSpan="6" Width="129"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Armée" Name="TabArmy">
+            <TabItem Header="Armée" IsEnabled="{Binding CityManagementViewModel.CanRecruitSoldiers}" Name="TabArmy">
                 <TabItem.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="#FFF7F3F3" Offset="0.344"/>
@@ -97,16 +97,14 @@
                         <ColumnDefinition Width="35*"/>
                         <ColumnDefinition Width="353*"/>
                     </Grid.ColumnDefinitions>
-                    <ComboBox Name="UnitBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,17,0,0" Width="95" SelectionChanged="UnitBox_SelectionChanged"/>
-                    <Button Content="Produire" Grid.Column="3" HorizontalAlignment="Left" Margin="250,18,0,0" VerticalAlignment="Top" Width="93" Click="ButtonBase_OnClick"/>
-                    <xctk:IntegerUpDown Name="SoldierQuantityBox" Grid.Column="3" HorizontalAlignment="Left" Height="23" Margin="62,17,0,0"  Watermark="Quantité à produire" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.507,0.203" ValueChanged="SoldierQuantityBox_ValueChanged"/>
-                    <xctk:CheckListBox Name="CurrentUnit" Grid.ColumnSpan="4" Grid.Column="0" HorizontalAlignment="Left" Height="144" Margin="76,98,0,0" VerticalAlignment="Top" Width="473"/>
-                    <Button Content="Attaquer !!!" HorizontalAlignment="Left" Margin="76,242,0,0" VerticalAlignment="Top" Width="473" Grid.ColumnSpan="4"
-                            Grid.Column="0" Height="39" Click="btnAttaquer"/>
+                    <ComboBox Name="UnitBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,17,0,0" Width="95" ItemsSource="{Binding ArmyManagementViewModel.SoldierTypes}"/>
+                    <Button Content="Produire" Grid.Column="3" HorizontalAlignment="Left" Margin="250,18,0,0" VerticalAlignment="Top" Width="93" Command="{Binding ArmyManagementViewModel.TrainSoldiers}" CommandParameter="{Binding ElementName=UnitBox, Path=SelectedItem}"/>
+                    <xctk:IntegerUpDown Grid.Column="3" HorizontalAlignment="Left" Height="23" Margin="62,17,0,0"  Watermark="Quantité à produire" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.507,0.203" Value="{Binding ArmyManagementViewModel.NumberToCreate}"/>
+                    <xctk:CheckListBox ItemsSource="{Binding ArmyManagementViewModel.CurrentArmy}" Grid.ColumnSpan="4" Grid.Column="0" HorizontalAlignment="Left" Height="144" Margin="76,98,0,0" VerticalAlignment="Top" Width="473"/>
                     <Label Name="ArmyRequirement" Grid.ColumnSpan="4" Content=" " HorizontalAlignment="Center" Height="28" Margin="76,56,68.594,0" VerticalAlignment="Top" Width="473"/>
                 </Grid>
             </TabItem>
-            <TabItem Name="TabTrade" Header="Marché" Height="22" VerticalAlignment="Top">
+            <TabItem Name="TabTrade" IsEnabled="{Binding CityManagementViewModel.CanTrade}" Header="Marché" Height="22" VerticalAlignment="Top">
                 <TabItem.Background>
                     <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                         <GradientStop Color="#FFF3F3F3" Offset="0"/>
@@ -196,44 +194,14 @@
                         <ColumnDefinition Width="130*"/>
                         <ColumnDefinition Width="125*"/>
                     </Grid.ColumnDefinitions>
-                    <ListBox Name="Listboxdereve" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="160" Height="200" Loaded="ListBox_Loaded" Grid.ColumnSpan="2" SelectionChanged="Listboxdereve_SelectionChanged"/>
+                    <ListBox helper:SelectionBehavior.SelectionChanged="{Binding BuildingManagementViewModel.ShowBuildingsStatus}" ItemsSource="{Binding BuildingManagementViewModel.BuildingTypes}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="160" Height="200" Grid.ColumnSpan="2"/>
                     <Label Name="Nbrcree" Content="Nombre de batiments créés" HorizontalAlignment="Center" Margin="32,40,124,242" VerticalAlignment="Center" Width="166" Height="30" Grid.Column="2" Grid.ColumnSpan="3"/>
-                    <TextBox Name="tnbrbat" IsEnabled="False" HorizontalAlignment="Left" Height="22" Margin="2,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="71" Grid.Column="5"/>
+                    <TextBox Text="{Binding BuildingManagementViewModel.BuildingCount}" IsEnabled="False" HorizontalAlignment="Left" Height="22" Margin="2,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="71" Grid.Column="5"/>
                     <Label Name="NBProd" Content="Nombre de batiments en construction" HorizontalAlignment="Center" Margin="32,82,78,200" VerticalAlignment="Center" Width="212" Height="30" Grid.Column="2" Grid.ColumnSpan="3"/>
-                    <TextBox Name="NBProdTextBox" IsEnabled="False" HorizontalAlignment="Left" Height="24" Margin="0,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="71" Grid.Column="5"/>
+                    <TextBox Text="{Binding BuildingManagementViewModel.InConstructionCount}" IsEnabled="False" HorizontalAlignment="Left" Height="24" Margin="0,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="71" Grid.Column="5"/>
 
                 </Grid>
-            </TabItem>
-            <TabItem Header="Options">
-                <Grid Background="#FFF0F0F0"  >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50*"/>
-                        <ColumnDefinition Width="7*"/>
-                        <ColumnDefinition Width="442*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button Name="btnSave" Content="SAUVEGARDE" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" Width="190" Grid.ColumnSpan="3" Height="68" RenderTransformOrigin="0.5,0.5" Click="btnSave_Click">
-                        <Button.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="0.186"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Button.RenderTransform>
-                    </Button>
-                    <Button Name ="BtnLoad" Content="CHARGER PARTIE" HorizontalAlignment="Left" Margin="10,121,0,0" VerticalAlignment="Top" Width="179" Grid.ColumnSpan="3" Height="36" Click="BtnLoad_Click"/>
-                    <Button Name ="BtnSaveNQuit" Content="SAUVEGARDER ET QUITTER" Grid.Column="2" HorizontalAlignment="Left" Margin="203,40,0,0" VerticalAlignment="Top" Width="244" Height="98" Click="Button_Click"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Carte">
-                <UniformGrid x:Name="Map">
-                    
-                    
-                </UniformGrid>
-            </TabItem>
+            </TabItem> 
         </TabControl>
-        <Popup Name="popup"  VerticalOffset="20"  PlacementRectangle="300,140,100,150" PopupAnimation="Fade"  AllowsTransparency="True" Margin="300,100,100,10" Placement="Mouse"  IsOpen="False">
-            <Label Name="labelPopup" Content="This is help!" Height="112" />
-        </Popup>
     </Grid>
 </Window>

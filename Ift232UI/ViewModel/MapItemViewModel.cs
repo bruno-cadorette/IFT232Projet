@@ -17,6 +17,10 @@ namespace Ift232UI
         {
             get
             {
+                if(!Info.IsVisible)
+                {
+                    return Brushes.Black;
+                }
                 if (Info.Item == null)
                 {
                     return Brushes.Gray;
@@ -31,7 +35,7 @@ namespace Ift232UI
                 }
                 else
                 {
-                    return Brushes.Black;
+                    return Brushes.Pink;
                 }
             }
         }

@@ -8,6 +8,7 @@ namespace Core.Map
 {
     public class Land
     {
+        public int ID { get; set; }
         public SoldierAttributes AttackerBonus { get; set; }
         public SoldierAttributes DefenderBonus { get; set; }
         public bool CanBeTraveled { get; set; }

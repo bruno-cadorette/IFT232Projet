@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace GameHelper
 {
-    public class MacroRelayCommand<T> : List<RelayCommand<T>>,  ICommand
+    public class MacroRelayCommand<T> : List<ICommand>, ICommand
     {
         private Predicate<T> canExecute;
         public MacroRelayCommand() : this(x=>true)

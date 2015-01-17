@@ -25,7 +25,7 @@ namespace Ift232UI
             InitializeComponent();
             Inscription inscription = new Inscription();
             inscription.ShowDialog();
-            MapViewModel = new MapViewModel(inscription.GetGame());
+            MapViewModel = new MapViewModel(inscription.GetGame(), city => new MainWindow(city).ShowDialog());
             this.DataContext = MapViewModel;
         }
     }

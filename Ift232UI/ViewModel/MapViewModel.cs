@@ -10,7 +10,7 @@ using Core;
 
 namespace Ift232UI
 {
-    public class MapViewModel
+    public class MapViewModel : BindableBase
     {
         public ObservableCollection<MapItemViewModel> Tiles { get; set; }
         public Position MaxBound
@@ -27,30 +27,41 @@ namespace Ift232UI
                 return new Position(WorldMap.MaxBound.X * 32, WorldMap.MaxBound.Y * 32);
             }
         }
+
+        public int TurnIndex
+        {
+            get
+            {
+                return game.TurnIndex;
+            }
+        }
         public Position SelectedCell { get; set; }
         public ICommand SelectCell { get; private set; }
         public ICommand SettleGround { get; private set; }
         public ICommand AdministrateCity { get; private set; }
         public ICommand NextTurn { get; private set; }
+        private Action<City> openCityWindow;
         private Game game;
 
-        public MapViewModel(Game game)
+        public MapViewModel(Game game, Action<City> openCityWindow)
         {
             this.game = game;
+            this.openCityWindow = openCityWindow;
             var unSelect = new RelayCommand<Position>(x => SelectedCell = null);
             var updateMap = new RelayCommand<Position>(_ =>
             {
                 Tiles.Clear();
-                foreach (var tile in game.WorldMap.Select(x=>new MapItemViewModel(x)))
+                
+                foreach (var tile in game.WorldMap.GetAllCellsForPlayer(game.CurrentPlayer.ID).Select(x => new MapItemViewModel(x)))
                 {
                     Tiles.Add(tile);
                 }
             });
-            Tiles = new ObservableCollection<MapItemViewModel>(game.WorldMap.Select(x=>new MapItemViewModel(x)));
+            Tiles = new ObservableCollection<MapItemViewModel>(game.WorldMap.GetAllCellsForPlayer(0).Select(x => new MapItemViewModel(x)));
             SelectCell = new RelayCommand<int>(i =>
                 {
-                    int x = i % MaxBound.X;
-                    int y = i / MaxBound.Y;
+                    int x = i / MaxBound.X;
+                    int y = i % MaxBound.Y;
                     var position = new Position(x, y);
                     if (SelectedCell != null)
                     {
@@ -61,6 +72,10 @@ namespace Ift232UI
                     else
                     {
                         SelectedCell = position;
+                        if (game.WorldMap[SelectedCell] is City)
+                        {
+                            AdministrateCity.Execute(SelectedCell);
+                        }
                     }
                 },
                 x => SelectedCell == null || game.WorldMap[SelectedCell] is MovableItem);
@@ -72,11 +87,19 @@ namespace Ift232UI
             };
             NextTurn = new MacroRelayCommand<Position>()
             {
-                new RelayCommand<Position>(x => game.NextTurn()),
+                new RelayCommand<Position>(x => 
+                    {
+                        game.NextTurn();
+                        this.OnPropertyChanged("TurnIndex");
+                    }),
                 updateMap
             };
 
-            AdministrateCity = new RelayCommand<Position>(x => { }, x => game.WorldMap[x] is City);
+            AdministrateCity = new MacroRelayCommand<Position>()
+            {
+                new RelayCommand<Position>(x => openCityWindow(game.WorldMap[x] as City), x => game.WorldMap[x] is City),
+                unSelect
+            };
         }
     }
 }
