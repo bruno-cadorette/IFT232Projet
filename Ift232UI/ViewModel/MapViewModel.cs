@@ -44,13 +44,14 @@ namespace Ift232UI
         public ICommand NextTurn { get; private set; }
         private Action<City> openCityWindow;
         private Game game;
-        private BitmapSource[] tiles;
+        private Dictionary<int, BitmapSource> tiles;
 
         public MapViewModel(Game game, Action<City> openCityWindow)
         {
             this.game = game;
             this.openCityWindow = openCityWindow;
-            tiles = new TileSetGenerator(GameConfig.Instance.WorldMapLandscape.TileSet, 32, 32).GetTiles().ToArray();
+            var usedLandId = GameConfig.Instance.WorldMapLandscape.Lands.Select(x=>x.ID).Distinct();
+            tiles = new TileSetGenerator(GameConfig.Instance.WorldMapLandscape.TileSet, 32, 32).GetUsedTiles(usedLandId);
             var unSelect = new RelayCommand<Position>(x => SelectedCell = null);
             var updateMap = new RelayCommand<Position>(_ =>
             {
