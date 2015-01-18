@@ -1,4 +1,6 @@
-﻿using GameBuilder.Utility;
+﻿using Core;
+using Core.Configuration;
+using Core.Map;
 using GameHelper;
 using System;
 using System.Collections.Generic;
@@ -19,11 +21,25 @@ namespace GameBuilder
         public LandscapeViewModel SelectedLandscape { get; set; }
         public int Height { get; set; }
         public int Width { get; set; }
+        public int PixelHeight 
+        { 
+            get
+            {
+                return Height * 32;
+            }
+        }
+        public int PixelWidth
+        {
+            get
+            {
+                return Width * 32;
+            }
+        }
         public bool FillMode { get; set; }
         public bool ColorSelector { get; set; }
         public bool EraseMode { get; set; }
         public ICommand ChangeLand { get; private set; }
-        public ICommand SaveLand { get; private set; }
+        public ICommand Save { get; private set; }
         public ICommand SelectLandscape { get; private set; }
 
         public MapEditorViewModel(TileSetGenerator tileSetGenerator, int width, int height)
@@ -52,6 +68,18 @@ namespace GameBuilder
                     {
                         LandscapeTiles[i] = EraseMode ? LandscapeViewModel.DefaultLandscape : SelectedLandscape;
                     }
+                });
+            Save = new RelayCommand<object>(_ =>
+                {
+                    new GameConfigData()
+                    {
+                        Landscape = new LandscapeConfig(tileSetGenerator.Path, LandscapeTiles.Select(x => new Land()
+                        {
+                            ID = x.ID
+                        }), Width, Height),
+                        Entities = Enumerable.Empty<BuildableEntity>()
+                    }.Save("newConfig.xml");
+
                 });
             SelectLandscape = new RelayCommand<LandscapeViewModel>(x => SelectedLandscape = x);
         }

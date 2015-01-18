@@ -1,4 +1,4 @@
-﻿using GameBuilder.Utility;
+﻿using GameHelper;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,7 +24,7 @@ namespace GameBuilder
         public MapEditorViewModel mapEditorViewModel { get; set; }
         public MapEditor()
         {
-            mapEditorViewModel = new MapEditorViewModel(new TileSetGenerator("tileset.png",32,32),100,100);
+            mapEditorViewModel = new MapEditorViewModel(new TileSetGenerator("tileset.png",32,32),15,15);
             DataContext = mapEditorViewModel;
             InitializeComponent();
             

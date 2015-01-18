@@ -7,6 +7,8 @@ using System.Text;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Core;
+using System.Windows.Media.Imaging;
+using Core.Configuration;
 
 namespace Ift232UI
 {
@@ -42,22 +44,24 @@ namespace Ift232UI
         public ICommand NextTurn { get; private set; }
         private Action<City> openCityWindow;
         private Game game;
+        private BitmapSource[] tiles;
 
         public MapViewModel(Game game, Action<City> openCityWindow)
         {
             this.game = game;
             this.openCityWindow = openCityWindow;
+            tiles = new TileSetGenerator(GameConfig.Instance.WorldMapLandscape.TileSet, 32, 32).GetTiles().ToArray();
             var unSelect = new RelayCommand<Position>(x => SelectedCell = null);
             var updateMap = new RelayCommand<Position>(_ =>
             {
                 Tiles.Clear();
-                
-                foreach (var tile in game.WorldMap.GetAllCellsForPlayer(game.CurrentPlayer.ID).Select(x => new MapItemViewModel(x)))
+
+                foreach (var tile in MapItems())
                 {
                     Tiles.Add(tile);
                 }
             });
-            Tiles = new ObservableCollection<MapItemViewModel>(game.WorldMap.GetAllCellsForPlayer(0).Select(x => new MapItemViewModel(x)));
+            Tiles = new ObservableCollection<MapItemViewModel>(MapItems());
             SelectCell = new RelayCommand<int>(i =>
                 {
                     int x = i / MaxBound.X;
@@ -100,6 +104,10 @@ namespace Ift232UI
                 new RelayCommand<Position>(x => openCityWindow(game.WorldMap[x] as City), x => game.WorldMap[x] is City),
                 unSelect
             };
+        }
+        private IEnumerable<MapItemViewModel> MapItems()
+        {
+            return game.WorldMap.GetAllCellsForPlayer(game.CurrentPlayer.ID).Select(x => new MapItemViewModel(x, tiles[x.Land.ID]));
         }
     }
 }

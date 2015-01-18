@@ -1,5 +1,4 @@
-﻿using GameBuilder.Utility;
-using GameHelper;
+﻿using GameHelper;
 using System;
 using System.Collections.Generic;
 using System.Linq;

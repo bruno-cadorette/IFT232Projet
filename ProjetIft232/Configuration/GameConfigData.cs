@@ -14,11 +14,11 @@ namespace Core.Configuration
         [DataMember]
         public IEnumerable<BuildableEntity> Entities { get; set; }
         [DataMember]
-        public Landscape Landscape { get; set; }
+        public LandscapeConfig Landscape { get; set; }
 
         public GameConfigData()
         {
-
+            
         }
         public static GameConfigData Load(string fileName)
         {
@@ -27,6 +27,15 @@ namespace Core.Configuration
                 DataContractSerializer serializer = new DataContractSerializer(typeof(GameConfigData));
                 fileStream.Position = 0;
                 return serializer.ReadObject(fileStream) as GameConfigData;
+            }
+        }
+
+        public void Save(string fileName)
+        {
+            using (var fileStream = File.Create(fileName))
+            {
+                DataContractSerializer serializer = new DataContractSerializer(typeof(GameConfigData));
+                serializer.WriteObject(fileStream, this);
             }
         }
     }

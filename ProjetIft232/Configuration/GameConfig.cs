@@ -15,7 +15,7 @@ namespace Core.Configuration
     {
         private GameConfig()
         {
-            var data = GameConfigData.Load("config.xml");
+            var data = GameConfigData.Load("newConfig.xml");
             BuildingFactory = new BuildableEntityFactory<Building>(data.Entities.OfType<Building>());
             SoldierFactory = new BuildableEntityFactory<Soldier>(data.Entities.OfType<Soldier>());
             TechnologyFactory = new BuildableEntityFactory<Technology>(data.Entities.OfType<Technology>());
@@ -24,6 +24,6 @@ namespace Core.Configuration
         public BuildableEntityFactory<Building> BuildingFactory { get; private set; }
         public BuildableEntityFactory<Soldier> SoldierFactory { get; private set; }
         public BuildableEntityFactory<Technology> TechnologyFactory { get; private set; }
-        public Landscape WorldMapLandscape { get; private set; }
+        public LandscapeConfig WorldMapLandscape { get; private set; }
     }
 }

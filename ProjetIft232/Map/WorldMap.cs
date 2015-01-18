@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,12 +12,11 @@ namespace Core.Map
         private Land[,] landScape = new Land[MaxBound.X, MaxBound.Y];
         public WorldMap()
         {
-            for (int i = 0; i < landScape.GetUpperBound(0); i++)
+            int i = 0;
+            foreach (var land in GameConfig.Instance.WorldMapLandscape.Lands)
             {
-                for (int j = 0; j < landScape.GetUpperBound(1); j++)
-                {
-                    landScape[i, j] = new Land();
-                }
+                landScape[i / MaxBound.X, i % MaxBound.Y] = land;
+                i++;
             }
         }
         public static Position MinBound
@@ -30,7 +30,7 @@ namespace Core.Map
         {
             get
             {
-                return new Position(15, 15);
+                return new Position(GameConfig.Instance.WorldMapLandscape.Witdh, GameConfig.Instance.WorldMapLandscape.Height);
             }
         }
 
@@ -50,18 +50,22 @@ namespace Core.Map
         }
         private IEnumerable<Position> VisibleCells(Position position)
         {
-            if(map.ContainsKey(position))
+            if (map.ContainsKey(position))
             {
-                for (int i = 0; i < 2 * map[position].VisionRange+1; i++)
+                for (int i = 0; i < 2 * map[position].VisionRange + 1; i++)
                 {
                     int x = position.X - map[position].VisionRange + i;
-                    for (int j = 0; j < 2 * map[position].VisionRange+1; j++)
+                    for (int j = 0; j < 2 * map[position].VisionRange + 1; j++)
                     {
                         int y = position.Y - map[position].VisionRange + j;
                         yield return new Position(x, y);
                     }
                 }
             }
+        }
+        public Land LandAtPosition(Position position)
+        {
+            return landScape[position.X, position.Y];
         }
         public void UpdateFogOfWar()
         {
@@ -103,7 +107,7 @@ namespace Core.Map
         public void ConvertItem(Position position)
         {
             var newItem = (map[position] as IMapItemConverter).Convert();
-            if (newItem!=null)
+            if (newItem != null)
             {
                 map[position] = newItem;
             }
@@ -151,7 +155,7 @@ namespace Core.Map
         }
         public void Add(Position position, WorldMapItem item)
         {
-            if(IsValid(position))
+            if (IsValid(position))
             {
                 map.Add(position, item);
             }
@@ -188,7 +192,7 @@ namespace Core.Map
         {
             get
             {
-                return map.ContainsKey(key)?map[key]:null;
+                return map.ContainsKey(key) ? map[key] : null;
             }
         }
 

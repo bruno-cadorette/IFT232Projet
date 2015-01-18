@@ -6,29 +6,29 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
-namespace GameBuilder.Utility
+namespace GameHelper
 {
     public class TileSetGenerator
     {
-        private string path;
-        private int height;
-        private int width;
+        public string Path { get; private set; }
+        public int Height { get; private set; }
+        public int Width { get; private set; }
         private int borderSize;
         public TileSetGenerator(string path, int height, int width, int borderSize = 0)
         {
-            this.path = path;
-            this.height = height;
-            this.width = width;
+            Path = path;
+            Height = height;
+            Width = width;
             this.borderSize = borderSize;
         }
         public IEnumerable<BitmapSource> GetTiles()
         {
-            BitmapImage tileset = new BitmapImage(new Uri(path, UriKind.Relative));
-            for (int y = 0; y < tileset.PixelHeight - borderSize; y += height + borderSize)
+            BitmapImage tileset = new BitmapImage(new Uri(Path, UriKind.Relative));
+            for (int y = 0; y < tileset.PixelHeight - borderSize; y += Height + borderSize)
             {
-                for (int x = 0; x < tileset.PixelWidth - borderSize; x += width + borderSize)
+                for (int x = 0; x < tileset.PixelWidth - borderSize; x += Width + borderSize)
                 {
-                    Int32Rect area = new Int32Rect(x, y, width, height);
+                    Int32Rect area = new Int32Rect(x, y, Width, Height);
                     yield return new CroppedBitmap(tileset, area);
                     
                 }

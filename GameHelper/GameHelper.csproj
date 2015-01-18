@@ -50,6 +50,7 @@
     <Compile Include="RelayCommand.cs" />
     <Compile Include="SelectionBehavior.cs" />
     <Compile Include="Singleton.cs" />
+    <Compile Include="TileSetGenerator.cs" />
     <Compile Include="TrulyObservableCollection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

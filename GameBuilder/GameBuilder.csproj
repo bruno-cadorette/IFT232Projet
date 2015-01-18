@@ -69,7 +69,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Utility\TileSetGenerator.cs" />
     <Compile Include="ViewModel\LandscapeViewModel.cs" />
     <Compile Include="View\MapEditor.xaml.cs">
       <DependentUpon>MapEditor.xaml</DependentUpon>

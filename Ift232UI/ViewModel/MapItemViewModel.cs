@@ -7,12 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Ift232UI
 {
     public class MapItemViewModel
     {
-        public MapCellInfo Info { get; set; }
+        public MapCellInfo Info { get; private set; }
+        private BitmapSource tile;
         public Brush Brush
         {
             get
@@ -23,7 +25,7 @@ namespace Ift232UI
                 }
                 if (Info.Item == null)
                 {
-                    return Brushes.Gray;
+                    return new ImageBrush(tile);
                 }
                 else if(Info.Item is City)
                 {
@@ -39,9 +41,10 @@ namespace Ift232UI
                 }
             }
         }
-        public MapItemViewModel(MapCellInfo info)
+        public MapItemViewModel(MapCellInfo info, BitmapSource tile)
         {
             Info = info;
+            this.tile = tile;
         }
     }
 }

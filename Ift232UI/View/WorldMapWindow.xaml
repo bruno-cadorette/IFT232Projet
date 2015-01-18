@@ -9,8 +9,8 @@
     </Window.Resources>
     <Grid>
         
-        <Button Content="SettleDown" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" />
-        <Button Content="NextTurn" Command="{Binding NextTurn}" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Content="SettleDown" HorizontalAlignment="Left" Margin="10,89,0,0" VerticalAlignment="Top" Width="75" />
+        <Button Content="NextTurn" Command="{Binding NextTurn}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Left"  Margin="153,0,0,0" VerticalAlignment="Top">
             <ItemsControl ItemsSource="{Binding Tiles}" AlternationCount="{Binding Tiles.Count}">
                 <ItemsControl.ItemTemplate>
@@ -35,6 +35,7 @@
             </ItemsControl>
         </ScrollViewer>
         <Label Content="{Binding TurnIndex}" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top"/>
+        <Button Content="Manage" HorizontalAlignment="Left" Margin="10,114,0,0" VerticalAlignment="Top" Width="75" />
 
 
 

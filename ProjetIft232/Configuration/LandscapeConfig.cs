@@ -9,17 +9,23 @@ using System.Threading.Tasks;
 namespace Core.Configuration
 {
     [DataContract]
-    public class Landscape
+    public class LandscapeConfig
     {
         [DataMember]
         public string TileSet { get; private set; }
         [DataMember]
         public IEnumerable<Land> Lands { get; private set; }
+        [DataMember]
+        public int Witdh { get; private set; }
+        [DataMember]
+        public int Height { get; private set; }
 
-        public Landscape (string tileSet, IEnumerable<Land> lands)
+        public LandscapeConfig (string tileSet, IEnumerable<Land> lands, int width, int height)
         {
             TileSet = tileSet;
             Lands = lands;
+            Witdh = width;
+            Height = height;
         }
     }
 }

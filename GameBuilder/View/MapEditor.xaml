@@ -5,7 +5,7 @@
     <Grid>
             <ToggleButton Content="Fill" IsChecked="{Binding FillMode}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
             <ToggleButton Content="Erase" IsChecked="{Binding EraseMode}" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="75"/>
-            <ScrollViewer Width="115" HorizontalAlignment="Left" Margin="0,75,0,0">
+            <ScrollViewer Width="115" HorizontalAlignment="Left" Margin="0,96,0,0">
                 <ItemsControl ItemsSource="{Binding LandscapeSelector}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -26,7 +26,7 @@
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </ScrollViewer>
-            
+        <Button Content="Save" Command="{Binding Save}" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" Width="75"/>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Left"  Margin="153,0,0,0" VerticalAlignment="Top">
             <ItemsControl ItemsSource="{Binding LandscapeTiles}" AlternationCount="{Binding LandscapeTiles.Count}">
                 <ItemsControl.ItemTemplate>
@@ -44,7 +44,7 @@
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel Width="3200" Height="3200"/>
+                        <WrapPanel Width="{Binding PixelWidth}" Height="{Binding PixelHeight}"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
