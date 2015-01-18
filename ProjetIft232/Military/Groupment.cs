@@ -29,12 +29,14 @@ namespace Core.Military
             }
         }
 
-        public Groupment(Soldier soldier)
+        public Groupment(Soldier soldier):this(soldier, 1)
+        {
+        }
+        public Groupment(Soldier soldier, int size)
         {
             Type = soldier;
-            Size = 1;
+            Size = size;
             health = Type.Attributes.Health;
-
         }
         public void Add(int n)
         {

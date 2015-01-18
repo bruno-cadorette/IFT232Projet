@@ -56,6 +56,10 @@
     <Compile Include="AIPlayer\Brain\ActionNode.cs" />
     <Compile Include="AIPlayer\Brain\ImprovmentNode.cs" />
     <Compile Include="AIPlayer\Brain\WatcherNode.cs" />
+    <Compile Include="Configuration\GameConfig.cs" />
+    <Compile Include="Configuration\BuildableEntityFactory.cs" />
+    <Compile Include="Configuration\GameConfigData.cs" />
+    <Compile Include="Configuration\LandscapeConfig.cs" />
     <Compile Include="Map\IMapItemConverter.cs" />
     <Compile Include="Map\Land.cs" />
     <Compile Include="Map\MapCellInfo.cs" />
@@ -92,7 +96,6 @@
     <Compile Include="Technologies\TechnologyFactory.cs" />
     <Compile Include="UpgradableEntity.cs" />
     <Compile Include="Utility\RandomGen.cs" />
-    <Compile Include="Utility\Singleton.cs" />
     <Compile Include="Utility\WeightedQueue.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +107,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GameHelper\GameHelper.csproj">
+      <Project>{7277bb77-36c0-4f13-bfdd-f1233854a72b}</Project>
+      <Name>GameHelper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
