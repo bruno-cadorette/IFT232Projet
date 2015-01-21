@@ -39,21 +39,22 @@ namespace Ift232UI
         }
         public Position SelectedCell { get; set; }
         public ICommand SelectCell { get; private set; }
-        public ICommand SettleGround { get; private set; }
+        public ICommand SettleDown { get; private set; }
         public ICommand AdministrateCity { get; private set; }
+        public ICommand SpawnArmy { get; private set; }
         public ICommand NextTurn { get; private set; }
         private Action<City> openCityWindow;
         private Game game;
         private Dictionary<int, BitmapSource> tiles;
-
+        private bool SpawningMode = false;
         public MapViewModel(Game game, Action<City> openCityWindow)
         {
             this.game = game;
             this.openCityWindow = openCityWindow;
             var usedLandId = GameConfig.Instance.WorldMapLandscape.Lands.Select(x=>x.ID).Distinct();
             tiles = new TileSetGenerator(GameConfig.Instance.WorldMapLandscape.TileSet, 32, 32).GetUsedTiles(usedLandId);
-            var unSelect = new RelayCommand<Position>(x => SelectedCell = null);
-            var updateMap = new RelayCommand<Position>(_ =>
+            var unSelect = new ActionCommand(() => SelectedCell = null);
+            var updateMap = new ActionCommand(() =>
             {
                 Tiles.Clear();
 
@@ -65,9 +66,11 @@ namespace Ift232UI
             Tiles = new ObservableCollection<MapItemViewModel>(MapItems());
             SelectCell = new RelayCommand<int>(i =>
                 {
-                    int x = i / MaxBound.X;
-                    int y = i % MaxBound.Y;
-                    var position = new Position(x, y);
+                    var position = game.WorldMap.NthPosition(i);
+                    if(SpawningMode)
+                    {
+                        SpawningMode = false;
+                    }
                     if (SelectedCell != null)
                     {
                         game.WorldMap.SetMove(SelectedCell, position);
@@ -77,22 +80,19 @@ namespace Ift232UI
                     else
                     {
                         SelectedCell = position;
-                        if (game.WorldMap[SelectedCell] is City)
-                        {
-                            AdministrateCity.Execute(SelectedCell);
-                        }
                     }
-                },
-                x => SelectedCell == null || game.WorldMap[SelectedCell] is MovableItem);
-            SettleGround = new MacroRelayCommand<Position>(x => SelectedCell != null)
+                    UpdateCommands();
+                });
+            SettleDown = new MacroRelayCommand<Position>(x => SelectedCell!=null && game.WorldMap[SelectedCell] is IMapItemConverter)
             {
-                new RelayCommand<Position>(game.WorldMap.ConvertItem, x => game.WorldMap[x] is IMapItemConverter),
+                new ActionCommand(()=>game.WorldMap.ConvertItem(SelectedCell)), 
                 unSelect,
                 updateMap
             };
+            SpawnArmy = new ActionCommand(()=>SpawningMode=true,()=>SelectedCell!=null&&game.WorldMap[SelectedCell] is IMovableItemSpawner);
             NextTurn = new MacroRelayCommand<Position>()
             {
-                new RelayCommand<Position>(x => 
+                new ActionCommand(() => 
                     {
                         game.NextTurn();
                         this.OnPropertyChanged("TurnIndex");
@@ -102,13 +102,18 @@ namespace Ift232UI
 
             AdministrateCity = new MacroRelayCommand<Position>()
             {
-                new RelayCommand<Position>(x => openCityWindow(game.WorldMap[x] as City), x => game.WorldMap[x] is City),
+                new ActionCommand(() => openCityWindow(game.WorldMap[SelectedCell] as City),
+                    () => SelectedCell!=null && game.WorldMap[SelectedCell] is City),
                 unSelect
             };
         }
         private IEnumerable<MapItemViewModel> MapItems()
         {
             return game.WorldMap.GetAllCellsForPlayer(game.CurrentPlayer.ID).Select(x => new MapItemViewModel(x, tiles[x.Land.ID]));
+        }
+        private void UpdateCommands()
+        {
+            CommandManager.InvalidateRequerySuggested();
         }
     }
 }

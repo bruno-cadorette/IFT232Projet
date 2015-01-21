@@ -188,6 +188,16 @@ namespace Core.Map
                 map.Add(to, item);
             }
         }
+        public WorldMapItem GetNthElement(int n)
+        {
+            return this[NthPosition(n)];
+        }
+        public Position NthPosition(int n)
+        {
+            int x = n / MaxBound.X;
+            int y = n % MaxBound.Y;
+            return new Position(x, y);
+        }
         public WorldMapItem this[Position key]
         {
             get

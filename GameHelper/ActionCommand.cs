@@ -7,20 +7,23 @@ using System.Windows.Input;
 
 namespace GameHelper
 {
-    public class MacroRelayCommand<T> : List<ICommand>, ICommand
+    public class ActionCommand : ICommand
     {
-        private Predicate<T> canExecute;
-        public MacroRelayCommand() : this(x=>true)
+        private Func<bool> canExecute;
+        private Action execute;
+        public ActionCommand(Action execute)
+            : this(execute, () => true)
         {
-
         }
-        public MacroRelayCommand(Predicate<T> canExecute)
+        public ActionCommand(Action execute, Func<bool> canExecute)
         {
             this.canExecute = canExecute;
+            this.execute = execute;
         }
+
         public bool CanExecute(object parameter)
         {
-            return canExecute((T)parameter) && this.All(x => x.CanExecute(parameter));
+            return canExecute();
         }
 
         public event EventHandler CanExecuteChanged
@@ -31,10 +34,7 @@ namespace GameHelper
 
         public void Execute(object parameter)
         {
-            foreach (var command in this)
-            {
-                command.Execute(parameter);
-            }
+            execute();
         }
     }
 }
