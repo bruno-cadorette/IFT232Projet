@@ -24,7 +24,7 @@ namespace GameBuilder
         public MapEditorViewModel mapEditorViewModel { get; set; }
         public MapEditor()
         {
-            mapEditorViewModel = new MapEditorViewModel(new TileSetGenerator("tileset.png",32,32),15,15);
+            mapEditorViewModel = new MapEditorViewModel(new TileSetGenerator("tileset.png",32,32),128,128);
             DataContext = mapEditorViewModel;
             InitializeComponent();
             

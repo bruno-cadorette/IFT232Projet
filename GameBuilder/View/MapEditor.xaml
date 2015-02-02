@@ -5,7 +5,7 @@
     <Grid>
             <ToggleButton Content="Fill" IsChecked="{Binding FillMode}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
             <ToggleButton Content="Erase" IsChecked="{Binding EraseMode}" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="75"/>
-            <ScrollViewer Width="115" HorizontalAlignment="Left" Margin="0,96,0,0">
+            <ScrollViewer Width="115" HorizontalAlignment="Left" Margin="0,129,0,0">
                 <ItemsControl ItemsSource="{Binding LandscapeSelector}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -49,6 +49,7 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
+        <Button Content="Generate" Command="{Binding GenerateMap}" HorizontalAlignment="Left" Margin="10,85,0,0" VerticalAlignment="Top" Width="75"/>
 
     </Grid>
 </Window>

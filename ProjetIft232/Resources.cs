@@ -16,29 +16,6 @@ namespace Core
         End
     }
 
-    //A enlever parce que c'est fucking laid
-    public class Resource
-    {
-        public static Dictionary<ResourcesType, string> Name = new Dictionary<ResourcesType, string>
-        {
-            {ResourcesType.Wood, "Wood"},
-            {ResourcesType.Gold, "Gold"},
-            {ResourcesType.Meat, "Meat"},
-            {ResourcesType.Rock, "Rock"},
-            {ResourcesType.Population, "Population"},
-        };
-
-        // Plus la valeur est basse et plus la ressource est precieuse
-        public static Dictionary<ResourcesType, int> Rarity = new Dictionary<ResourcesType, int>
-        {
-            {ResourcesType.Wood, 12},
-            {ResourcesType.Gold, 1},
-            {ResourcesType.Meat, 7},
-            {ResourcesType.Rock, 10},
-            {ResourcesType.Population, 0},
-        };
-    }
-
     [DataContract]
     public class Resources
     {
