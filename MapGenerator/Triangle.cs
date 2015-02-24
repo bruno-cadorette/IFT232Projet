@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
-namespace GameBuilder.MapGenerator
+namespace MapGenerator
 {
     public class Triangle
     {
@@ -16,7 +16,7 @@ namespace GameBuilder.MapGenerator
         public Point C { get; set; }
         public Triangle()
         {
-
+            
         }
         public Triangle(Point a, LineGeometry edge)
         {

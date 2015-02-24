@@ -100,14 +100,14 @@ namespace Ift232UI
             Market m = (Market)Game.GetMarket();
             if (m == null)
                 return;
-            var boughtType = Resource.Name.First(n => n.Value == BoughtResources.SelectedItem.ToString());
+            //var boughtType = Resource.Name.First(n => n.Value == BoughtResources.SelectedItem.ToString());
 
-            var soldType = Resource.Name.First(n => n.Value == SoldResources.SelectedItem.ToString());
+   //         var soldType = Resource.Name.First(n => n.Value == SoldResources.SelectedItem.ToString());
 
-            int val2 = m.Trade(val1, soldType.Key, boughtType.Key);
-            SecondValue.Text = val2.ToString(CultureInfo.InvariantCulture);
+           // int val2 = m.Trade(val1, soldType.Key, boughtType.Key);
+          //  SecondValue.Text = val2.ToString(CultureInfo.InvariantCulture);
 
-            FirstValue.Maximum = City.Ressources[soldType.Key];
+         //  FirstValue.Maximum = City.Ressources[soldType.Key];
         }
 
         private void SoldResources_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -125,21 +125,21 @@ namespace Ift232UI
             if (!FirstValue.Value.HasValue)
                 return;
 
-            var soldType = Resource.Name.First(n => n.Value == SoldResources.SelectedItem.ToString());
-            var boughtType = Resource.Name.First(n => n.Value == BoughtResources.SelectedItem.ToString());
+            //var soldType = Resource.Name.First(n => n.Value == SoldResources.SelectedItem.ToString());
+            //var boughtType = Resource.Name.First(n => n.Value == BoughtResources.SelectedItem.ToString());
 
-            int qty = FirstValue.Value.Value;
+            //int qty = FirstValue.Value.Value;
 
-            bool done = ((Market)Game.GetMarket()).Achat(City, qty, soldType.Key,
-                boughtType.Key);
-            if (done)
-            {
-                MessageBox.Show("Votre échange a bien eu lieu !!!");
-            }
-            else
-            {
-                MessageBox.Show("Votre échange n'a pas eu lieu !!!");
-            }
+            //bool done = ((Market)Game.GetMarket()).Achat(City, qty, soldType.Key,
+            //    boughtType.Key);
+            //if (done)
+            //{
+            //    MessageBox.Show("Votre échange a bien eu lieu !!!");
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Votre échange n'a pas eu lieu !!!");
+            //}
 
 
             Update();

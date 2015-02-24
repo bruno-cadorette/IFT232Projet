@@ -69,6 +69,7 @@
     <Compile Include="LoaderTest.cs" />
     <Compile Include="RandomGenTest.cs" />
     <Compile Include="RequirementGraphTest.cs" />
+    <Compile Include="MapGeneratorTest.cs" />
     <Compile Include="WorldEditorTest.cs" />
     <Compile Include="WorldMapTest.cs" />
   </ItemGroup>
@@ -80,6 +81,10 @@
     <ProjectReference Include="..\GameHelper\GameHelper.csproj">
       <Project>{7277bb77-36c0-4f13-bfdd-f1233854a72b}</Project>
       <Name>GameHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MapGenerator\MapGenerator.csproj">
+      <Project>{ec420546-a611-44d8-96f5-12fe5c62c3c7}</Project>
+      <Name>MapGenerator</Name>
     </ProjectReference>
     <ProjectReference Include="..\ProjetIft232\Core.csproj">
       <Project>{4d3df023-7a7a-4f62-8470-f236132d5be1}</Project>

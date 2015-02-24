@@ -1,7 +1,6 @@
 ﻿using Core;
 using Core.Configuration;
 using Core.Map;
-using GameBuilder.MapGenerator;
 using GameHelper;
 using System;
 using System.Collections.Generic;
@@ -53,10 +52,9 @@ namespace GameBuilder
             LandscapeSelector = new TrulyObservableCollection<LandscapeViewModel>(
                 tileSetGenerator.GetTiles().Select((x, id) => new LandscapeViewModel(id, x)));
             LandscapeViewModel.DefaultLandscape = LandscapeSelector.First();
-            LandscapeTiles = new TrulyObservableCollection<LandscapeViewModel>(Spining());
+            LandscapeTiles = new TrulyObservableCollection<LandscapeViewModel>();
             SelectedLandscape = LandscapeViewModel.DefaultLandscape;
             FillMode = false;
-            GenerateMap = new ActionCommand(DrawIslandDebug);
             ChangeLand = new RelayCommand<int>(i =>
                 {
                     if (FillMode)
@@ -88,58 +86,7 @@ namespace GameBuilder
                 });
             SelectLandscape = new RelayCommand<LandscapeViewModel>(x => SelectedLandscape = x);
         }
-        private IEnumerable<LandscapeViewModel> Spining()
-        {
-            var map = new MapGenerator.SquaredIslandGenerator().Generate(Width);
-            for (int i = 0; i < map.GetLength(0); i++)
-            {
-                for (int j = 0; j < map.GetLength(1); j++)
-                {
-                    switch (map[i, j])
-                    {
-                        case GameBuilder.MapGenerator.TileType.Land:
-                            yield return LandscapeSelector[60];
-                            break;
-                        case GameBuilder.MapGenerator.TileType.Water:
-                            yield return LandscapeSelector[1];
-                            break;
-                        case GameBuilder.MapGenerator.TileType.Forest:
-                            yield return LandscapeSelector[13];
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-        }
-        private void DrawIslandDebug()
-        {
-            var edges = new IslandGenerator(2048, 2048).Triangulation(16).SelectMany(x => x.Edges);
-            File.WriteAllLines("new.txt", edges.Select(x => x.StartPoint + "," + x.EndPoint));
-
-
-            DrawingVisual drawingVisual = new DrawingVisual();
-            DrawingContext drawingContext = drawingVisual.RenderOpen();
-            var pen = new Pen(Brushes.Black,2.0);
-            foreach (var line in edges)
-            {
-                drawingContext.DrawLine(pen, line.StartPoint, line.EndPoint);
-            }
-            drawingContext.Close();
-
-            RenderTargetBitmap rtb = new RenderTargetBitmap(2048, 2048, 96, 96, PixelFormats.Pbgra32);
-            rtb.Render(drawingVisual);
-
-            // Encoding the RenderBitmapTarget as a PNG file.
-            PngBitmapEncoder png = new PngBitmapEncoder();
-            png.Frames.Add(BitmapFrame.Create(rtb));
-            using (Stream stm = File.Create("new.png"))
-            {
-                png.Save(stm);
-            }
-
-
-        }
+        
         private IEnumerable<LandscapeViewModel> TilesGenerator()
         {
             return Enumerable.Repeat(LandscapeViewModel.DefaultLandscape, Height * Width);

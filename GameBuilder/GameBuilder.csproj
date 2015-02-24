@@ -69,10 +69,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="MapGenerator\IslandGenerator.cs" />
-    <Compile Include="MapGenerator\SquaredIslandGenerator.cs" />
-    <Compile Include="MapGenerator\TileType.cs" />
-    <Compile Include="MapGenerator\Triangle.cs" />
     <Compile Include="ViewModel\LandscapeViewModel.cs" />
     <Compile Include="View\MapEditor.xaml.cs">
       <DependentUpon>MapEditor.xaml</DependentUpon>
